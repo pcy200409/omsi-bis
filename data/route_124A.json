@@ -1,0 +1,215 @@
+{
+  "key": "124A",
+  "no": "124",
+  "type": "일반",
+  "dir": "up",
+  "label": "124 상행",
+  "from": "현천차고지",
+  "to": "시영아파트",
+  "length": 20539.5,
+  "stops": [
+    {
+      "id": "11832",
+      "name": "Hyeoncheon Garage Start",
+      "kname": "현천차고지",
+      "kachel": "118",
+      "dist": 185.1
+    },
+    {
+      "id": "7274",
+      "name": "Dongil Sweet Apt",
+      "kname": "동일스위트아파트",
+      "kachel": "106",
+      "dist": 832.4
+    },
+    {
+      "id": "7977",
+      "name": "Yugok",
+      "kname": "유곡",
+      "kachel": "110",
+      "dist": 2214.1
+    },
+    {
+      "id": "8206",
+      "name": "Gaeam",
+      "kname": "개암",
+      "kachel": "120",
+      "dist": 2430.6
+    },
+    {
+      "id": "8281",
+      "name": "Bangchon",
+      "kname": "방촌",
+      "kachel": "126",
+      "dist": 2719.5
+    },
+    {
+      "id": "8573",
+      "name": "Seokgyo",
+      "kname": "석교",
+      "kachel": "99",
+      "dist": 3472.3
+    },
+    {
+      "id": "8957",
+      "name": "Gusa",
+      "kname": "구사",
+      "kachel": "124",
+      "dist": 4030.7
+    },
+    {
+      "id": "8967",
+      "name": "Dongwol",
+      "kname": "동월",
+      "kachel": "132",
+      "dist": 4361.7
+    },
+    {
+      "id": "8966",
+      "name": "Jogye",
+      "kname": "조개",
+      "kachel": "96",
+      "dist": 5758.0
+    },
+    {
+      "id": "8960",
+      "name": "Solti",
+      "kname": "솔티",
+      "kachel": "78",
+      "dist": 6103.2
+    },
+    {
+      "id": "4113",
+      "name": "Wola",
+      "kname": "월아",
+      "kachel": "49",
+      "dist": 6923.3
+    },
+    {
+      "id": "4278",
+      "name": "Segang Tax Office",
+      "kname": "세강세무서",
+      "kachel": "4",
+      "dist": 7749.4
+    },
+    {
+      "id": "15523",
+      "name": "Jinheung Laketown Apt",
+      "kname": "진흥레이크타운아파트",
+      "kachel": "2",
+      "dist": 9111.4
+    },
+    {
+      "id": "13780",
+      "name": "Myeongseok Tunnel",
+      "kname": "명석터널",
+      "kachel": "34",
+      "dist": 10825.6
+    },
+    {
+      "id": "15652",
+      "name": "Hera Palace to Cheongdo",
+      "kname": "헤라펠리스(청도방면)",
+      "kachel": "151",
+      "dist": 12811.8
+    },
+    {
+      "id": "12944",
+      "name": "Cheonsu Samgeori",
+      "kname": "청수사거리",
+      "kachel": "166",
+      "dist": 13886.1
+    },
+    {
+      "id": "13502",
+      "name": "Chamjin Church",
+      "kname": "참진교회",
+      "kachel": "205",
+      "dist": 14960.3
+    },
+    {
+      "id": "2161",
+      "name": "Geumgok E Mart",
+      "kname": "금곡이마트",
+      "kachel": "200",
+      "dist": 15953.2
+    },
+    {
+      "id": "375",
+      "name": "Cheonghak Station",
+      "kname": "청학역",
+      "kachel": "196",
+      "dist": 16946.1
+    },
+    {
+      "id": "14103",
+      "name": "Singi Maru",
+      "kname": "신기마루",
+      "kachel": "209",
+      "dist": 17383.3
+    },
+    {
+      "id": "13886",
+      "name": "Gaya Byeoksan Apt",
+      "kname": "가야벽산아파트",
+      "kachel": "210",
+      "dist": 17706.1
+    },
+    {
+      "id": "16233",
+      "name": "Daepyeong Transfer Center",
+      "kname": "동평환승센터",
+      "kachel": "211",
+      "dist": 18100.3
+    },
+    {
+      "id": "1786",
+      "name": "Songbaek Bridge",
+      "kname": "송백교",
+      "kachel": "212",
+      "dist": 18384.3
+    },
+    {
+      "id": "15958",
+      "name": "Shinan Villa",
+      "kname": "신안빌라",
+      "kachel": "213",
+      "dist": 18721.7
+    },
+    {
+      "id": "14983",
+      "name": "Eosu-ro",
+      "kname": "어수로",
+      "kachel": "214",
+      "dist": 19041.3
+    },
+    {
+      "id": "15123",
+      "name": "Hanbit Elementary School",
+      "kname": "한빛초등학교",
+      "kachel": "213",
+      "dist": 19483.6
+    },
+    {
+      "id": "2410",
+      "name": "Daesan Community Center",
+      "kname": "대산동사무소",
+      "kachel": "213",
+      "dist": 19764.6
+    },
+    {
+      "id": "2219",
+      "name": "Daesan Siyeong Apt",
+      "kname": "대산시영아파트",
+      "kachel": "218",
+      "dist": 20200.3
+    },
+    {
+      "id": "15852",
+      "name": "Siyeong Apt",
+      "kname": "시영아파트",
+      "kachel": "212",
+      "dist": 20539.5
+    }
+  ]
+}

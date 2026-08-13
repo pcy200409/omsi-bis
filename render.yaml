@@ -1,0 +1,16 @@
+# Render Blueprint — deploys the BIS server as a free web service.
+# In Render: New + → Blueprint → connect this repo. It reads this file.
+services:
+  - type: web
+    name: omsi-bis
+    runtime: python
+    plan: free
+    rootDir: server
+    buildCommand: pip install -r requirements.txt
+    # Render provides $PORT; bind 0.0.0.0 so it's reachable from the internet.
+    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: BIS_READONLY      # cloud instance is view-only (edit names locally)
+        value: "1"
+      - key: PYTHON_VERSION
+        value: "3.12.5"

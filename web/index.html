@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>OMSI BIS 관제</title>
+<style>
+  :root{
+    --bg:#eef1f5; --card:#fff; --track:#9db4e0; --ink:#1a2233; --sub:#8a93a6;
+    --code:#8a93a6; --green:#1bb56b; --orange:#f08a24; --navy:#12386e;
+    --shadow:0 2px 14px #0b214412;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);
+    font:15px/1.5 "Malgun Gothic","Segoe UI",system-ui,sans-serif;}
+  #app{max-width:430px;margin:0 auto;height:100%;background:var(--card);
+    box-shadow:var(--shadow);display:flex;flex-direction:column;}
+  header{padding:18px 20px 14px;border-bottom:1px solid #eef0f4;}
+  .rownum{display:flex;align-items:center;gap:10px;}
+  .badge{background:var(--green);color:#fff;font-size:13px;font-weight:700;padding:3px 9px;border-radius:7px;}
+  .badge.trunk{background:#2f6bff;}
+  .num{font-size:30px;font-weight:800;letter-spacing:-.5px;}
+  .ends{margin-top:8px;color:#3b465c;font-weight:600;}
+  .summary{margin-top:6px;color:var(--sub);font-size:14px;}
+  .summary .run{color:var(--orange);font-weight:700;}
+  .refresh{display:flex;justify-content:space-between;align-items:center;
+    padding:8px 20px;color:var(--sub);font-size:13px;border-bottom:1px solid #eef0f4;background:#fafbfc;}
+  .conn.ok{color:var(--green);} .conn.bad{color:#d5495f;}
+  .stops{flex:1;overflow-y:auto;position:relative;padding:6px 0 60px;}
+  .stop{position:relative;display:flex;gap:14px;padding:0 20px;min-height:62px;}
+  .rail{position:relative;width:28px;flex:none;}
+  .rail::before{content:"";position:absolute;top:0;bottom:0;width:4px;background:var(--track);left:12px;}
+  .stop:first-child .rail::before{top:24px;}
+  .stop:last-child .rail::before{bottom:calc(100% - 24px);}
+  .node{position:absolute;top:11px;left:1px;width:26px;height:26px;border-radius:50%;
+    background:#fff;border:2px solid var(--track);display:flex;align-items:center;justify-content:center;
+    color:#7f93bd;font-size:12px;z-index:2;}
+  .info{padding:11px 0;border-bottom:1px solid #f1f3f7;flex:1;}
+  .sname{font-weight:700;color:#20293b;}
+  .scode{color:var(--code);font-size:13px;margin-top:2px;}
+  .bus{position:absolute;left:19px;width:30px;height:30px;z-index:5;color:var(--navy);
+    transform:translateY(-50%);transition:top .45s linear;}
+  .bus svg{width:30px;height:30px;filter:drop-shadow(0 2px 3px #0b214433);}
+  .bus .tag{position:absolute;left:36px;top:50%;transform:translateY(-50%);white-space:nowrap;
+    background:var(--navy);color:#fff;font-size:12px;font-weight:600;padding:3px 8px;border-radius:6px;
+    opacity:0;transition:opacity .15s;pointer-events:none;}
+  .bus:hover .tag{opacity:1;}
+  .eta{flex:none;align-self:center;text-align:right;white-space:nowrap;min-width:0;
+    display:flex;flex-direction:column;line-height:1.25;}
+  .eta b{font-size:13px;font-weight:700;}
+  .eta small{font-size:11.5px;color:#9aa3b2;font-weight:600;}
+  .eta.soon b{color:#0f8a4f;} .eta.here b{color:var(--green);}
+  .eta.far b{color:#c26a12;}
+  .node.next{border-color:var(--green);color:var(--green);animation:nodepulse 1.2s ease-in-out infinite;}
+  .node.here{background:var(--green);border-color:var(--green);color:#fff;}
+  @keyframes nodepulse{0%,100%{box-shadow:0 0 0 2px #1bb56b33;}50%{box-shadow:0 0 0 7px #1bb56b0f;}}
+  .bus.at svg{animation:busbob .7s ease-in-out infinite;}
+  @keyframes busbob{0%,100%{transform:translateY(0);}50%{transform:translateY(-3px);}}
+  .note{padding:8px 20px;color:#a7863a;background:#fff8e8;font-size:12.5px;border-bottom:1px solid #f2e6c8;}
+  .editbtn{margin-left:auto;align-self:center;background:#eef1f6;border:1px solid #dde3ec;
+    color:#54607a;font-size:13px;font-weight:700;padding:6px 11px;border-radius:8px;cursor:pointer;}
+  .editbtn:hover{background:#e5eaf3;}
+  .modal{position:fixed;inset:0;background:#0b214455;display:flex;justify-content:center;
+    align-items:flex-end;z-index:50;}
+  .modal[hidden]{display:none;}
+  .sheet{background:var(--card);width:100%;max-width:430px;height:88%;border-radius:16px 16px 0 0;
+    display:flex;flex-direction:column;box-shadow:0 -4px 24px #0b214433;}
+  .sheethead{padding:16px 18px 12px;border-bottom:1px solid #eef0f4;position:relative;}
+  .sheethead b{font-size:17px;} .sheethead .sub{display:block;color:var(--sub);font-size:12.5px;margin-top:3px;}
+  .xbtn{position:absolute;top:14px;right:14px;border:none;background:#eef1f6;width:30px;height:30px;
+    border-radius:8px;font-size:15px;color:#54607a;cursor:pointer;}
+  .editfilter{padding:10px 18px;border-bottom:1px solid #eef0f4;}
+  .editfilter input{width:100%;padding:9px 12px;border:1px solid #dde3ec;border-radius:9px;font-size:14px;}
+  .editlist{flex:1;overflow-y:auto;padding:6px 0 20px;}
+  .erow{display:flex;align-items:center;gap:10px;padding:10px 18px;border-bottom:1px solid #f3f5f9;}
+  .erow .meta{flex:none;width:96px;min-width:96px;}
+  .erow .romaji{font-size:12px;color:#8a93a6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .erow .eid{font-size:11px;color:#b3bac8;}
+  .erow .dir{display:inline-block;font-size:10.5px;font-weight:700;color:#7b8699;background:#eef1f6;
+    border-radius:5px;padding:1px 5px;margin-top:2px;}
+  .erow input{flex:1;min-width:0;padding:8px 10px;border:1px solid #dde3ec;border-radius:8px;font-size:14px;font-weight:600;color:#20293b;}
+  .erow input:focus{outline:none;border-color:#2f6bff;}
+  .erow .save{flex:none;background:#2f6bff;color:#fff;border:none;font-size:13px;font-weight:700;
+    padding:8px 12px;border-radius:8px;cursor:pointer;}
+  .erow .save:disabled{background:#c7d2e6;cursor:default;}
+  .erow.saved input{border-color:var(--green);background:#f2fbf6;}
+  .dirtabs{display:flex;gap:8px;margin-top:12px;}
+  .dirtab{flex:1;text-align:center;padding:8px 0;border-radius:8px;font-weight:700;font-size:14px;
+    background:#eef1f6;color:#7b8699;cursor:pointer;border:1px solid transparent;user-select:none;}
+  .dirtab.on{background:#e8f0ff;color:#2f6bff;border-color:#b9d0ff;}
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <div class="rownum"><span class="badge" id="badge">일반</span><span class="num" id="num">—</span>
+      <button class="editbtn" id="editbtn" title="정류장명 편집">✎ 편집</button></div>
+    <div class="ends" id="ends"></div>
+    <div class="summary">총 <span id="nstops">0</span>개 정류소 ·
+      <span class="run">현재 <span id="running">0</span>대 운행중</span></div>
+    <div class="dirtabs" id="dirtabs"></div>
+  </header>
+  <div class="refresh"><span id="clock"></span><span class="conn bad" id="conn">● 연결 안 됨</span></div>
+  <div class="note" id="note">실제 124번 노선 · 마커는 OMSI 실시간 운행스케줄 기준</div>
+  <div class="stops" id="stops"></div>
+</div>
+
+<div id="editor" class="modal" hidden>
+  <div class="sheet">
+    <div class="sheethead">
+      <b>정류장명 편집</b>
+      <span class="sub">한글 이름을 고치면 관제화면에 바로 반영됩니다.</span>
+      <button class="xbtn" id="editclose">✕</button>
+    </div>
+    <div class="editfilter"><input id="editsearch" placeholder="정류장 검색 (한글·로마자·번호)"></div>
+    <div class="editlist" id="editlist"></div>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const stopsEl = $('stops');
+let ROUTE = null, rowEls = [];
+const busEls = new Map();        // id -> element
+
+const SVG_BUS = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-1 1.73V19a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-1H6v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-2.27A2 2 0 0 1 2 15V6a2 2 0 0 1 2-2Zm1 3v4h6V7H5Zm8 0v4h6V7h-6ZM6.5 13.5A1.5 1.5 0 1 0 6.5 16.5 1.5 1.5 0 0 0 6.5 13.5Zm11 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z"/></svg>`;
+
+async function loadRoutes(){
+  const list = await (await fetch('/api/routes?t='+Date.now(), {cache:'no-store'})).json();
+  const tabs = $('dirtabs'); tabs.innerHTML='';
+  list.forEach(r=>{
+    const t=document.createElement('div'); t.className='dirtab';
+    t.textContent = r.dir==='up' ? '상행' : '하행';
+    t.dataset.key = r.key; t.onclick = ()=>selectRoute(r.key);
+    tabs.appendChild(t);
+  });
+  await selectRoute(list[0].key);
+}
+
+async function selectRoute(key){
+  document.querySelectorAll('.dirtab').forEach(t=>t.classList.toggle('on', t.dataset.key===key));
+  ROUTE = await (await fetch('/api/route/'+key+'?t='+Date.now(), {cache:'no-store'})).json();
+  $('badge').textContent = ROUTE.type || '일반';
+  $('badge').className = 'badge' + (ROUTE.type==='간선'?' trunk':'');
+  $('num').textContent = ROUTE.no;
+  $('ends').textContent = `${ROUTE.from} ↔ ${ROUTE.to}`;
+  $('nstops').textContent = ROUTE.stops.length;
+  stopsEl.querySelectorAll('.stop').forEach(e=>e.remove());
+  for(const [,e] of busEls) e.remove(); busEls.clear();   // markers re-place on next tick
+  rowEls = ROUTE.stops.map(s=>{
+    const row=document.createElement('div'); row.className='stop';
+    row.innerHTML=`<div class="rail"><div class="node">▾</div></div>
+      <div class="info"><div class="sname">${s.kname||s.name}</div><div class="scode">${s.id}</div></div>
+      <div class="eta"></div>`;
+    stopsEl.appendChild(row); return row;
+  });
+}
+
+function ensureBus(id){
+  let e=busEls.get(id);
+  if(!e){ e=document.createElement('div'); e.className='bus';
+    e.innerHTML=`${SVG_BUS}<span class="tag"></span>`; stopsEl.appendChild(e); busEls.set(id,e); }
+  return e;
+}
+
+function nodeY(i){
+  const base = stopsEl.getBoundingClientRect().top - stopsEl.scrollTop;
+  return rowEls[i].querySelector('.node').getBoundingClientRect().top - base + 13;
+}
+
+const ETA_WINDOW = 8;      // only annotate stops within this many stops of a bus
+const AVG_MPS = 5.2;       // assumed effective city-bus speed (~19 km/h incl. stops)
+
+function apply(buses){
+  // a bus only belongs on the strip of the direction it's actually running
+  buses = buses.filter(b => (b.dir||null) === ROUTE.dir);
+  $('running').textContent = buses.length;
+  const alive=new Set();
+  // eta[j] = nearest incoming bus to stop j: {n stops away, remain metres, at-station}
+  const eta = new Array(ROUTE.stops.length).fill(null);
+  for(const b of buses){ alive.add(b.id);
+    const e=ensureBus(b.id);
+    e.querySelector('.tag').textContent=(b.line?`[${b.line}] `:'')+(b.nick||b.id);
+    // OMSI schedule: bus is heading to stop `nextIdCode`, coming from the previous
+    // stop; the exact position is OMSI's own prev/next distance ratio.
+    let top = null;
+    const i = (b.schedValid && b.nextIdCode)
+      ? ROUTE.stops.findIndex(s => String(s.id) === String(b.nextIdCode)) : -1;
+    if(i >= 0){
+      const nd = b.nextDist||0, pd = b.prevDist||0;
+      const f = (pd+nd) > 0 ? pd/(pd+nd) : 0;   // 0 = at prev stop, 1 = at next stop
+      top = (i === 0) ? nodeY(0) : nodeY(i-1) + (nodeY(i)-nodeY(i-1))*f;
+      const atStop = (b.atStation||0) > 0.5;
+      e.classList.toggle('at', atStop);
+      // this bus is (j - i) stops away from every stop j ahead of it (incl. j==i).
+      // remaining distance = metres to its own next stop + stop-to-stop cumulative.
+      for(let j=i; j<ROUTE.stops.length && j-i<=ETA_WINDOW; j++){
+        const n = j - i;
+        const remain = nd + (ROUTE.stops[j].dist - ROUTE.stops[i].dist);
+        if(!eta[j] || remain < eta[j].remain) eta[j] = {n, remain, at: atStop && n===0};
+      }
+    }
+    // no valid schedule position: keep the marker where it was (avoids a flicker
+    // teleporting it), or park it at the first stop until OMSI reports a schedule.
+    if(top !== null){ e.style.top = top + 'px'; e.dataset.placed = '1'; }
+    else if(!e.dataset.placed){ e.style.top = nodeY(0) + 'px'; }
+  }
+  for(const [id,e] of busEls){ if(!alive.has(id)){ e.remove(); busEls.delete(id); } }
+  renderEta(eta);
+}
+
+// Korean BIS-style arrival text on each stop + highlight of the approached node
+function renderEta(eta){
+  for(let j=0;j<rowEls.length;j++){
+    const badge = rowEls[j].querySelector('.eta');
+    const node  = rowEls[j].querySelector('.node');
+    node.classList.remove('next','here');
+    const s = eta[j];
+    if(!s){ badge.innerHTML=''; badge.className='eta'; continue; }
+    const mins = Math.round(s.remain / (AVG_MPS*60));
+    if(s.at){
+      badge.innerHTML='<b>도착</b>'; badge.className='eta here'; node.classList.add('here');
+    } else if(s.n===0){
+      badge.innerHTML='<b>곧 도착</b>'; badge.className='eta soon'; node.classList.add('next');
+    } else {
+      badge.innerHTML=`<b>${s.n}정류장 전</b><small>약 ${Math.max(1,mins)}분 후 도착</small>`;
+      badge.className='eta far';
+    }
+  }
+}
+
+setInterval(()=>{ const d=new Date();
+  $('clock').textContent=`${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')} ↻`; },1000);
+
+// ── station-name editor ────────────────────────────────────────────────
+let EDIT_STOPS = [];
+const DIRLABEL = {up:'상행', down:'하행'};
+
+async function openEditor(){
+  EDIT_STOPS = await (await fetch('/api/stops?t='+Date.now(), {cache:'no-store'})).json();
+  $('editsearch').value = '';
+  renderEditList('');
+  $('editor').hidden = false;
+}
+function closeEditor(){ $('editor').hidden = true; }
+
+function renderEditList(q){
+  q = (q||'').trim().toLowerCase();
+  const list = $('editlist'); list.innerHTML = '';
+  for(const s of EDIT_STOPS){
+    if(q && !(`${s.kname} ${s.name} ${s.id}`.toLowerCase().includes(q))) continue;
+    const row = document.createElement('div'); row.className = 'erow';
+    row.innerHTML =
+      `<div class="meta"><div class="romaji" title="${s.name}">${s.name||'—'}</div>
+         <div class="eid">${s.id}</div>
+         <span class="dir">${s.dirs.map(d=>DIRLABEL[d]||d).join('·')}</span></div>
+       <input value="${s.kname.replace(/"/g,'&quot;')}">
+       <button class="save">저장</button>`;
+    const input = row.querySelector('input');
+    const btn = row.querySelector('.save');
+    const commit = ()=>saveKname(s, input.value, row, btn);
+    btn.onclick = commit;
+    input.onkeydown = ev => { if(ev.key==='Enter') commit(); };
+    list.appendChild(row);
+  }
+  if(!list.children.length) list.innerHTML = '<div style="padding:20px;color:#8a93a6">검색 결과 없음</div>';
+}
+
+async function saveKname(s, value, row, btn){
+  const kname = value.trim();
+  if(!kname || kname === s.kname){ return; }
+  btn.disabled = true; btn.textContent = '저장중';
+  try{
+    const res = await fetch('/api/kname', {method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({id:s.id, kname})});
+    if(!res.ok) throw new Error((await res.json()).error||res.status);
+    s.kname = kname;
+    row.classList.add('saved'); btn.textContent = '완료';
+    setTimeout(()=>{ row.classList.remove('saved'); btn.textContent='저장'; btn.disabled=false; }, 1200);
+    if(ROUTE) selectRoute(ROUTE.key);        // reflect the change on the live strip
+  }catch(err){
+    btn.textContent = '실패'; btn.disabled = false;
+    setTimeout(()=>{ btn.textContent='저장'; }, 1500);
+    console.error('save failed', err);
+  }
+}
+
+// hide the editor entirely on a view-only (cloud) deployment
+fetch('/api/config').then(r=>r.json()).then(c=>{
+  if(!c.editable) $('editbtn').style.display = 'none';
+}).catch(()=>{});
+
+$('editbtn').onclick = openEditor;
+$('editclose').onclick = closeEditor;
+$('editor').onclick = e => { if(e.target.id==='editor') closeEditor(); };
+$('editsearch').oninput = e => renderEditList(e.target.value);
+
+function connect(){
+  const proto=location.protocol==='https:'?'wss':'ws';
+  const ws=new WebSocket(`${proto}://${location.host}/ws`);
+  const c=$('conn');
+  ws.onopen=()=>{c.textContent='● 실시간';c.className='conn ok';};
+  ws.onclose=()=>{c.textContent='● 연결 끊김';c.className='conn bad';setTimeout(connect,1000);};
+  ws.onmessage=e=>{ if(ROUTE) apply((JSON.parse(e.data).buses)||[]); };
+}
+loadRoutes().then(connect);
+</script>
+</body>
+</html>

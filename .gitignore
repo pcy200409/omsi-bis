@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+server/.venv/
+
+# C# client build output (source is tracked, artifacts are not)
+client/bin/
+client/obj/
+client/publish/
+
+# logs / temp
+*.log

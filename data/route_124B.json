@@ -1,0 +1,222 @@
+{
+  "key": "124B",
+  "no": "124",
+  "type": "일반",
+  "dir": "down",
+  "label": "124 하행",
+  "from": "시영아파트",
+  "to": "현천차고지",
+  "length": 20539.5,
+  "stops": [
+    {
+      "id": "15752",
+      "name": "Siyeong Apt A",
+      "kname": "시영아파트",
+      "kachel": "212",
+      "dist": 0.0
+    },
+    {
+      "id": "2220",
+      "name": "Daesan Siyeong Apt A",
+      "kname": "대산시영아파트",
+      "kachel": "218",
+      "dist": 339.2
+    },
+    {
+      "id": "14808",
+      "name": "Daesan Community Center A",
+      "kname": "대산동사무소",
+      "kachel": "213",
+      "dist": 774.9
+    },
+    {
+      "id": "15122",
+      "name": "Hanbit Elementary School A",
+      "kname": "한빛초등학교",
+      "kachel": "213",
+      "dist": 1055.9
+    },
+    {
+      "id": "14982",
+      "name": "Eosu-ro A",
+      "kname": "어수로",
+      "kachel": "214",
+      "dist": 1498.2
+    },
+    {
+      "id": "15956",
+      "name": "Shinan Villa A",
+      "kname": "신안빌라",
+      "kachel": "213",
+      "dist": 1817.8
+    },
+    {
+      "id": "15284",
+      "name": "Songbaek Bridge A",
+      "kname": "송백교",
+      "kachel": "212",
+      "dist": 2155.2
+    },
+    {
+      "id": "196",
+      "name": "Daepyeong Transfer Center E",
+      "kname": "동평환승센터",
+      "kachel": "211",
+      "dist": 2439.2
+    },
+    {
+      "id": "13887",
+      "name": "Geumgang Villa A",
+      "kname": "금강빌라",
+      "kachel": "210",
+      "dist": 2797.7
+    },
+    {
+      "id": "14104",
+      "name": "Singi Maru A",
+      "kname": "신기마루",
+      "kachel": "209",
+      "dist": 3156.2
+    },
+    {
+      "id": "376",
+      "name": "Cheonghak Station A",
+      "kname": "청학역",
+      "kachel": "196",
+      "dist": 3593.4
+    },
+    {
+      "id": "15347",
+      "name": "Geumgok E Mart A",
+      "kname": "금곡이마트",
+      "kachel": "203",
+      "dist": 4586.3
+    },
+    {
+      "id": "13501",
+      "name": "Geumgok Purification Plant",
+      "kname": "금곡정수장",
+      "kachel": "176",
+      "dist": 5275.3
+    },
+    {
+      "id": "13152",
+      "name": "Cheonga Apt",
+      "kname": "청아아파트",
+      "kachel": "172",
+      "dist": 5964.4
+    },
+    {
+      "id": "12947",
+      "name": "Cheonsu Samgeori A",
+      "kname": "청수사거리",
+      "kachel": "169",
+      "dist": 6653.4
+    },
+    {
+      "id": "15654",
+      "name": "Hera Palace to Segang",
+      "kname": "헤라펠리스(세강방면)",
+      "kachel": "151",
+      "dist": 8183.6
+    },
+    {
+      "id": "13781",
+      "name": "Myeongseok Tunnel A",
+      "kname": "명석터널",
+      "kachel": "34",
+      "dist": 9713.9
+    },
+    {
+      "id": "15524",
+      "name": "Jinheung Laketown Apt A",
+      "kname": "진흥레이크타운아파트",
+      "kachel": "2",
+      "dist": 11428.1
+    },
+    {
+      "id": "4112",
+      "name": "Wola A",
+      "kname": "월아",
+      "kachel": "49",
+      "dist": 13616.2
+    },
+    {
+      "id": "8959",
+      "name": "Solti A",
+      "kname": "솔티",
+      "kachel": "78",
+      "dist": 14436.3
+    },
+    {
+      "id": "8965",
+      "name": "Jogye A",
+      "kname": "조개",
+      "kachel": "96",
+      "dist": 14781.5
+    },
+    {
+      "id": "8968",
+      "name": "Dongwol A",
+      "kname": "동월",
+      "kachel": "132",
+      "dist": 16177.8
+    },
+    {
+      "id": "8958",
+      "name": "Gusa A",
+      "kname": "구사",
+      "kachel": "124",
+      "dist": 16508.8
+    },
+    {
+      "id": "8574",
+      "name": "Seokgyo A",
+      "kname": "석교",
+      "kachel": "99",
+      "dist": 17067.2
+    },
+    {
+      "id": "8282",
+      "name": "Bangchon A",
+      "kname": "방촌",
+      "kachel": "126",
+      "dist": 17820.0
+    },
+    {
+      "id": "8209",
+      "name": "Gaeam A",
+      "kname": "개암",
+      "kachel": "125",
+      "dist": 18108.9
+    },
+    {
+      "id": "7978",
+      "name": "Yugok A",
+      "kname": "유곡",
+      "kachel": "110",
+      "dist": 18325.4
+    },
+    {
+      "id": "7273",
+      "name": "Dongil Sweet Apt A",
+      "kname": "동일스위트아파트",
+      "kachel": "106",
+      "dist": 19707.1
+    },
+    {
+      "id": "15397",
+      "name": "Samdong Hill",
+      "kname": "삼동고개",
+      "kachel": "117",
+      "dist": 20123.3
+    },
+    {
+      "id": "11872",
+      "name": "Hyeoncheon Garage",
+      "kname": "현천차고지",
+      "kachel": "118",
+      "dist": 20539.5
+    }
+  ]
+}
