@@ -99,7 +99,7 @@
   .mapstop.next{fill:#1bb56b;stroke:#0f8a4f;}
   .mapstop.here{fill:#1bb56b;stroke:#fff;}
   .mroute{fill:none;stroke:#2f6bff;stroke-width:7;stroke-linejoin:round;stroke-linecap:round;opacity:.8;}
-  .mbus{fill:#12386e;stroke:#fff;stroke-width:3;}
+  .mbus{fill:#12386e;stroke:#fff;stroke-width:3;cursor:pointer;}
   .mbus.at{animation:mbob 0.8s ease-in-out infinite;}
   @keyframes mbob{0%,100%{opacity:1;}50%{opacity:.55;}}
   #mappop{position:fixed;z-index:60;background:#fff;border:1px solid #dde3ec;border-radius:10px;
@@ -155,6 +155,7 @@ const busEls = new Map();        // id -> strip element
 const mapBusEls = new Map();     // id -> svg marker (map view)
 const SVGNS = 'http://www.w3.org/2000/svg';
 let GEO = null, VIEW = 'strip', lastEta = [];
+const busData = new Map();        // id -> latest bus payload (for the bus-click popup)
 
 const SVG_BUS = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-1 1.73V19a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-1H6v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-2.27A2 2 0 0 1 2 15V6a2 2 0 0 1 2-2Zm1 3v4h6V7H5Zm8 0v4h6V7h-6ZM6.5 13.5A1.5 1.5 0 1 0 6.5 16.5 1.5 1.5 0 0 0 6.5 13.5Zm11 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z"/></svg>`;
 
@@ -209,6 +210,7 @@ function apply(buses){
   // a bus only belongs on the strip of the direction it's actually running
   buses = buses.filter(b => (b.dir||null) === ROUTE.dir);
   $('running').textContent = buses.length;
+  busData.clear(); for(const b of buses) busData.set(b.id, b);
   const alive=new Set();
   // eta[j] = nearest incoming bus to stop j: {n stops away, remain metres, at-station}
   const eta = new Array(ROUTE.stops.length).fill(null);
@@ -291,7 +293,8 @@ function updateMapBuses(pl, alive){
     const x = a[0]+(c[0]-a[0])*t, y = a[1]+(c[1]-a[1])*t;
     let el = mapBusEls.get(b.id);
     if(!el){ el=document.createElementNS(SVGNS,'circle'); el.setAttribute('r','11'); el.setAttribute('class','mbus');
-      el.appendChild(document.createElementNS(SVGNS,'title')); layer.appendChild(el); mapBusEls.set(b.id,el); }
+      el.appendChild(document.createElementNS(SVGNS,'title')); layer.appendChild(el); mapBusEls.set(b.id,el);
+      el.addEventListener('click', ev=>{ ev.stopPropagation(); showBusPopup(b.id, ev); }); }
     el.setAttribute('cx',x); el.setAttribute('cy',y);
     el.classList.toggle('at', atStop);
     el.querySelector('title').textContent=(b.line?`[${b.line}] `:'')+(b.nick||b.id);
@@ -314,6 +317,29 @@ function showStopPopup(i, ev){
   }
   pop.innerHTML = `<span class="px">✕</span><div class="pt">${nm}</div>${body}`;
   pop.querySelector('.px').onclick = ()=>pop.hidden=true;
+  placePop(ev);
+}
+
+// bus tap -> running-bus info (route / driver / next stop), like the 김제 BIS card
+function showBusPopup(id, ev){
+  const b = busData.get(id); if(!b) return;
+  const pop = $('mappop');
+  const line = b.line || '—', nick = b.nick || b.id;
+  const next = b.schedValid ? (b.nextName||'') : '';
+  pop.innerHTML = `<span class="px">✕</span>
+    <div style="color:#8a93a6;font-size:11.5px;font-weight:700">운행버스정보</div>
+    <div style="display:flex;align-items:baseline;gap:8px;margin:3px 0 7px">
+      <span class="badge">일반</span>
+      <span style="font-size:23px;font-weight:800;color:#2f6bff;letter-spacing:-.5px">${line}</span></div>
+    <div class="pl"><span>기사</span><b style="color:#20293b">${nick}</b></div>
+    ${next?`<div class="pl"><span>다음 정류장</span><b style="color:#0f8a4f">${next}</b></div>`:
+           `<div class="pl"><span style="color:#c26a12">운행 스케줄 없음</span></div>`}`;
+  pop.querySelector('.px').onclick = ()=>pop.hidden=true;
+  placePop(ev);
+}
+
+function placePop(ev){
+  const pop = $('mappop');
   pop.hidden = false;
   const w = pop.offsetWidth, h = pop.offsetHeight;
   pop.style.left = Math.max(6, Math.min(window.innerWidth - w - 6, ev.clientX + 10)) + 'px';
