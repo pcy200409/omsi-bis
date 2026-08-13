@@ -1,7 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
+    <UseWindowsForms>true</UseWindowsForms>
     <!-- OmsiHook reads OMSI's 32-bit process memory, so the client must be x86 -->
     <TargetFramework>net8.0-windows</TargetFramework>
     <PlatformTarget>x86</PlatformTarget>

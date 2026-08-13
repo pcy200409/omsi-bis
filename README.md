@@ -20,10 +20,9 @@ python -m venv .venv && .venv/Scripts/pip install -r requirements.txt
 .venv/Scripts/python -m uvicorn app:app --host 127.0.0.1 --port 8000
 # 브라우저: http://127.0.0.1:8000
 ```
-클라이언트(관리자 권한, OMSI 실행 중):
-```
-client/publish/OmsiBisClient.exe http://127.0.0.1:8000 <닉> 124 "Segang Alpha"
-```
+클라이언트: `client/publish/OmsiBisClient.exe` **더블클릭**(관리자 UAC 승인) →
+창에서 서버주소·닉네임·노선·맵 입력 후 **[시작]**. OMSI(맵+버스 탑승) 실행 중이어야 함.
+개발 PC에선 창의 **[로컬 서버 켜기]** 로 `127.0.0.1:8000` 서버도 버튼으로 띄울 수 있음.
 
 ## 클라우드 배포 (Render 무료)
 1. 이 저장소를 GitHub에 올린다.
@@ -32,8 +31,8 @@ client/publish/OmsiBisClient.exe http://127.0.0.1:8000 <닉> 124 "Segang Alpha"
    Root=`server`, Build=`pip install -r requirements.txt`,
    Start=`uvicorn app:app --host 0.0.0.0 --port $PORT`, 환경변수 `BIS_READONLY=1`.)
 3. 배포되면 공개주소(`https://<이름>.onrender.com`)가 나온다 → 친구들에게 공유.
-4. 클라이언트는 그 주소로 실행:
-   `OmsiBisClient.exe https://<이름>.onrender.com <닉> 124 "Segang Alpha"`
+4. 친구들에게 `client/publish/` 폴더째 전달(.NET 설치 불필요). 각자 `OmsiBisClient.exe`
+   더블클릭 → 서버주소에 `https://<이름>.onrender.com` 넣고 닉네임 입력 → [시작].
 
 **클라우드는 보기 전용**(`BIS_READONLY=1`): 정류장명 편집은 OMSI 맵이 있는 로컬에서만 하고,
 바뀐 `data/*.json`을 커밋/푸시하면 클라우드에 반영된다.
