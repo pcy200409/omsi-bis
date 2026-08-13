@@ -13,9 +13,18 @@
   *{box-sizing:border-box;}
   html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);
     font:15px/1.5 "Malgun Gothic","Segoe UI",system-ui,sans-serif;}
-  #app{max-width:430px;margin:0 auto;height:100%;background:var(--card);
-    box-shadow:var(--shadow);display:flex;flex-direction:column;}
-  header{padding:18px 20px 14px;border-bottom:1px solid #eef0f4;}
+  #app{height:100%;display:flex;flex-direction:column;background:var(--bg);}
+  #topnav{display:flex;align-items:center;gap:26px;background:#152a52;color:#fff;
+    padding:0 24px;height:54px;flex:none;box-shadow:0 1px 8px #0b214433;z-index:30;}
+  #topnav .brand{font-weight:800;font-size:17px;letter-spacing:-.3px;display:flex;align-items:center;gap:8px;}
+  #topnav .navlinks{display:flex;gap:26px;margin-left:14px;font-size:14.5px;color:#c7d2ea;}
+  #topnav .navlinks span{cursor:pointer;padding:4px 0;}
+  #topnav .navlinks span.on,#topnav .navlinks span:hover{color:#fff;font-weight:700;}
+  #main{flex:1;display:flex;min-height:0;}
+  #sidebar{width:372px;flex:none;background:var(--card);display:flex;flex-direction:column;
+    min-height:0;box-shadow:2px 0 12px #0b21440d;z-index:20;}
+  #mappane{flex:1;position:relative;min-width:0;background:#e9edf2;display:flex;}
+  header{padding:16px 20px 12px;border-bottom:1px solid #eef0f4;flex:none;}
   .rownum{display:flex;align-items:center;gap:10px;}
   .badge{background:var(--green);color:#fff;font-size:13px;font-weight:700;padding:3px 9px;border-radius:7px;}
   .badge.trunk{background:#2f6bff;}
@@ -88,20 +97,21 @@
   .dirtab{flex:1;text-align:center;padding:8px 0;border-radius:8px;font-weight:700;font-size:14px;
     background:#eef1f6;color:#7b8699;cursor:pointer;border:1px solid transparent;user-select:none;}
   .dirtab.on{background:#e8f0ff;color:#2f6bff;border-color:#b9d0ff;}
-  .viewtabs{display:flex;gap:0;margin-top:10px;border:1px solid #dde3ec;border-radius:9px;overflow:hidden;}
-  .vtab{flex:1;text-align:center;padding:7px 0;font-weight:700;font-size:13.5px;color:#7b8699;
-    cursor:pointer;user-select:none;background:#fff;}
-  .vtab.on{background:#2f6bff;color:#fff;}
-  #mapview{flex:1;overflow:auto;background:#e9edf2;}
-  .mapwrap{position:relative;width:100%;}
-  #mapsvg{display:block;width:100%;height:auto;}
-  .mapstop{fill:#fff;stroke:#2f6bff;stroke-width:3;cursor:pointer;}
-  .mapstop.next{fill:#1bb56b;stroke:#0f8a4f;}
-  .mapstop.here{fill:#1bb56b;stroke:#fff;}
-  .mroute{fill:none;stroke:#2f6bff;stroke-width:7;stroke-linejoin:round;stroke-linecap:round;opacity:.8;}
-  .mbus{fill:#12386e;stroke:#fff;stroke-width:3;cursor:pointer;}
+  #stripview{flex:1;display:flex;flex-direction:column;min-height:0;}
+  .mapwrap{position:absolute;inset:0;overflow:hidden;}
+  #mapsvg{display:block;width:100%;height:100%;}
+  .mapstop{color:var(--orange);cursor:pointer;}      /* orange bus-stop sign */
+  .mapstop.next{color:var(--green);} .mapstop.here{color:var(--green);}
+  .mroute{fill:none;stroke:#4f74c4;stroke-width:14;stroke-linejoin:round;stroke-linecap:round;opacity:.85;}
+  .mbus{color:var(--navy);cursor:pointer;}
   .mbus.at{animation:mbob 0.8s ease-in-out infinite;}
-  @keyframes mbob{0%,100%{opacity:1;}50%{opacity:.55;}}
+  @keyframes mbob{0%,100%{opacity:1;}50%{opacity:.5;}}
+  @media (max-width:820px){
+    #topnav .navlinks{display:none;}
+    #main{flex-direction:column;}
+    #sidebar{width:100%;height:42vh;box-shadow:0 2px 10px #0b21440d;}
+    #mappane{flex:1;}
+  }
   #mappop{position:fixed;z-index:60;background:#fff;border:1px solid #dde3ec;border-radius:10px;
     box-shadow:0 4px 18px #0b214433;padding:10px 12px;font-size:13px;min-width:150px;max-width:230px;}
   #mappop .pt{font-weight:800;margin-bottom:6px;}
@@ -112,27 +122,31 @@
 </head>
 <body>
 <div id="app">
-  <header>
-    <div class="rownum"><span class="badge" id="badge">일반</span><span class="num" id="num">—</span>
-      <button class="editbtn" id="editbtn" title="정류장명 편집">✎ 편집</button></div>
-    <div class="ends" id="ends"></div>
-    <div class="summary">총 <span id="nstops">0</span>개 정류소 ·
-      <span class="run">현재 <span id="running">0</span>대 운행중</span></div>
-    <div class="dirtabs" id="dirtabs"></div>
-    <div class="viewtabs">
-      <div class="vtab on" data-view="strip">노선</div>
-      <div class="vtab" data-view="map">지도</div>
+  <nav id="topnav">
+    <div class="brand">🚍 OMSI 버스정보시스템</div>
+    <div class="navlinks"><span class="on">노선현황</span><span>정류소현황</span><span>이용안내</span><span>공지사항</span></div>
+  </nav>
+  <div id="main">
+    <aside id="sidebar">
+      <header>
+        <div class="rownum"><span class="badge" id="badge">일반</span><span class="num" id="num">—</span>
+          <button class="editbtn" id="editbtn" title="정류장명 편집">✎ 편집</button></div>
+        <div class="ends" id="ends"></div>
+        <div class="summary">총 <span id="nstops">0</span>개 정류소 ·
+          <span class="run">현재 <span id="running">0</span>대 운행중</span></div>
+        <div class="dirtabs" id="dirtabs"></div>
+      </header>
+      <div class="refresh"><span id="clock"></span><span class="conn bad" id="conn">● 연결 안 됨</span></div>
+      <div id="stripview">
+        <div class="note" id="note">실제 124번 노선 · 마커는 OMSI 실시간 운행스케줄 기준</div>
+        <div class="stops" id="stops"></div>
+      </div>
+    </aside>
+    <div id="mappane">
+      <div class="mapwrap"><svg id="mapsvg" preserveAspectRatio="xMidYMid meet"></svg></div>
     </div>
-  </header>
-  <div class="refresh"><span id="clock"></span><span class="conn bad" id="conn">● 연결 안 됨</span></div>
-  <div id="stripview">
-    <div class="note" id="note">실제 124번 노선 · 마커는 OMSI 실시간 운행스케줄 기준</div>
-    <div class="stops" id="stops"></div>
   </div>
-  <div id="mapview" hidden>
-    <div class="mapwrap"><svg id="mapsvg" preserveAspectRatio="xMidYMid meet"></svg></div>
-    <div id="mappop" hidden></div>
-  </div>
+  <div id="mappop" hidden></div>
 </div>
 
 <div id="editor" class="modal" hidden>
@@ -154,10 +168,20 @@ let ROUTE = null, rowEls = [];
 const busEls = new Map();        // id -> strip element
 const mapBusEls = new Map();     // id -> svg marker (map view)
 const SVGNS = 'http://www.w3.org/2000/svg';
-let GEO = null, VIEW = 'strip', lastEta = [];
+let GEO = null, lastEta = [];
 const busData = new Map();        // id -> latest bus payload (for the bus-click popup)
 
-const SVG_BUS = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-1 1.73V19a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-1H6v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-2.27A2 2 0 0 1 2 15V6a2 2 0 0 1 2-2Zm1 3v4h6V7H5Zm8 0v4h6V7h-6ZM6.5 13.5A1.5 1.5 0 1 0 6.5 16.5 1.5 1.5 0 0 0 6.5 13.5Zm11 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z"/></svg>`;
+const BUS_PATH = "M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-1 1.73V19a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-1H6v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-2.27A2 2 0 0 1 2 15V6a2 2 0 0 1 2-2Zm1 3v4h6V7H5Zm8 0v4h6V7h-6ZM6.5 13.5A1.5 1.5 0 1 0 6.5 16.5 1.5 1.5 0 0 0 6.5 13.5Zm11 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z";
+const SVG_BUS = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="${BUS_PATH}"/></svg>`;
+// map marker symbols: orange bus-stop sign for stops, navy circle for live buses
+const MAP_DEFS = `<defs>
+  <symbol id="stopicon" viewBox="-4 -4 32 32">
+    <rect x="-3" y="-3" width="30" height="30" rx="8" fill="currentColor" stroke="#fff" stroke-width="3"/>
+    <path d="${BUS_PATH}" fill="#fff"/></symbol>
+  <symbol id="busicon" viewBox="-5 -5 34 34">
+    <circle cx="12" cy="12" r="17" fill="currentColor" stroke="#fff" stroke-width="3"/>
+    <path d="${BUS_PATH}" fill="#fff"/></symbol>
+</defs>`;
 
 async function loadRoutes(){
   const list = await (await fetch('/api/routes?t='+Date.now(), {cache:'no-store'})).json();
@@ -188,7 +212,7 @@ async function selectRoute(key){
       <div class="eta"></div>`;
     stopsEl.appendChild(row); return row;
   });
-  if(VIEW==='map') renderMapBase();   // rebuild map for the new direction
+  renderMapBase();   // rebuild the map for the new direction
 }
 
 function ensureBus(id){
@@ -253,18 +277,10 @@ function apply(buses){
 async function loadGeo(){
   try{ GEO = await (await fetch('/api/geo?t='+Date.now(), {cache:'no-store'})).json(); }
   catch(e){ GEO = null; }
+  renderMapBase();
 }
 
-function setView(v){
-  VIEW = v;
-  document.querySelectorAll('.vtab').forEach(t=>t.classList.toggle('on', t.dataset.view===v));
-  $('stripview').hidden = v!=='strip';
-  $('mapview').hidden = v!=='map';
-  $('mappop').hidden = true;
-  if(v==='map') renderMapBase();
-}
-
-// build the static map layer (background + route + stop dots) for the current direction
+// build the static map layer (background + route + orange stop signs) per direction
 function renderMapBase(){
   const svg = $('mapsvg');
   if(!GEO || !ROUTE || !GEO[ROUTE.dir]){ svg.innerHTML=''; return; }
@@ -273,8 +289,10 @@ function renderMapBase(){
   const pts = g.path.map(p=>p.join(',')).join(' ');
   let dots='';
   g.stops.forEach((s,i)=>{ const nm = ROUTE.stops[i] ? (ROUTE.stops[i].kname||ROUTE.stops[i].name) : '';
-    dots += `<circle class="mapstop" cx="${s.xy[0]}" cy="${s.xy[1]}" r="7" data-i="${i}"><title>${nm}</title></circle>`; });
-  svg.innerHTML = `<image href="/geo_bg.png" x="0" y="0" width="${GEO.W}" height="${GEO.H}"/>`
+    const [x,y]=s.xy;
+    dots += `<use href="#stopicon" class="mapstop" x="${x-20}" y="${y-20}" width="40" height="40" data-i="${i}"><title>${nm}</title></use>`; });
+  svg.innerHTML = MAP_DEFS
+    + `<image href="/geo_bg.png" x="0" y="0" width="${GEO.W}" height="${GEO.H}"/>`
     + `<polyline class="mroute" points="${pts}"/>`
     + `<g id="mapstops">${dots}</g><g id="mapbuses"></g>`;
   mapBusEls.clear();
@@ -282,7 +300,7 @@ function renderMapBase(){
 }
 
 function updateMapBuses(pl, alive){
-  if(VIEW!=='map' || !GEO || !GEO[ROUTE.dir]) return;
+  if(!GEO || !ROUTE || !GEO[ROUTE.dir]) return;
   const g = GEO[ROUTE.dir];
   const svg = $('mapsvg'), layer = svg.querySelector('#mapbuses');
   if(!layer) return;
@@ -292,10 +310,11 @@ function updateMapBuses(pl, alive){
     const t = (i===0) ? 0 : f;
     const x = a[0]+(c[0]-a[0])*t, y = a[1]+(c[1]-a[1])*t;
     let el = mapBusEls.get(b.id);
-    if(!el){ el=document.createElementNS(SVGNS,'circle'); el.setAttribute('r','11'); el.setAttribute('class','mbus');
+    if(!el){ el=document.createElementNS(SVGNS,'use'); el.setAttribute('href','#busicon');
+      el.setAttribute('width','56'); el.setAttribute('height','56'); el.setAttribute('class','mbus');
       el.appendChild(document.createElementNS(SVGNS,'title')); layer.appendChild(el); mapBusEls.set(b.id,el);
       el.addEventListener('click', ev=>{ ev.stopPropagation(); showBusPopup(b.id, ev); }); }
-    el.setAttribute('cx',x); el.setAttribute('cy',y);
+    el.setAttribute('x', x-28); el.setAttribute('y', y-28);
     el.classList.toggle('at', atStop);
     el.querySelector('title').textContent=(b.line?`[${b.line}] `:'')+(b.nick||b.id);
     const dot = svg.querySelector(`.mapstop[data-i="${i}"]`);
@@ -426,8 +445,6 @@ async function saveKname(s, value, row, btn){
 fetch('/api/config').then(r=>r.json()).then(c=>{
   if(!c.editable) $('editbtn').style.display = 'none';
 }).catch(()=>{});
-
-document.querySelectorAll('.vtab').forEach(t=>t.onclick=()=>setView(t.dataset.view));
 
 $('editbtn').onclick = openEditor;
 $('editclose').onclick = closeEditor;
