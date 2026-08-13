@@ -222,6 +222,19 @@ async def edit_kname(e: KnameEdit):
     return {"ok": True, "id": sid, "kname": kname}
 
 
+@app.get("/api/geo")
+async def geo():
+    p = DATA_DIR / "geo_124.json"
+    if not p.exists():
+        return JSONResponse({"error": "no geo"}, status_code=404)
+    return FileResponse(p)
+
+
+@app.get("/geo_bg.png")
+async def geo_bg():
+    return FileResponse(WEB_DIR / "geo_bg.png", media_type="image/png")
+
+
 @app.get("/")
 async def index():
     # no-store so a plain browser refresh always gets the latest page during dev

@@ -88,6 +88,26 @@
   .dirtab{flex:1;text-align:center;padding:8px 0;border-radius:8px;font-weight:700;font-size:14px;
     background:#eef1f6;color:#7b8699;cursor:pointer;border:1px solid transparent;user-select:none;}
   .dirtab.on{background:#e8f0ff;color:#2f6bff;border-color:#b9d0ff;}
+  .viewtabs{display:flex;gap:0;margin-top:10px;border:1px solid #dde3ec;border-radius:9px;overflow:hidden;}
+  .vtab{flex:1;text-align:center;padding:7px 0;font-weight:700;font-size:13.5px;color:#7b8699;
+    cursor:pointer;user-select:none;background:#fff;}
+  .vtab.on{background:#2f6bff;color:#fff;}
+  #mapview{flex:1;overflow:auto;background:#e9edf2;}
+  .mapwrap{position:relative;width:100%;}
+  #mapsvg{display:block;width:100%;height:auto;}
+  .mapstop{fill:#fff;stroke:#2f6bff;stroke-width:3;cursor:pointer;}
+  .mapstop.next{fill:#1bb56b;stroke:#0f8a4f;}
+  .mapstop.here{fill:#1bb56b;stroke:#fff;}
+  .mroute{fill:none;stroke:#2f6bff;stroke-width:7;stroke-linejoin:round;stroke-linecap:round;opacity:.8;}
+  .mbus{fill:#12386e;stroke:#fff;stroke-width:3;}
+  .mbus.at{animation:mbob 0.8s ease-in-out infinite;}
+  @keyframes mbob{0%,100%{opacity:1;}50%{opacity:.55;}}
+  #mappop{position:fixed;z-index:60;background:#fff;border:1px solid #dde3ec;border-radius:10px;
+    box-shadow:0 4px 18px #0b214433;padding:10px 12px;font-size:13px;min-width:150px;max-width:230px;}
+  #mappop .pt{font-weight:800;margin-bottom:6px;}
+  #mappop .pl{display:flex;justify-content:space-between;gap:10px;padding:3px 0;color:#3b465c;}
+  #mappop .pl b{color:#0f8a4f;} #mappop .pl.far b{color:#c26a12;}
+  #mappop .px{position:absolute;top:6px;right:8px;color:#9aa3b2;cursor:pointer;font-weight:700;}
 </style>
 </head>
 <body>
@@ -99,10 +119,20 @@
     <div class="summary">총 <span id="nstops">0</span>개 정류소 ·
       <span class="run">현재 <span id="running">0</span>대 운행중</span></div>
     <div class="dirtabs" id="dirtabs"></div>
+    <div class="viewtabs">
+      <div class="vtab on" data-view="strip">노선</div>
+      <div class="vtab" data-view="map">지도</div>
+    </div>
   </header>
   <div class="refresh"><span id="clock"></span><span class="conn bad" id="conn">● 연결 안 됨</span></div>
-  <div class="note" id="note">실제 124번 노선 · 마커는 OMSI 실시간 운행스케줄 기준</div>
-  <div class="stops" id="stops"></div>
+  <div id="stripview">
+    <div class="note" id="note">실제 124번 노선 · 마커는 OMSI 실시간 운행스케줄 기준</div>
+    <div class="stops" id="stops"></div>
+  </div>
+  <div id="mapview" hidden>
+    <div class="mapwrap"><svg id="mapsvg" preserveAspectRatio="xMidYMid meet"></svg></div>
+    <div id="mappop" hidden></div>
+  </div>
 </div>
 
 <div id="editor" class="modal" hidden>
@@ -121,7 +151,10 @@
 const $ = id => document.getElementById(id);
 const stopsEl = $('stops');
 let ROUTE = null, rowEls = [];
-const busEls = new Map();        // id -> element
+const busEls = new Map();        // id -> strip element
+const mapBusEls = new Map();     // id -> svg marker (map view)
+const SVGNS = 'http://www.w3.org/2000/svg';
+let GEO = null, VIEW = 'strip', lastEta = [];
 
 const SVG_BUS = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-1 1.73V19a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-1H6v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-2.27A2 2 0 0 1 2 15V6a2 2 0 0 1 2-2Zm1 3v4h6V7H5Zm8 0v4h6V7h-6ZM6.5 13.5A1.5 1.5 0 1 0 6.5 16.5 1.5 1.5 0 0 0 6.5 13.5Zm11 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z"/></svg>`;
 
@@ -154,6 +187,7 @@ async function selectRoute(key){
       <div class="eta"></div>`;
     stopsEl.appendChild(row); return row;
   });
+  if(VIEW==='map') renderMapBase();   // rebuild map for the new direction
 }
 
 function ensureBus(id){
@@ -178,6 +212,7 @@ function apply(buses){
   const alive=new Set();
   // eta[j] = nearest incoming bus to stop j: {n stops away, remain metres, at-station}
   const eta = new Array(ROUTE.stops.length).fill(null);
+  const pl = [];   // {b,i,f,atStop} — shared placement for strip + map
   for(const b of buses){ alive.add(b.id);
     const e=ensureBus(b.id);
     e.querySelector('.tag').textContent=(b.line?`[${b.line}] `:'')+(b.nick||b.id);
@@ -189,9 +224,10 @@ function apply(buses){
     if(i >= 0){
       const nd = b.nextDist||0, pd = b.prevDist||0;
       const f = (pd+nd) > 0 ? pd/(pd+nd) : 0;   // 0 = at prev stop, 1 = at next stop
-      top = (i === 0) ? nodeY(0) : nodeY(i-1) + (nodeY(i)-nodeY(i-1))*f;
       const atStop = (b.atStation||0) > 0.5;
+      top = (i === 0) ? nodeY(0) : nodeY(i-1) + (nodeY(i)-nodeY(i-1))*f;
       e.classList.toggle('at', atStop);
+      pl.push({b, i, f, atStop});
       // this bus is (j - i) stops away from every stop j ahead of it (incl. j==i).
       // remaining distance = metres to its own next stop + stop-to-stop cumulative.
       for(let j=i; j<ROUTE.stops.length && j-i<=ETA_WINDOW; j++){
@@ -206,7 +242,82 @@ function apply(buses){
     else if(!e.dataset.placed){ e.style.top = nodeY(0) + 'px'; }
   }
   for(const [id,e] of busEls){ if(!alive.has(id)){ e.remove(); busEls.delete(id); } }
+  lastEta = eta;
   renderEta(eta);
+  updateMapBuses(pl, alive);
+}
+
+// ── map view ───────────────────────────────────────────────────────────
+async function loadGeo(){
+  try{ GEO = await (await fetch('/api/geo?t='+Date.now(), {cache:'no-store'})).json(); }
+  catch(e){ GEO = null; }
+}
+
+function setView(v){
+  VIEW = v;
+  document.querySelectorAll('.vtab').forEach(t=>t.classList.toggle('on', t.dataset.view===v));
+  $('stripview').hidden = v!=='strip';
+  $('mapview').hidden = v!=='map';
+  $('mappop').hidden = true;
+  if(v==='map') renderMapBase();
+}
+
+// build the static map layer (background + route + stop dots) for the current direction
+function renderMapBase(){
+  const svg = $('mapsvg');
+  if(!GEO || !ROUTE || !GEO[ROUTE.dir]){ svg.innerHTML=''; return; }
+  const g = GEO[ROUTE.dir];
+  svg.setAttribute('viewBox', `0 0 ${GEO.W} ${GEO.H}`);
+  const pts = g.path.map(p=>p.join(',')).join(' ');
+  let dots='';
+  g.stops.forEach((s,i)=>{ const nm = ROUTE.stops[i] ? (ROUTE.stops[i].kname||ROUTE.stops[i].name) : '';
+    dots += `<circle class="mapstop" cx="${s.xy[0]}" cy="${s.xy[1]}" r="7" data-i="${i}"><title>${nm}</title></circle>`; });
+  svg.innerHTML = `<image href="/geo_bg.png" x="0" y="0" width="${GEO.W}" height="${GEO.H}"/>`
+    + `<polyline class="mroute" points="${pts}"/>`
+    + `<g id="mapstops">${dots}</g><g id="mapbuses"></g>`;
+  mapBusEls.clear();
+  svg.querySelectorAll('.mapstop').forEach(c=>c.addEventListener('click', ev=>showStopPopup(+c.dataset.i, ev)));
+}
+
+function updateMapBuses(pl, alive){
+  if(VIEW!=='map' || !GEO || !GEO[ROUTE.dir]) return;
+  const g = GEO[ROUTE.dir];
+  const svg = $('mapsvg'), layer = svg.querySelector('#mapbuses');
+  if(!layer) return;
+  svg.querySelectorAll('.mapstop').forEach(c=>c.classList.remove('next','here'));
+  for(const {b,i,f,atStop} of pl){
+    const a = g.stops[Math.max(0,i-1)].xy, c = g.stops[i].xy;
+    const t = (i===0) ? 0 : f;
+    const x = a[0]+(c[0]-a[0])*t, y = a[1]+(c[1]-a[1])*t;
+    let el = mapBusEls.get(b.id);
+    if(!el){ el=document.createElementNS(SVGNS,'circle'); el.setAttribute('r','11'); el.setAttribute('class','mbus');
+      el.appendChild(document.createElementNS(SVGNS,'title')); layer.appendChild(el); mapBusEls.set(b.id,el); }
+    el.setAttribute('cx',x); el.setAttribute('cy',y);
+    el.classList.toggle('at', atStop);
+    el.querySelector('title').textContent=(b.line?`[${b.line}] `:'')+(b.nick||b.id);
+    const dot = svg.querySelector(`.mapstop[data-i="${i}"]`);
+    if(dot) dot.classList.add(atStop?'here':'next');
+  }
+  for(const [id,el] of mapBusEls){ if(!alive.has(id)){ el.remove(); mapBusEls.delete(id); } }
+}
+
+// stop tap -> Korean-BIS style arrival popup (uses the same ETA as the strip)
+function showStopPopup(i, ev){
+  const pop = $('mappop'), st = ROUTE.stops[i];
+  const nm = st ? (st.kname||st.name) : ('#'+i), s = lastEta[i];
+  let body;
+  if(!s) body = '<div class="pl">접근 중인 버스 없음</div>';
+  else{
+    const mins = Math.max(1, Math.round(s.remain/(AVG_MPS*60)));
+    const label = s.at ? '<b>도착</b>' : (s.n===0 ? '<b>곧 도착</b>' : `<b>${s.n}정류장 전</b> · 약 ${mins}분 후`);
+    body = `<div class="pl ${s.n>0?'far':''}">${label}</div>`;
+  }
+  pop.innerHTML = `<span class="px">✕</span><div class="pt">${nm}</div>${body}`;
+  pop.querySelector('.px').onclick = ()=>pop.hidden=true;
+  pop.hidden = false;
+  const w = pop.offsetWidth, h = pop.offsetHeight;
+  pop.style.left = Math.max(6, Math.min(window.innerWidth - w - 6, ev.clientX + 10)) + 'px';
+  pop.style.top  = Math.max(6, Math.min(window.innerHeight - h - 6, ev.clientY + 10)) + 'px';
 }
 
 // Korean BIS-style arrival text on each stop + highlight of the approached node
@@ -290,6 +401,8 @@ fetch('/api/config').then(r=>r.json()).then(c=>{
   if(!c.editable) $('editbtn').style.display = 'none';
 }).catch(()=>{});
 
+document.querySelectorAll('.vtab').forEach(t=>t.onclick=()=>setView(t.dataset.view));
+
 $('editbtn').onclick = openEditor;
 $('editclose').onclick = closeEditor;
 $('editor').onclick = e => { if(e.target.id==='editor') closeEditor(); };
@@ -303,7 +416,7 @@ function connect(){
   ws.onclose=()=>{c.textContent='● 연결 끊김';c.className='conn bad';setTimeout(connect,1000);};
   ws.onmessage=e=>{ if(ROUTE) apply((JSON.parse(e.data).buses)||[]); };
 }
-loadRoutes().then(connect);
+loadRoutes().then(loadGeo).then(connect);
 </script>
 </body>
 </html>
