@@ -102,7 +102,10 @@
   #mapsvg{display:block;width:100%;height:100%;}
   .mapstop{color:var(--orange);cursor:pointer;}      /* orange bus-stop sign */
   .mapstop.next{color:var(--green);} .mapstop.here{color:var(--green);}
-  .mroute{fill:none;stroke:#4f74c4;stroke-width:14;stroke-linejoin:round;stroke-linecap:round;opacity:.85;}
+  .mroute{fill:none;stroke:#4f74c4;stroke-linejoin:round;stroke-linecap:round;opacity:.85;}
+  .mlabel{fill:#17233b;font-weight:800;paint-order:stroke;stroke:#fff;stroke-linejoin:round;
+    pointer-events:none;font-family:"Malgun Gothic",sans-serif;}
+  #mapsvg{touch-action:none;}   /* let wheel/drag drive zoom & pan */
   .mbus{color:var(--navy);cursor:pointer;}
   .mbus.at{animation:mbob 0.8s ease-in-out infinite;}
   @keyframes mbob{0%,100%{opacity:1;}50%{opacity:.5;}}
@@ -280,24 +283,86 @@ async function loadGeo(){
   renderMapBase();
 }
 
-// build the static map layer (background + route + orange stop signs) per direction
+// build the static map layer (background + route + orange stop signs + labels)
 function renderMapBase(){
   const svg = $('mapsvg');
   if(!GEO || !ROUTE || !GEO[ROUTE.dir]){ svg.innerHTML=''; return; }
   const g = GEO[ROUTE.dir];
-  svg.setAttribute('viewBox', `0 0 ${GEO.W} ${GEO.H}`);
   const pts = g.path.map(p=>p.join(',')).join(' ');
-  let dots='';
+  let dots='', labels='';
   g.stops.forEach((s,i)=>{ const nm = ROUTE.stops[i] ? (ROUTE.stops[i].kname||ROUTE.stops[i].name) : '';
     const [x,y]=s.xy;
-    dots += `<use href="#stopicon" class="mapstop" x="${x-20}" y="${y-20}" width="40" height="40" data-i="${i}"><title>${nm}</title></use>`; });
+    dots   += `<use href="#stopicon" class="mapstop" data-cx="${x}" data-cy="${y}" data-i="${i}"><title>${nm}</title></use>`;
+    labels += `<text class="mlabel" data-cx="${x}" data-cy="${y}" text-anchor="middle" style="display:none">${nm}</text>`; });
   svg.innerHTML = MAP_DEFS
     + `<image href="/geo_bg.png" x="0" y="0" width="${GEO.W}" height="${GEO.H}"/>`
     + `<polyline class="mroute" points="${pts}"/>`
-    + `<g id="mapstops">${dots}</g><g id="mapbuses"></g>`;
+    + `<g id="mapstops">${dots}</g><g id="maplabels">${labels}</g><g id="mapbuses"></g>`;
   mapBusEls.clear();
-  svg.querySelectorAll('.mapstop').forEach(c=>c.addEventListener('click', ev=>showStopPopup(+c.dataset.i, ev)));
+  svg.querySelectorAll('.mapstop').forEach(c=>c.addEventListener('click', ev=>{ if(!_dragged) showStopPopup(+c.dataset.i, ev); }));
+  initMapView();          // fit whole route, then zoom/pan takes over
 }
+
+// ── zoom & pan (viewBox), with markers/labels kept at constant screen size ──
+let vb = null, baseVB = null, mScale = 1;
+const STOP_PX = 17, BUS_PX = 30, ROUTE_PX = 4, LABEL_PX = 12;
+
+function paneSize(){ const p = $('mappane'); return {w: p.clientWidth||1, h: p.clientHeight||1}; }
+
+function initMapView(){
+  const {w:pw, h:ph} = paneSize(), ar = pw/ph;
+  baseVB = {x:0, y:0, w:GEO.W, h:GEO.H};
+  let w, h;                                   // fit the whole map, matching pane aspect (no letterbox)
+  if(ar > GEO.W/GEO.H){ h = GEO.H; w = h*ar; } else { w = GEO.W; h = w/ar; }
+  vb = {x:(GEO.W-w)/2, y:(GEO.H-h)/2, w, h};
+  applyView();
+}
+
+function applyView(){
+  const svg = $('mapsvg'); if(!vb) return;
+  svg.setAttribute('viewBox', `${vb.x} ${vb.y} ${vb.w} ${vb.h}`);
+  mScale = vb.w / paneSize().w;               // world units per on-screen pixel
+  const ss = STOP_PX*mScale, bs = BUS_PX*mScale;
+  svg.querySelectorAll('.mapstop').forEach(u=>{ const cx=+u.dataset.cx, cy=+u.dataset.cy;
+    u.setAttribute('x',cx-ss/2); u.setAttribute('y',cy-ss/2); u.setAttribute('width',ss); u.setAttribute('height',ss); });
+  svg.querySelectorAll('.mbus').forEach(u=>{ const cx=+u.dataset.cx, cy=+u.dataset.cy;
+    u.setAttribute('x',cx-bs/2); u.setAttribute('y',cy-bs/2); u.setAttribute('width',bs); u.setAttribute('height',bs); });
+  const rt = svg.querySelector('.mroute'); if(rt) rt.setAttribute('stroke-width', ROUTE_PX*mScale);
+  const show = vb.w < baseVB.w*0.55;          // only show labels once zoomed in (avoid clutter)
+  svg.querySelectorAll('.mlabel').forEach(t=>{
+    if(!show){ t.style.display='none'; return; }
+    t.style.display=''; t.setAttribute('font-size', LABEL_PX*mScale);
+    t.setAttribute('x', +t.dataset.cx); t.setAttribute('y', +t.dataset.cy - ss*0.8);
+    t.setAttribute('stroke-width', 3*mScale);
+  });
+}
+
+let _mapWired = false;
+function setupMapInteraction(){
+  if(_mapWired) return; _mapWired = true;
+  const svg = $('mapsvg');
+  svg.addEventListener('wheel', e=>{
+    if(!vb) return; e.preventDefault();
+    const r = svg.getBoundingClientRect();
+    const fx=(e.clientX-r.left)/r.width, fy=(e.clientY-r.top)/r.height;
+    const wx=vb.x+fx*vb.w, wy=vb.y+fy*vb.h, ar=paneSize().w/paneSize().h;
+    let nw = vb.w*(e.deltaY<0?0.83:1/0.83);
+    nw = Math.min(baseVB.w, Math.max(GEO.W*0.05, nw));   // zoom range
+    const nh = nw/ar;
+    vb.x=wx-fx*nw; vb.y=wy-fy*nh; vb.w=nw; vb.h=nh; applyView();
+  }, {passive:false});
+  let drag=null, moved=false;
+  svg.addEventListener('pointerdown', e=>{ if(!vb) return; drag={x:e.clientX,y:e.clientY}; moved=false; svg.style.cursor='grabbing'; });
+  svg.addEventListener('pointermove', e=>{ if(!drag||!vb) return; const r=svg.getBoundingClientRect();
+    if(Math.hypot(e.clientX-drag.x,e.clientY-drag.y)>3) moved=true;
+    vb.x-=(e.clientX-drag.x)/r.width*vb.w; vb.y-=(e.clientY-drag.y)/r.height*vb.h;
+    drag={x:e.clientX,y:e.clientY}; applyView(); });
+  const end=()=>{ drag=null; svg.style.cursor='grab'; setTimeout(()=>{ _dragged=moved; }, 0); };
+  svg.addEventListener('pointerup', end); svg.addEventListener('pointercancel', end);
+  window.addEventListener('resize', ()=>{ if(vb) initMapView(); });
+  svg.style.cursor='grab';
+}
+let _dragged = false;
 
 function updateMapBuses(pl, alive){
   if(!GEO || !ROUTE || !GEO[ROUTE.dir]) return;
@@ -310,11 +375,12 @@ function updateMapBuses(pl, alive){
     const t = (i===0) ? 0 : f;
     const x = a[0]+(c[0]-a[0])*t, y = a[1]+(c[1]-a[1])*t;
     let el = mapBusEls.get(b.id);
-    if(!el){ el=document.createElementNS(SVGNS,'use'); el.setAttribute('href','#busicon');
-      el.setAttribute('width','56'); el.setAttribute('height','56'); el.setAttribute('class','mbus');
+    if(!el){ el=document.createElementNS(SVGNS,'use'); el.setAttribute('href','#busicon'); el.setAttribute('class','mbus');
       el.appendChild(document.createElementNS(SVGNS,'title')); layer.appendChild(el); mapBusEls.set(b.id,el);
-      el.addEventListener('click', ev=>{ ev.stopPropagation(); showBusPopup(b.id, ev); }); }
-    el.setAttribute('x', x-28); el.setAttribute('y', y-28);
+      el.addEventListener('click', ev=>{ ev.stopPropagation(); if(!_dragged) showBusPopup(b.id, ev); }); }
+    const bs = BUS_PX*mScale;
+    el.dataset.cx = x; el.dataset.cy = y;
+    el.setAttribute('x', x-bs/2); el.setAttribute('y', y-bs/2); el.setAttribute('width', bs); el.setAttribute('height', bs);
     el.classList.toggle('at', atStop);
     el.querySelector('title').textContent=(b.line?`[${b.line}] `:'')+(b.nick||b.id);
     const dot = svg.querySelector(`.mapstop[data-i="${i}"]`);
@@ -445,6 +511,8 @@ async function saveKname(s, value, row, btn){
 fetch('/api/config').then(r=>r.json()).then(c=>{
   if(!c.editable) $('editbtn').style.display = 'none';
 }).catch(()=>{});
+
+setupMapInteraction();
 
 $('editbtn').onclick = openEditor;
 $('editclose').onclick = closeEditor;
