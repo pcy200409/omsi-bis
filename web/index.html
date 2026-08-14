@@ -293,7 +293,7 @@ const MAP_DEFS = `<defs>
 </defs>`;
 
 async function loadRoutes(){
-  const list = await (await fetch('/api/routes?t='+Date.now(), {cache:'no-store'})).json();
+  const list = await (await fetch('/api/routes'+rq(), {cache:'no-store'})).json();
   const tabs = $('dirtabs'); tabs.innerHTML='';
   list.forEach(r=>{
     const t=document.createElement('div'); t.className='dirtab';
@@ -306,7 +306,7 @@ async function loadRoutes(){
 
 async function selectRoute(key){
   document.querySelectorAll('.dirtab').forEach(t=>t.classList.toggle('on', t.dataset.key===key));
-  ROUTE = await (await fetch('/api/route/'+key+'?t='+Date.now(), {cache:'no-store'})).json();
+  ROUTE = await (await fetch('/api/route/'+key+rq(), {cache:'no-store'})).json();
   $('badge').textContent = ROUTE.type || '일반';
   $('badge').className = 'badge' + (ROUTE.type==='간선'?' trunk':'');
   $('num').textContent = ROUTE.no;
@@ -344,7 +344,7 @@ const AVG_MPS = 5.2;       // assumed effective city-bus speed (~19 km/h incl. s
 
 function apply(buses){
   // a bus only belongs on the strip of the direction it's actually running
-  buses = buses.filter(b => (b.dir||null) === ROUTE.dir);
+  buses = buses.filter(b => (b.region||CURRENT_REGION) === CURRENT_REGION && (b.dir||null) === ROUTE.dir);
   $('running').textContent = buses.length;
   busData.clear(); for(const b of buses) busData.set(b.id, b);
   const alive=new Set();
@@ -387,7 +387,7 @@ function apply(buses){
 
 // ── map view ───────────────────────────────────────────────────────────
 async function loadGeo(){
-  try{ GEO = await (await fetch('/api/geo?t='+Date.now(), {cache:'no-store'})).json(); }
+  try{ GEO = await (await fetch('/api/geo'+rq(), {cache:'no-store'})).json(); }
   catch(e){ GEO = null; }
   renderMapBase();
 }
@@ -404,7 +404,7 @@ function renderMapBase(){
     dots   += `<use href="#stopicon" class="mapstop" data-cx="${x}" data-cy="${y}" data-i="${i}"><title>${nm}</title></use>`;
     labels += `<text class="mlabel" data-cx="${x}" data-cy="${y}" data-i="${i}" text-anchor="middle" style="display:none">${nm}</text>`; });
   svg.innerHTML = MAP_DEFS
-    + `<image href="/geo_bg.png" x="0" y="0" width="${GEO.W}" height="${GEO.H}"/>`
+    + `<image href="/api/geo_bg?region=${encodeURIComponent(CURRENT_REGION)}" x="0" y="0" width="${GEO.W}" height="${GEO.H}"/>`
     + `<polyline class="mroute" points="${pts}"/>`
     + `<g id="mapstops">${dots}</g><g id="maplabels">${labels}</g><g id="mapbuses"></g>`;
   mapBusEls.clear();
@@ -424,7 +424,7 @@ function undoStopMove(){
 function resetStop(i){
   const st = ROUTE.stops[i]; if(!st) return;
   fetch('/api/stoppos/reset', {method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({dir:ROUTE.dir, id:String(st.id)})}).then(r=>r.json()).then(j=>{
+    body: JSON.stringify({region:CURRENT_REGION, dir:ROUTE.dir, id:String(st.id)})}).then(r=>r.json()).then(j=>{
     if(j && j.xy){ const el=$('mapsvg').querySelector(`.mapstop[data-i="${i}"]`); if(el) moveStop(el, j.xy[0], j.xy[1]); }
   }).catch(()=>{});
 }
@@ -513,7 +513,7 @@ function saveStopPos(el){
   const i=+el.dataset.i, st=ROUTE.stops[i];
   if(!st) return;
   fetch('/api/stoppos', {method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({dir:ROUTE.dir, id:String(st.id), x:+el.dataset.cx, y:+el.dataset.cy})})
+    body: JSON.stringify({region:CURRENT_REGION, dir:ROUTE.dir, id:String(st.id), x:+el.dataset.cx, y:+el.dataset.cy})})
     .then(r=>{ if(!r.ok) r.json().then(j=>console.error('위치 저장 실패', j)); });
 }
 
@@ -649,7 +649,7 @@ async function saveKname(s, value, row, btn){
   btn.disabled = true; btn.textContent = '저장중';
   try{
     const res = await fetch('/api/kname', {method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({id:s.id, kname})});
+      body: JSON.stringify({region:CURRENT_REGION, id:s.id, kname})});
     if(!res.ok) throw new Error((await res.json()).error||res.status);
     s.kname = kname;
     row.classList.add('saved'); btn.textContent = '완료';
@@ -697,9 +697,18 @@ $('editsearch').oninput = e => renderEditList(e.target.value);
 // Two nav contexts (like the national BIS): on HOME the top nav lists regions
 // (HOME | <지역들> | 공지사항); inside a region it becomes the region BIS menu
 // (<지역> 버스정보시스템 | 노선현황 | 정류소현황 | 이용안내 | 공지사항).
-const REGIONS = [{key:'segang', name:'세강시', map:'Segang Alpha'}];   // add more later
+let REGIONS = [{key:'segang', name:'세강시'}];   // loaded from /api/regions at init
 let CURRENT_REGION = REGIONS[0].key;
 let PAGE = 'home', SIDE = 'routes', NAVMODE = 'home';
+const rq = () => '?region='+encodeURIComponent(CURRENT_REGION)+'&t='+Date.now();
+
+// switch to another region: reload its routes + map, refresh nav/brand
+async function switchRegion(key){
+  CURRENT_REGION = key; GEO = null;
+  renderNav(); updateSideBrand();
+  await loadRoutes();          // rebuilds dir tabs + selects first route (uses rq())
+  await loadGeo();             // reloads geo + redraws the map
+}
 
 function renderNav(){
   const el = $('navlinks');
@@ -724,7 +733,7 @@ function onNav(s){
   if(s.classList.contains('disabled')) return;
   const a = s.dataset.act;
   if(a==='home') setPage('home');
-  else if(a==='region'){ CURRENT_REGION = s.dataset.region; setPage('app'); setSide('routes'); }
+  else if(a==='region'){ setPage('app'); switchRegion(s.dataset.region).then(()=>setSide('routes')); }
   else if(a==='side'){ if(PAGE!=='app') setPage('app'); setSide(s.dataset.side); }
   else if(a==='notices') setPage('notices');
 }
@@ -893,7 +902,16 @@ function connect(){
   ws.onclose=()=>{c.textContent='● 연결 끊김';c.className='conn bad';setTimeout(connect,1000);};
   ws.onmessage=e=>{ if(ROUTE) apply((JSON.parse(e.data).buses)||[]); };
 }
-loadRoutes().then(loadGeo).then(connect);
+async function init(){
+  try{ const rs = await (await fetch('/api/regions?t='+Date.now())).json();
+       if(Array.isArray(rs) && rs.length) REGIONS = rs; }catch(e){}
+  CURRENT_REGION = REGIONS[0].key;
+  renderNav();                 // re-render nav with the real region list
+  await loadRoutes();          // preload default region so entering it is instant
+  await loadGeo();
+  connect();
+}
+init();
 </script>
 </body>
 </html>

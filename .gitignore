@@ -8,6 +8,8 @@ server/.venv/
 client/bin/
 client/obj/
 client/publish/
+client/dist/
+installer/Output/
 
 # logs / temp
 *.log
