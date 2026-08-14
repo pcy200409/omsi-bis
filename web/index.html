@@ -110,6 +110,28 @@
     padding:8px 12px;border-radius:8px;cursor:pointer;}
   .erow .save:disabled{background:#c7d2e6;cursor:default;}
   .erow.saved input{border-color:var(--green);background:#f2fbf6;}
+  /* 지역(맵) 관리 모달 */
+  .rrow{display:flex;align-items:center;gap:10px;padding:11px 18px;border-bottom:1px solid #f3f5f9;}
+  .rrow .rn{flex:1;min-width:0;} .rrow .rn b{font-size:14.5px;}
+  .rrow .rm{display:block;font-size:11.5px;color:#8a93a6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .rrow.cur{background:#f5f8ff;}
+  .rrow .rb{flex:none;background:#eef1f6;border:1px solid #dde3ec;color:#54607a;font-size:12px;
+    font-weight:700;padding:6px 9px;border-radius:8px;cursor:pointer;}
+  .rrow .rb.del{color:#d5495f;} .rrow .rb:disabled{opacity:.45;cursor:default;}
+  .regform{flex:none;border-top:2px solid #eef0f4;padding:14px 18px 18px;background:#fafbfd;
+    border-radius:0 0 16px 16px;overflow-y:auto;max-height:56%;}
+  .regform h4{font-size:13.5px;color:#152a52;margin-bottom:10px;}
+  .fl{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+  .fl label{flex:none;width:64px;font-size:12.5px;font-weight:700;color:#54607a;}
+  .fl select,.fl input{flex:1;min-width:0;padding:8px 10px;border:1px solid #dde3ec;border-radius:8px;
+    font-size:13.5px;background:#fff;color:#20293b;}
+  .fl .hint{font-size:11.5px;color:#8a93a6;}
+  .addbtn{width:100%;margin-top:6px;background:#2f6bff;color:#fff;border:none;font-size:14px;
+    font-weight:800;padding:11px 0;border-radius:9px;cursor:pointer;}
+  .addbtn:disabled{background:#c7d2e6;cursor:default;}
+  .reglog{margin-top:10px;background:#101a2e;color:#c8d6f0;font-size:11.5px;line-height:1.55;
+    border-radius:8px;padding:9px 11px;white-space:pre-wrap;max-height:130px;overflow-y:auto;}
+  .reglog.bad{background:#3a1220;color:#ffd3dc;}
   .dirtabs{display:flex;gap:8px;margin-top:12px;}
   .dirtab{flex:1;text-align:center;padding:8px 0;border-radius:8px;font-weight:700;font-size:14px;
     background:#eef1f6;color:#7b8699;cursor:pointer;border:1px solid transparent;user-select:none;}
@@ -265,6 +287,26 @@
     </div>
     <div class="editfilter"><input id="editsearch" placeholder="정류장 검색 (한글·로마자·번호)"></div>
     <div class="editlist" id="editlist"></div>
+  </div>
+</div>
+
+<div id="regmodal" class="modal" hidden>
+  <div class="sheet">
+    <div class="sheethead">
+      <b>지역(맵) 관리</b>
+      <span class="sub">OMSI 맵과 노선을 고르면 노선·지도가 자동 생성됩니다.</span>
+      <button class="xbtn" id="regclose">✕</button>
+    </div>
+    <div class="editlist" id="reglist"></div>
+    <div class="regform">
+      <h4>＋ 새 지역 추가</h4>
+      <div class="fl"><label>맵</label><select id="rgmap"></select></div>
+      <div class="fl"><label>노선</label><select id="rgline"></select></div>
+      <div class="fl"><label>지역명</label><input id="rgname" placeholder="예) 세강시"></div>
+      <div class="fl"><label>주소키</label><input id="rgkey" placeholder="segang"></div>
+      <button class="addbtn" id="rgadd">＋ 추가하고 노선 만들기</button>
+      <div class="reglog" id="reglog" hidden></div>
+    </div>
   </div>
 </div>
 
@@ -667,6 +709,7 @@ fetch('/api/config').then(r=>r.json()).then(c=>{
   EDITABLE = !!c.editable;
   if(!EDITABLE){ $('editbtn').style.display='none'; }
   else { $('posbtn').hidden = false; }
+  renderNav();                      // 관리자면 '⚙ 지역관리' 항목이 이제 붙는다
 }).catch(()=>{});
 
 $('posbtn').onclick = ()=>{
@@ -693,6 +736,119 @@ $('editclose').onclick = closeEditor;
 $('editor').onclick = e => { if(e.target.id==='editor') closeEditor(); };
 $('editsearch').oninput = e => renderEditList(e.target.value);
 
+// ── 지역(맵) 관리, 관리자 전용 ──────────────────────────────────────────
+// OMSI 맵 목록을 서버가 스캔해 주고(/api/maps), 맵+노선을 고르면 서버가
+// build_region.py를 돌려 노선·지도를 만든 뒤 바로 그 지역으로 들어간다.
+let MAPS = [];
+
+function openRegions(){ if(!EDITABLE) return; $('regmodal').hidden = false; loadRegionPanel(); }
+function closeRegions(){ $('regmodal').hidden = true; }
+
+async function loadRegionPanel(){
+  $('reglog').hidden = true;
+  try{ MAPS = await (await fetch('/api/maps?t='+Date.now())).json(); }catch(e){ MAPS = []; }
+  renderRegionList();
+  fillMapSelect();
+}
+
+function renderRegionList(){
+  $('reglist').innerHTML = REGIONS.map(r=>`
+    <div class="rrow${r.key===CURRENT_REGION?' cur':''}">
+      <div class="rn"><b>${esc(r.name)}</b> <span style="color:#8a93a6;font-size:12.5px">${esc(r.line||'')}번</span>
+        <span class="rm">${esc(r.map||'')} · /${esc(r.key)}</span></div>
+      <button class="rb" data-rb="build" data-key="${esc(r.key)}" title="맵을 고친 뒤 노선·지도 다시 만들기">↻ 재생성</button>
+      <button class="rb del" data-rb="del" data-key="${esc(r.key)}" ${REGIONS.length<2?'disabled title="마지막 지역은 지울 수 없습니다"':''}>삭제</button>
+    </div>`).join('');
+  $('reglist').querySelectorAll('.rb').forEach(b=>b.onclick = ()=>
+    b.dataset.rb==='build' ? rebuildRegion(b.dataset.key) : removeRegion(b.dataset.key));
+}
+
+function fillMapSelect(){
+  const sel = $('rgmap'), add = $('rgadd');
+  if(!MAPS.length){
+    sel.innerHTML = '<option>OMSI 맵을 찾지 못했습니다</option>';
+    $('rgline').innerHTML = ''; add.disabled = true; return;
+  }
+  add.disabled = false;
+  sel.innerHTML = MAPS.map(m=>
+    `<option value="${esc(m.map)}"${m.region?' disabled':''}>${esc(m.map)}${m.region?' · 등록됨':''}</option>`).join('');
+  sel.value = (MAPS.find(m=>!m.region) || MAPS[0]).map;
+  sel.onchange = onMapPick;
+  onMapPick();
+}
+
+function onMapPick(){
+  const m = MAPS.find(x=>x.map===$('rgmap').value);
+  $('rgline').innerHTML = ((m&&m.lines)||[]).map(l=>
+    `<option value="${esc(l.line)}">${esc(l.line)}번${l.both?'':' (상행만)'}${l.geo?'':' · 지도 없음'}</option>`).join('');
+  // 주소키 자동제안: 맵 이름의 첫 낱말만 (버전표기 "(2.0.5)" · "4.0" 등은 버린다)
+  if(m){
+    const base = m.map.replace(/\(.*?\)/g,' ').trim().split(/\s+/)[0] || m.map;
+    const slug = s => s.toLowerCase().replace(/[^0-9a-z]/g,'');
+    $('rgkey').value = slug(base) || slug(m.map);
+  }
+}
+
+function showRegLog(text, bad){
+  const el = $('reglog'); el.hidden = false; el.textContent = text;
+  el.classList.toggle('bad', !!bad);
+}
+
+async function refreshRegions(){
+  try{ const rs = await (await fetch('/api/regions?t='+Date.now())).json();
+       if(Array.isArray(rs) && rs.length) REGIONS = rs; }catch(e){}
+  try{ MAPS = await (await fetch('/api/maps?t='+Date.now())).json(); }catch(e){}
+  renderNav(); updateSideBrand(); renderRegionList(); fillMapSelect();
+}
+
+$('rgadd').onclick = async ()=>{
+  const body = {map:$('rgmap').value, line:$('rgline').value,
+                name:$('rgname').value.trim(), key:$('rgkey').value.trim()};
+  if(!body.name){ showRegLog('지역명을 입력하세요. (예: 세강시)', true); $('rgname').focus(); return; }
+  const btn = $('rgadd'); btn.disabled = true; btn.textContent = '노선·지도 만드는 중…';
+  showRegLog(`${body.map} · ${body.line}번 생성 중 …`);
+  try{
+    const res = await fetch('/api/regions', {method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(body)});
+    const j = await res.json();
+    if(!res.ok){ showRegLog((j.error||'추가 실패') + (j.log?'\n\n'+j.log:''), true); return; }
+    showRegLog(j.log || '완료');
+    await refreshRegions();
+    $('rgname').value = '';
+    setPage('app'); await switchRegion(j.key); setSide('routes');
+    setTimeout(closeRegions, 700);           // 로그 잠깐 보여주고 닫기
+  }catch(e){ showRegLog('요청 실패: '+e, true); }
+  finally{ btn.disabled = false; btn.textContent = '＋ 추가하고 노선 만들기'; }
+};
+
+async function rebuildRegion(key){
+  showRegLog(`'${key}' 다시 만드는 중 …`);
+  try{
+    const res = await fetch('/api/regions/'+encodeURIComponent(key)+'/rebuild', {method:'POST'});
+    const j = await res.json();
+    if(!res.ok){ showRegLog((j.error||'재생성 실패') + (j.log?'\n\n'+j.log:''), true); return; }
+    showRegLog(j.log || '완료');
+    if(key===CURRENT_REGION){ GEO = null; await loadRoutes(); await loadGeo(); }
+  }catch(e){ showRegLog('요청 실패: '+e, true); }
+}
+
+async function removeRegion(key){
+  const r = REGIONS.find(x=>x.key===key);
+  if(!confirm(`'${r?r.name:key}' 지역을 목록에서 뺄까요?\n(만들어둔 데이터 폴더는 남으니 다시 추가하면 수정한 이름·위치가 살아납니다)`)) return;
+  try{
+    const res = await fetch('/api/regions/'+encodeURIComponent(key), {method:'DELETE'});
+    const j = await res.json();
+    if(!res.ok){ showRegLog(j.error||'삭제 실패', true); return; }
+    const wasCurrent = (key===CURRENT_REGION);
+    await refreshRegions();
+    showRegLog(`'${r?r.name:key}' 지역을 목록에서 뺐습니다.`);
+    if(wasCurrent && REGIONS.length) await switchRegion(REGIONS[0].key);
+  }catch(e){ showRegLog('요청 실패: '+e, true); }
+}
+
+$('regclose').onclick = closeRegions;
+$('regmodal').onclick = e => { if(e.target.id==='regmodal') closeRegions(); };
+
 // ── site navigation ─────────────────────────────────────────────────────
 // Two nav contexts (like the national BIS): on HOME the top nav lists regions
 // (HOME | <지역들> | 공지사항); inside a region it becomes the region BIS menu
@@ -712,6 +868,7 @@ async function switchRegion(key){
 
 function renderNav(){
   const el = $('navlinks');
+  const admin = EDITABLE ? `<span data-act="regions" title="OMSI 맵을 지역으로 등록">⚙ 지역관리</span>` : '';
   if(NAVMODE==='region'){
     const r = REGIONS.find(x=>x.key===CURRENT_REGION) || REGIONS[0];
     el.innerHTML =
@@ -719,12 +876,12 @@ function renderNav(){
       `<span data-act="side" data-side="routes">노선현황</span>`+
       `<span data-act="side" data-side="stops">정류소현황</span>`+
       `<span class="disabled">이용안내</span>`+
-      `<span data-act="notices">공지사항</span>`;
+      `<span data-act="notices">공지사항</span>`+ admin;
   } else {
     el.innerHTML =
       `<span data-act="home">HOME</span>`+
       REGIONS.map(r=>`<span data-act="region" data-region="${r.key}">${r.name}</span>`).join('')+
-      `<span data-act="notices">공지사항</span>`;
+      `<span data-act="notices">공지사항</span>`+ admin;
   }
   el.querySelectorAll('span').forEach(s=>s.onclick=()=>onNav(s));
   highlightNav();
@@ -736,6 +893,7 @@ function onNav(s){
   else if(a==='region'){ setPage('app'); switchRegion(s.dataset.region).then(()=>setSide('routes')); }
   else if(a==='side'){ if(PAGE!=='app') setPage('app'); setSide(s.dataset.side); }
   else if(a==='notices') setPage('notices');
+  else if(a==='regions') openRegions();
 }
 function highlightNav(){
   $('navlinks').querySelectorAll('span').forEach(s=>{

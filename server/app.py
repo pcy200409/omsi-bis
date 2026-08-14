@@ -32,6 +32,10 @@ READONLY = os.environ.get("BIS_READONLY", "").strip() not in ("", "0", "false", 
 WEB_DIR = Path(__file__).resolve().parent.parent / "web"
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 REGIONS_DIR = DATA_DIR / "regions"
+# Where this machine keeps its OMSI maps — only used by the admin "지역 추가" GUI,
+# which is local-only anyway (the cloud copy has no OMSI install).
+OMSI_MAPS = Path(os.environ.get(
+    "OMSI_MAPS_DIR", r"C:\Program Files (x86)\Steam\steamapps\common\OMSI 2\maps"))
 
 app = FastAPI(title="OMSI BIS server")
 buses: dict[str, dict] = {}
@@ -41,6 +45,11 @@ buses: dict[str, dict] = {}
 def load_regions() -> list[dict]:
     p = DATA_DIR / "regions.json"
     return json.loads(p.read_text(encoding="utf-8")) if p.exists() else []
+
+
+def save_regions(regs: list[dict]):
+    (DATA_DIR / "regions.json").write_text(
+        json.dumps(regs, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 REGIONS = load_regions()
@@ -71,6 +80,16 @@ def build_id2dir(key: str) -> dict[int, str]:
 
 
 ID2DIR: dict[str, dict[int, str]] = {r["key"]: build_id2dir(r["key"]) for r in REGIONS}
+
+
+def reload_regions():
+    """Re-read regions.json after the admin adds/removes one (no restart needed)."""
+    global REGIONS, DEFAULT_REGION, REGION_KEYS, MAP2REGION, ID2DIR
+    REGIONS = load_regions()
+    DEFAULT_REGION = REGIONS[0]["key"] if REGIONS else "segang"
+    REGION_KEYS = {r["key"] for r in REGIONS}
+    MAP2REGION = {r.get("map", ""): r["key"] for r in REGIONS}
+    ID2DIR = {r["key"]: build_id2dir(r["key"]) for r in REGIONS}
 
 
 class Update(BaseModel):
@@ -157,7 +176,8 @@ async def _startup():
 # ── region-scoped route + geo data ───────────────────────────────────────
 @app.get("/api/regions")
 async def regions_list():
-    return [{"key": r["key"], "name": r["name"], "line": r.get("line", "")} for r in REGIONS]
+    return [{"key": r["key"], "name": r["name"], "line": r.get("line", ""),
+             "map": r.get("map", "")} for r in REGIONS]
 
 
 @app.get("/api/routes")
@@ -263,12 +283,106 @@ class StopReset(BaseModel):
 
 
 def _rebuild_region(rk: str) -> tuple[bool, str]:
-    r = subprocess.run([sys.executable, str(Path(__file__).resolve().parent / "build_region.py"), rk],
-                       capture_output=True, text=True, cwd=str(Path(__file__).resolve().parent))
+    """Run build_region.py for one region; returns (ok, build log)."""
+    here = Path(__file__).resolve().parent
+    r = subprocess.run([sys.executable, str(here / "build_region.py"), rk],
+                       capture_output=True, text=True, cwd=str(here))
+    log = ((r.stdout or "") + (r.stderr or "")).strip()
     if r.returncode != 0:
-        return False, (r.stderr or r.stdout or "build_region failed")[-500:]
+        return False, (log or "build_region failed")[-1500:]
     ID2DIR[rk] = build_id2dir(rk)
-    return True, "ok"
+    return True, log[-1500:]
+
+
+# ── admin: region (map) management — powers the 지역 추가 GUI ─────────────
+def _slug(s: str) -> str:
+    return re.sub(r"[^0-9a-z]", "", (s or "").lower())
+
+
+def _line_of(f: Path) -> str:
+    return f.stem[:-2]                       # "124 A.ttp" -> "124"
+
+
+@app.get("/api/maps")
+async def maps_list():
+    """OMSI maps installed on this machine and the lines each one offers."""
+    if READONLY or not OMSI_MAPS.is_dir():
+        return []
+    out = []
+    for d in sorted(p for p in OMSI_MAPS.iterdir() if p.is_dir()):
+        tt = d / "TTData"
+        if not tt.is_dir():
+            continue
+        lines = []
+        for f in sorted(tt.glob("* A.ttp")):
+            ln = _line_of(f)
+            lines.append({"line": ln,
+                          "both": (tt / f"{ln} B.ttp").exists(),   # 상·하행 다 있나
+                          "geo": (tt / f"{ln} A.ttr").exists()})   # 지도(track) 가능한가
+        if lines:
+            out.append({"map": d.name, "lines": lines, "region": MAP2REGION.get(d.name)})
+    return out
+
+
+class RegionNew(BaseModel):
+    key: str = ""
+    name: str
+    map: str
+    line: str
+
+
+@app.post("/api/regions")
+async def add_region(r: RegionNew):
+    if READONLY:
+        return JSONResponse({"error": "지역 추가는 로컬(관리자)에서만 가능합니다."}, status_code=403)
+    name, mp, line = r.name.strip(), r.map.strip(), r.line.strip()
+    key = _slug(r.key) or _slug(mp)
+    if not (name and mp and line and key):
+        return JSONResponse({"error": "지역 이름 · 맵 · 노선을 모두 지정하세요."}, status_code=400)
+    regs = load_regions()
+    if any(x["key"] == key for x in regs):
+        return JSONResponse({"error": f"이미 쓰는 지역 키입니다: {key}"}, status_code=409)
+    if any(x.get("map") == mp for x in regs):
+        return JSONResponse({"error": f"이 맵은 이미 등록돼 있습니다: {mp}"}, status_code=409)
+    if not (OMSI_MAPS / mp / "TTData" / f"{line} A.ttp").exists():
+        return JSONResponse({"error": f"노선 파일이 없습니다: {line} A.ttp"}, status_code=400)
+    save_regions(regs + [{"key": key, "name": name, "map": mp, "line": line}])
+    ok, log = await asyncio.to_thread(_rebuild_region, key)      # keeps the server responsive
+    if not ok:
+        save_regions(regs)                  # failed build -> leave no half-registered region
+        reload_regions()
+        return JSONResponse({"error": "노선 데이터 생성 실패", "log": log}, status_code=500)
+    reload_regions()
+    return {"ok": True, "key": key, "name": name, "log": log}
+
+
+@app.post("/api/regions/{key}/rebuild")
+async def rebuild_region(key: str):
+    if READONLY:
+        return JSONResponse({"error": "재생성은 로컬(관리자)에서만 가능합니다."}, status_code=403)
+    key = _slug(key)
+    if key not in REGION_KEYS:
+        return JSONResponse({"error": "없는 지역입니다."}, status_code=404)
+    ok, log = await asyncio.to_thread(_rebuild_region, key)
+    if not ok:
+        return JSONResponse({"error": "재생성 실패", "log": log}, status_code=500)
+    return {"ok": True, "key": key, "log": log}
+
+
+@app.delete("/api/regions/{key}")
+async def del_region(key: str):
+    if READONLY:
+        return JSONResponse({"error": "지역 삭제는 로컬(관리자)에서만 가능합니다."}, status_code=403)
+    key = _slug(key)
+    regs = load_regions()
+    if not any(x["key"] == key for x in regs):
+        return JSONResponse({"error": "없는 지역입니다."}, status_code=404)
+    if len(regs) <= 1:
+        return JSONResponse({"error": "최소 한 개 지역은 있어야 합니다."}, status_code=400)
+    save_regions([x for x in regs if x["key"] != key])
+    reload_regions()
+    # data/regions/<key>/ 는 그대로 둔다 — 다시 추가하면 손수 고친 이름·위치가 살아난다.
+    return {"ok": True, "key": key}
 
 
 @app.post("/api/kname")
