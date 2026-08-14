@@ -194,7 +194,7 @@ def _load_route(rk: str, key: str) -> dict | None:
 @app.get("/api/route/{key}")
 async def route(key: str, region: str = ""):
     rk = valid_region(region or DEFAULT_REGION)
-    key = re.sub(r"[^0-9A-Za-z]", "", key)          # sanitize path segment
+    key = re.sub(r"[^0-9A-Za-z._\-]", "", key)      # sanitize path segment (line ids like 8-1)
     r = _load_route(rk, key)
     if r is None:
         return JSONResponse({"error": "not found"}, status_code=404)
@@ -285,8 +285,11 @@ class StopReset(BaseModel):
 def _rebuild_region(rk: str) -> tuple[bool, str]:
     """Run build_region.py for one region; returns (ok, build log)."""
     here = Path(__file__).resolve().parent
+    # 한글 윈도우면 파이프 기본 인코딩이 cp949라 로그 한 줄에 빌드가 통째로 죽는다
+    env = {**os.environ, "PYTHONIOENCODING": "utf-8"}
     r = subprocess.run([sys.executable, str(here / "build_region.py"), rk],
-                       capture_output=True, text=True, cwd=str(here))
+                       capture_output=True, text=True, encoding="utf-8",
+                       errors="replace", env=env, cwd=str(here))
     log = ((r.stdout or "") + (r.stderr or "")).strip()
     if r.returncode != 0:
         return False, (log or "build_region failed")[-1500:]
@@ -299,13 +302,25 @@ def _slug(s: str) -> str:
     return re.sub(r"[^0-9a-z]", "", (s or "").lower())
 
 
-def _line_of(f: Path) -> str:
-    return f.stem[:-2]                       # "124 A.ttp" -> "124"
+def _line_of(stem: str) -> str:
+    """Trip files are named freely per map, but they all start with the line:
+    "124 A" · "92 (to Munsan Univ)" · "725_WBG_hin" · "102_1" -> 124 · 92 · 725 · 102"""
+    m = re.match(r"[^\s_(]+", stem.strip())
+    return m.group(0) if m else stem.strip()
+
+
+def _line_sort(ln: str):
+    m = re.match(r"(\d+)(.*)", ln)
+    return (0, int(m.group(1)), m.group(2)) if m else (1, 0, ln)
 
 
 @app.get("/api/maps")
 async def maps_list():
-    """OMSI maps installed on this machine and the lines each one offers."""
+    """Every OMSI map here, its trip files (.ttp) grouped by line number.
+
+    We don't assume any naming convention — the admin picks which trip file is
+    the up/down direction. `track` says whether a .ttr exists for the map view
+    (same name as the trip, or just the line number, as maps differ)."""
     if READONLY or not OMSI_MAPS.is_dir():
         return []
     out = []
@@ -313,14 +328,15 @@ async def maps_list():
         tt = d / "TTData"
         if not tt.is_dir():
             continue
-        lines = []
-        for f in sorted(tt.glob("* A.ttp")):
-            ln = _line_of(f)
-            lines.append({"line": ln,
-                          "both": (tt / f"{ln} B.ttp").exists(),   # 상·하행 다 있나
-                          "geo": (tt / f"{ln} A.ttr").exists()})   # 지도(track) 가능한가
+        lines: dict[str, list] = {}
+        for f in sorted(tt.glob("*.ttp")):
+            ln = _line_of(f.stem)
+            has_track = (tt / f"{f.stem}.ttr").exists() or (tt / f"{ln}.ttr").exists()
+            lines.setdefault(ln, []).append({"file": f.stem, "track": has_track})
         if lines:
-            out.append({"map": d.name, "lines": lines, "region": MAP2REGION.get(d.name)})
+            out.append({"map": d.name, "region": MAP2REGION.get(d.name),
+                        "lines": [{"line": ln, "trips": lines[ln]}
+                                  for ln in sorted(lines, key=_line_sort)]})
     return out
 
 
@@ -329,6 +345,8 @@ class RegionNew(BaseModel):
     name: str
     map: str
     line: str
+    tripUp: str = ""        # .ttp stem (empty = "<line> A" convention)
+    tripDown: str = ""
 
 
 @app.post("/api/regions")
@@ -344,9 +362,16 @@ async def add_region(r: RegionNew):
         return JSONResponse({"error": f"이미 쓰는 지역 키입니다: {key}"}, status_code=409)
     if any(x.get("map") == mp for x in regs):
         return JSONResponse({"error": f"이 맵은 이미 등록돼 있습니다: {mp}"}, status_code=409)
-    if not (OMSI_MAPS / mp / "TTData" / f"{line} A.ttp").exists():
-        return JSONResponse({"error": f"노선 파일이 없습니다: {line} A.ttp"}, status_code=400)
-    save_regions(regs + [{"key": key, "name": name, "map": mp, "line": line}])
+    tt = OMSI_MAPS / mp / "TTData"
+    up = (r.tripUp or f"{line} A").strip()
+    down = (r.tripDown or "").strip()
+    if not (tt / f"{up}.ttp").exists():
+        return JSONResponse({"error": f"운행 파일이 없습니다: {up}.ttp"}, status_code=400)
+    if down and not (tt / f"{down}.ttp").exists():
+        return JSONResponse({"error": f"운행 파일이 없습니다: {down}.ttp"}, status_code=400)
+    entry = {"key": key, "name": name, "map": mp, "line": line,
+             "trips": {"up": up, "down": down}}
+    save_regions(regs + [entry])
     ok, log = await asyncio.to_thread(_rebuild_region, key)      # keeps the server responsive
     if not ok:
         save_regions(regs)                  # failed build -> leave no half-registered region

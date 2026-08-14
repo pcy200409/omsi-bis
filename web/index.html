@@ -110,6 +110,10 @@
     padding:8px 12px;border-radius:8px;cursor:pointer;}
   .erow .save:disabled{background:#c7d2e6;cursor:default;}
   .erow.saved input{border-color:var(--green);background:#f2fbf6;}
+  .mapnone{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+    align-items:center;gap:6px;text-align:center;color:#7b8699;font-size:15px;font-weight:700;
+    background:#f4f6fa;line-height:1.7;}
+  .mapnone span{font-size:13px;font-weight:600;color:#a7b0c0;}
   /* 지역(맵) 관리 모달 */
   .rrow{display:flex;align-items:center;gap:10px;padding:11px 18px;border-bottom:1px solid #f3f5f9;}
   .rrow .rn{flex:1;min-width:0;} .rrow .rn b{font-size:14.5px;}
@@ -302,6 +306,9 @@
       <h4>＋ 새 지역 추가</h4>
       <div class="fl"><label>맵</label><select id="rgmap"></select></div>
       <div class="fl"><label>노선</label><select id="rgline"></select></div>
+      <div class="fl"><label>상행</label><select id="rgup"></select></div>
+      <div class="fl"><label>하행</label><select id="rgdown"></select></div>
+      <div class="fl"><label></label><span class="hint" id="rghint"></span></div>
       <div class="fl"><label>지역명</label><input id="rgname" placeholder="예) 세강시"></div>
       <div class="fl"><label>주소키</label><input id="rgkey" placeholder="segang"></div>
       <button class="addbtn" id="rgadd">＋ 추가하고 노선 만들기</button>
@@ -429,7 +436,9 @@ function apply(buses){
 
 // ── map view ───────────────────────────────────────────────────────────
 async function loadGeo(){
-  try{ GEO = await (await fetch('/api/geo'+rq(), {cache:'no-store'})).json(); }
+  try{ const r = await fetch('/api/geo'+rq(), {cache:'no-store'});
+       const j = r.ok ? await r.json() : null;      // 지도 없는 지역은 404 -> 스트립만
+       GEO = (j && j.W) ? j : null; }
   catch(e){ GEO = null; }
   renderMapBase();
 }
@@ -437,6 +446,7 @@ async function loadGeo(){
 // build the static map layer (background + route + orange stop signs + labels)
 function renderMapBase(){
   const svg = $('mapsvg');
+  showMapNote(!GEO || !ROUTE || !GEO[ROUTE.dir]);
   if(!GEO || !ROUTE || !GEO[ROUTE.dir]){ svg.innerHTML=''; return; }
   const g = GEO[ROUTE.dir];
   const pts = g.path.map(p=>p.join(',')).join(' ');
@@ -455,6 +465,16 @@ function renderMapBase(){
     c.addEventListener('contextmenu', ev=>{ if(posEdit){ ev.preventDefault(); resetStop(+c.dataset.i); } });
   });
   initMapView();          // fit whole route, then zoom/pan takes over
+}
+
+// 지도 데이터(.ttr)가 없는 맵/방향이면 빈 지도 대신 안내를 띄운다
+function showMapNote(on){
+  let n = $('mapnone');
+  if(on && !n){
+    n = document.createElement('div'); n.id = 'mapnone'; n.className = 'mapnone';
+    n.innerHTML = '이 노선은 지도 데이터(.ttr)가 없습니다.<br><span>왼쪽 정류장 목록으로 실시간 위치를 볼 수 있습니다.</span>';
+    $('mappane').appendChild(n);
+  } else if(!on && n){ n.remove(); }
 }
 
 // undo the last stop move / reset a stop to its original (spline) position
@@ -549,7 +569,8 @@ function moveStop(el, wx, wy){
   el.setAttribute('x', wx-ss/2); el.setAttribute('y', wy-ss/2);
   const lbl=svg.querySelector(`.mlabel[data-i="${i}"]`);
   if(lbl){ lbl.dataset.cx=wx; lbl.dataset.cy=wy; lbl.setAttribute('x', wx); lbl.setAttribute('y', wy-ss*0.8); }
-  if(GEO && GEO[ROUTE.dir]) GEO[ROUTE.dir].stops[i].xy=[wx,wy];   // buses interpolate on new pos
+  if(GEO && GEO[ROUTE.dir]){ GEO[ROUTE.dir].stops[i].xy=[wx,wy];  // buses interpolate on new pos
+    delete GEO[ROUTE.dir]._pi; }                                   // 노선선 스냅 인덱스 재계산
 }
 function saveStopPos(el){
   const i=+el.dataset.i, st=ROUTE.stops[i];
@@ -557,6 +578,47 @@ function saveStopPos(el){
   fetch('/api/stoppos', {method:'POST', headers:{'Content-Type':'application/json'},
     body: JSON.stringify({region:CURRENT_REGION, dir:ROUTE.dir, id:String(st.id), x:+el.dataset.cx, y:+el.dataset.cy})})
     .then(r=>{ if(!r.ok) r.json().then(j=>console.error('위치 저장 실패', j)); });
+}
+
+// ── 지도 위 버스는 노선 폴리라인을 '따라' 간다 ────────────────────────────
+// 정류장 사이를 직선보간하면 길이 굽은 구간에서 마커가 도로 밖 엉뚱한 곳을
+// 가로지른다(실운전 피드백). 그래서 정류장을 노선선에 스냅해 두고, 두 정류장
+// 사이를 선의 '거리(호장)' 기준으로 걸어간다 — f 자체가 OMSI의 거리비율이라 잘 맞는다.
+const PATH_SNAP_MAX = 70;      // 정류장이 노선선에서 이보다 멀면(px) 그 구간은 직선보간
+
+function pathIndex(g){
+  if(g._pi !== undefined) return g._pi;
+  const P = g.path;
+  if(!P || P.length < 2) return (g._pi = null);
+  const cum = new Float64Array(P.length);
+  for(let i=1;i<P.length;i++) cum[i] = cum[i-1] + Math.hypot(P[i][0]-P[i-1][0], P[i][1]-P[i-1][1]);
+  const idx = [];
+  let from = 0;                                   // 노선 진행순서대로만 스냅(뒤로 안 감)
+  for(const s of g.stops){
+    let best = -1, bd = Infinity;
+    for(let i=from;i<P.length;i++){
+      const d = (P[i][0]-s.xy[0])**2 + (P[i][1]-s.xy[1])**2;
+      if(d < bd){ bd = d; best = i; }
+    }
+    if(bd > PATH_SNAP_MAX*PATH_SNAP_MAX) best = -1;   // 손으로 옮긴 정류장 등 = 선과 무관
+    idx.push(best);
+    if(best >= 0) from = best;
+  }
+  return (g._pi = {P, cum, idx});
+}
+
+function posOnPath(g, i, f){
+  const pi = pathIndex(g);
+  if(!pi || i<=0) return null;
+  const a = pi.idx[i-1], b = pi.idx[i];
+  if(a < 0 || b < 0 || b <= a) return null;          // 스냅 실패 구간 -> 직선보간으로
+  const target = pi.cum[a] + (pi.cum[b]-pi.cum[a])*f;
+  let lo = a, hi = b;
+  while(lo < hi-1){ const m = (lo+hi)>>1; if(pi.cum[m] <= target) lo = m; else hi = m; }
+  const seg = pi.cum[hi] - pi.cum[lo];
+  const t = seg > 0 ? (target-pi.cum[lo])/seg : 0;
+  return [pi.P[lo][0] + (pi.P[hi][0]-pi.P[lo][0])*t,
+          pi.P[lo][1] + (pi.P[hi][1]-pi.P[lo][1])*t];
 }
 
 function updateMapBuses(pl, alive){
@@ -568,7 +630,9 @@ function updateMapBuses(pl, alive){
   for(const {b,i,f,atStop} of pl){
     const a = g.stops[Math.max(0,i-1)].xy, c = g.stops[i].xy;
     const t = (i===0) ? 0 : f;
-    const x = a[0]+(c[0]-a[0])*t, y = a[1]+(c[1]-a[1])*t;
+    const on = posOnPath(g, i, t);                    // 노선선 위 좌표(가능하면)
+    const x = on ? on[0] : a[0]+(c[0]-a[0])*t;
+    const y = on ? on[1] : a[1]+(c[1]-a[1])*t;
     let el = mapBusEls.get(b.id);
     if(!el){ el=document.createElementNS(SVGNS,'use'); el.setAttribute('href','#busicon'); el.setAttribute('class','mbus');
       el.appendChild(document.createElementNS(SVGNS,'title')); layer.appendChild(el); mapBusEls.set(b.id,el);
@@ -605,7 +669,9 @@ function showBusPopup(id, ev){
   const b = busData.get(id); if(!b) return;
   const pop = $('mappop');
   const line = b.line || '—', nick = b.nick || b.id;
-  const next = b.schedValid ? (b.nextName||'') : '';
+  // OMSI가 주는 nextName은 맵 원본(로마자)이라, 화면에 쓰는 정류소 한글이름으로 바꿔 보여준다
+  const nextSt = b.schedValid && ROUTE ? ROUTE.stops.find(s=>String(s.id)===String(b.nextIdCode)) : null;
+  const next = nextSt ? (nextSt.kname || nextSt.name) : (b.schedValid ? (b.nextName||'') : '');
   const row=(k,v,c)=>`<div class="pl"><span>${k}</span><b style="color:${c||'#20293b'}">${esc(v)}</b></div>`;
   pop.innerHTML = `<span class="px">✕</span>
     <div style="color:#8a93a6;font-size:11.5px;font-weight:700">운행버스정보</div>
@@ -779,14 +845,46 @@ function fillMapSelect(){
 
 function onMapPick(){
   const m = MAPS.find(x=>x.map===$('rgmap').value);
-  $('rgline').innerHTML = ((m&&m.lines)||[]).map(l=>
-    `<option value="${esc(l.line)}">${esc(l.line)}번${l.both?'':' (상행만)'}${l.geo?'':' · 지도 없음'}</option>`).join('');
+  $('rgline').innerHTML = ((m&&m.lines)||[]).map(l=>{
+    const n = l.trips.length, geo = l.trips.some(t=>t.track);
+    return `<option value="${esc(l.line)}">${esc(l.line)}번 · 운행 ${n}개${geo?'':' · 지도 없음'}</option>`;
+  }).join('');
+  $('rgline').onchange = onLinePick;
+  onLinePick();
   // 주소키 자동제안: 맵 이름의 첫 낱말만 (버전표기 "(2.0.5)" · "4.0" 등은 버린다)
   if(m){
     const base = m.map.replace(/\(.*?\)/g,' ').trim().split(/\s+/)[0] || m.map;
     const slug = s => s.toLowerCase().replace(/[^0-9a-z]/g,'');
     $('rgkey').value = slug(base) || slug(m.map);
   }
+}
+
+// 맵마다 운행파일(.ttp) 이름 규칙이 제각각이라("124 A", "92 (to Munsan Univ)",
+// "725_WBG_hin"…) 어느 파일이 상행/하행인지는 사람이 고른다. A/B가 있으면 그걸 기본으로.
+function onLinePick(){
+  const m = MAPS.find(x=>x.map===$('rgmap').value);
+  const l = m && (m.lines||[]).find(x=>x.line===$('rgline').value);
+  const trips = (l&&l.trips)||[];
+  const opt = t => `<option value="${esc(t.file)}">${esc(t.file)}${t.track?'':' (지도 없음)'}</option>`;
+  $('rgup').innerHTML = trips.map(opt).join('');
+  $('rgdown').innerHTML = '<option value="">— 없음 (편도)</option>' + trips.map(opt).join('');
+  const endsWith = s => trips.find(t=>t.file.trim().toUpperCase().endsWith(s));
+  const a = endsWith(' A'), b = endsWith(' B');
+  $('rgup').value   = (a||trips[0]||{}).file || '';
+  $('rgdown').value = (b|| (trips[1]&&trips[1]!==a ? trips[1] : null) || {}).file || '';
+  updateRgHint();
+  $('rgup').onchange = $('rgdown').onchange = updateRgHint;
+}
+
+function updateRgHint(){
+  const m = MAPS.find(x=>x.map===$('rgmap').value);
+  const l = m && (m.lines||[]).find(x=>x.line===$('rgline').value);
+  const trips = (l&&l.trips)||[];
+  const tr = f => (trips.find(t=>t.file===f)||{}).track;
+  const up = $('rgup').value, dn = $('rgdown').value;
+  const geo = tr(up) || (dn && tr(dn));
+  $('rghint').textContent = geo ? '지도(노선 경로) 있음 — 지도 관제까지 됩니다'
+                                : '지도 데이터(.ttr) 없음 — 정류장 목록만 만들어집니다';
 }
 
 function showRegLog(text, bad){
@@ -803,6 +901,7 @@ async function refreshRegions(){
 
 $('rgadd').onclick = async ()=>{
   const body = {map:$('rgmap').value, line:$('rgline').value,
+                tripUp:$('rgup').value, tripDown:$('rgdown').value,
                 name:$('rgname').value.trim(), key:$('rgkey').value.trim()};
   if(!body.name){ showRegLog('지역명을 입력하세요. (예: 세강시)', true); $('rgname').focus(); return; }
   const btn = $('rgadd'); btn.disabled = true; btn.textContent = '노선·지도 만드는 중…';

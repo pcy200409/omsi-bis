@@ -5,6 +5,15 @@ pulls real distances from StnLinks.cfg, and auto-transliterates Korean names),
 and its spline reconstruction for the map geometry. So adding a new map only
 needs an entry in data/regions.json and a run of this script.
 
+Trip files are named freely per map ("124 A.ttp", "92 (to Munsan Univ).ttp",
+"725_WBG_hin.ttp" …), so the region entry names them explicitly:
+
+  {"key","name","map","line", "trips": {"up": "<ttp stem>", "down": "<ttp stem>"}}
+
+Without "trips" we fall back to the "<line> A"/"<line> B" convention. The track
+(.ttr, only needed for the map view) is looked up by trip stem, then by line
+number; a map with no track still gets the route strip.
+
 Usage:  python build_region.py <region_key>
 Outputs data/regions/<key>/{routes.json, route_<line>A.json, route_<line>B.json,
 geo.json, geo_bg.png}. Manual kname/geo overrides (same folder) are respected.
@@ -30,8 +39,26 @@ def hhmm(m) -> str:
     return f"{int(m) // 60 % 24:02d}:{int(m) % 60:02d}" if m is not None else ""
 
 
-def ttl_first_last(ttdata: Path, line: str):
+def trip_stems(reg: dict) -> dict:
+    """Which .ttp file is each direction? (explicit, else the "<line> A/B" convention)"""
+    t = reg.get("trips") or {}
+    line = reg["line"]
+    return {"up": t.get("up") or f"{line} A", "down": t.get("down") or f"{line} B"}
+
+
+def find_track(ttdata: Path, stem: str, line: str) -> Path | None:
+    """.ttr naming varies: same as the trip, or just the line number, or absent."""
+    for cand in (stem, line):
+        p = ttdata / f"{cand}.ttr"
+        if p.exists():
+            return p
+    return None
+
+
+def ttl_first_last(ttdata: Path, line: str, stem: str = ""):
     p = ttdata / f"{line}.ttl"
+    if not p.exists() and stem:
+        p = ttdata / f"{stem}.ttl"
     if not p.exists():
         return "", ""
     lines = [l.rstrip("\r") for l in T.read_text(str(p)).split("\n")]
@@ -57,11 +84,12 @@ def build_region(key: str, log=print):
         raise SystemExit(f"map TTData not found: {ttdata}")
     out = DATA / "regions" / key
     out.mkdir(parents=True, exist_ok=True)
-    log(f"building region '{key}'  map='{reg['map']}'  line={line}")
+    trips = trip_stems(reg)
+    log(f"building region '{key}'  map='{reg['map']}'  line={line}  trips={trips}")
 
     ovf = out / "kname_overrides.json"                       # authoritative Korean names
     OV = json.loads(ovf.read_text(encoding="utf-8")) if ovf.exists() else {}
-    first, last = ttl_first_last(ttdata, line)
+    first, last = ttl_first_last(ttdata, line, trips["up"])
 
     def kname_for(st):
         sid = str(st["index"])
@@ -70,13 +98,13 @@ def build_region(key: str, log=print):
         ko = T.koreanize(st["name"])                         # auto RR->Hangul + glossary
         return ko if has_hangul(ko) else st["name"]
 
-    def parse_dir(suffix):
-        p = ttdata / f"{line} {suffix}.ttp"
+    def parse_dir(direction):
+        p = ttdata / f"{trips[direction]}.ttp"
         return T.parse_ttp(str(p)) if p.exists() else None
 
-    tripA, tripB = parse_dir("A"), parse_dir("B")
+    tripA, tripB = parse_dir("up"), parse_dir("down")
     if not tripA:
-        raise SystemExit(f"trip file not found: {ttdata / (line + ' A.ttp')}")
+        raise SystemExit(f"trip file not found: {ttdata / (trips['up'] + '.ttp')}")
 
     def mkroute(trip, rkey, direction):
         stops = [{"id": str(st["index"]), "name": st["name"], "kname": kname_for(st),
@@ -100,23 +128,34 @@ def build_region(key: str, log=print):
     log(f"  routes: " + ", ".join(f"{k}={len(r['stops'])} stops" for k, r in routes.items()))
 
     # ── map geometry (spline reconstruction) ────────────────────────────
-    log("  indexing tile splines + road map …")
-    splines = T.index_splines(str(mapdir))
-    roadmap = T.load_roadmap(str(mapdir))
-    if not splines:
-        log("  ! no tile splines — skipping map (strip view still works)")
+    # Only worth the (slow) spline indexing if some direction has a track file.
+    tracks = {d: find_track(ttdata, trips[d], line) for d in ("up", "down")}
+    for d, trf in tracks.items():
+        if not trf:
+            log(f"  ! {d}: no .ttr track - this direction gets no map")
+    if not any(tracks.values()):
+        log("  ! no track files at all - strip view only (map view is skipped)")
         return
+    log("  indexing tile splines + road map ...")
+    splines = T.index_splines(str(mapdir))
+    if not splines:
+        log("  ! no tile splines - skipping map (strip view still works)")
+        return
+    try:
+        roadmap = T.load_roadmap(str(mapdir))       # 맵마다 없거나 깨져 있기도 하다
+    except Exception as e:
+        log(f"  ! roadmap image unusable ({type(e).__name__}) - plain background")
+        roadmap = None
     geos = {}
-    for rkey, direction in ((f"{line}A", "up"), (f"{line}B", "down")):
+    for direction in ("up", "down"):
         trip = tripA if direction == "up" else tripB
-        trf = ttdata / f"{line} {'A' if direction == 'up' else 'B'}.ttr"
-        if not trip or not trf.exists():
+        if not trip or not tracks[direction]:
             continue
-        g = T.build_geo(trip, T.parse_track(str(trf)), splines)
+        g = T.build_geo(trip, T.parse_track(str(tracks[direction])), splines)
         if g:
             geos[direction] = (trip, g)
     if not geos:
-        log("  ! geometry reconstruction failed — skipping map")
+        log("  ! geometry reconstruction failed - skipping map")
         return
     bg, px, W, H = T._geo_canvas([g for _, g in geos.values()], roadmap, MAPW, SS)
     if bg is None:
