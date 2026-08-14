@@ -222,6 +222,32 @@ async def edit_kname(e: KnameEdit):
     return {"ok": True, "id": sid, "kname": kname}
 
 
+def _geo_overrides() -> dict:
+    op = DATA_DIR / "geo_overrides.json"
+    return json.loads(op.read_text(encoding="utf-8")) if op.exists() else {}
+
+
+def _save_geo_overrides(ov: dict):
+    (DATA_DIR / "geo_overrides.json").write_text(
+        json.dumps(ov, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def _load_geo_merged():
+    """Original spline geometry (geo_124.json) with any admin position overrides
+    (geo_overrides.json, keyed by stop id) merged in."""
+    p = DATA_DIR / "geo_124.json"
+    if not p.exists():
+        return None
+    geo = json.loads(p.read_text(encoding="utf-8"))
+    ov = _geo_overrides()
+    if ov:
+        for d in ("up", "down"):
+            for s in geo.get(d, {}).get("stops", []):
+                if str(s["id"]) in ov:
+                    s["xy"] = ov[str(s["id"])]
+    return geo
+
+
 class StopPos(BaseModel):
     dir: str
     id: str
@@ -229,36 +255,47 @@ class StopPos(BaseModel):
     y: float
 
 
+class StopReset(BaseModel):
+    dir: str = "up"
+    id: str
+
+
 @app.post("/api/stoppos")
 async def edit_stoppos(e: StopPos):
-    """Admin-only: nudge a stop's map pixel position. Patches geo_124.json live and
-    records the override (by id) so a build_geo.py rerun keeps the manual position."""
+    """Admin-only: record a stop's corrected map position (by id). Stored as an
+    override; the original geo_124.json is never mutated, so a reset can undo it."""
     if READONLY:
         return JSONResponse({"error": "이 서버는 보기 전용입니다. 편집은 로컬에서 하세요."}, status_code=403)
-    d = e.dir if e.dir in ("up", "down") else None
-    gp = DATA_DIR / "geo_124.json"
-    if not d or not gp.exists():
-        return JSONResponse({"error": "bad request"}, status_code=400)
-    geo = json.loads(gp.read_text(encoding="utf-8"))
+    if e.dir not in ("up", "down"):
+        return JSONResponse({"error": "bad dir"}, status_code=400)
     xy = [round(e.x, 1), round(e.y, 1)]
-    hit = next((s for s in geo[d]["stops"] if str(s["id"]) == str(e.id)), None)
-    if hit is None:
-        return JSONResponse({"error": "stop not found"}, status_code=404)
-    hit["xy"] = xy
-    gp.write_text(json.dumps(geo, ensure_ascii=False), encoding="utf-8")
-    op = DATA_DIR / "geo_overrides.json"
-    ov = json.loads(op.read_text(encoding="utf-8")) if op.exists() else {}
+    ov = _geo_overrides()
     ov[str(e.id)] = xy
-    op.write_text(json.dumps(ov, ensure_ascii=False, indent=2), encoding="utf-8")
+    _save_geo_overrides(ov)
     return {"ok": True, "id": str(e.id), "xy": xy}
+
+
+@app.post("/api/stoppos/reset")
+async def reset_stoppos(e: StopReset):
+    """Admin-only: drop a stop's override, reverting it to the original position.
+    Returns that original so the map can snap it back."""
+    if READONLY:
+        return JSONResponse({"error": "보기 전용"}, status_code=403)
+    ov = _geo_overrides()
+    ov.pop(str(e.id), None)
+    _save_geo_overrides(ov)
+    base = _load_geo_merged()          # override just removed, so this is the original
+    d = e.dir if e.dir in ("up", "down") else "up"
+    hit = next((s for s in base[d]["stops"] if str(s["id"]) == str(e.id)), None) if base else None
+    return {"ok": True, "id": str(e.id), "xy": hit["xy"] if hit else None}
 
 
 @app.get("/api/geo")
 async def geo():
-    p = DATA_DIR / "geo_124.json"
-    if not p.exists():
+    g = _load_geo_merged()
+    if g is None:
         return JSONResponse({"error": "no geo"}, status_code=404)
-    return FileResponse(p)
+    return JSONResponse(g)
 
 
 @app.get("/geo_bg.png")

@@ -75,18 +75,9 @@ def emit(trip, geo):
 out = {"W": W, "H": H, "bg": "geo_bg.png",
        "up": emit(tripA, geoA), "down": emit(tripB, geoB)}
 
-# reapply manual stop-position nudges made in the admin map editor (by stop id),
-# so hand-corrected positions survive a rebuild
-_ov = DATA / "geo_overrides.json"
-if _ov.exists():
-    overrides = json.loads(_ov.read_text(encoding="utf-8"))
-    n = 0
-    for d in ("up", "down"):
-        for s in out[d]["stops"]:
-            if s["id"] in overrides:
-                s["xy"] = overrides[s["id"]]; n += 1
-    print(f"  applied {n} manual position override(s)")
-
+# geo_124.json stays the ORIGINAL spline positions; manual admin nudges live in
+# data/geo_overrides.json and are merged in at serve time (so a reset can always
+# recover the original, and a rebuild here never loses corrections).
 (DATA / "geo_124.json").write_text(json.dumps(out, ensure_ascii=False), encoding="utf-8")
 print(f"  geo_124.json: up={len(out['up']['stops'])} stops/"
       f"{len(out['up']['path'])} pts, down={len(out['down']['stops'])} stops/"

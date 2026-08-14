@@ -73,9 +73,12 @@
   #posbtn{margin-left:auto;} #editbtn{margin-left:6px;}
   #mapsvg.posedit{cursor:move;} #mapsvg.posedit .mapstop{cursor:grab;}
   .posedit .mapstop{opacity:1;}
-  .posnote{position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:15;
-    background:#2f6bff;color:#fff;font-size:12.5px;font-weight:700;padding:6px 14px;border-radius:20px;
-    box-shadow:0 2px 10px #2f6bff55;pointer-events:none;}
+  .posnote{position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:15;display:flex;
+    align-items:center;gap:10px;background:#2f6bff;color:#fff;font-size:12.5px;font-weight:700;
+    padding:5px 8px 5px 14px;border-radius:20px;box-shadow:0 2px 10px #2f6bff55;white-space:nowrap;}
+  #undopos{background:#fff;color:#2f6bff;border:none;font-size:12px;font-weight:700;
+    padding:5px 11px;border-radius:16px;cursor:pointer;}
+  #undopos:hover{background:#eaf0ff;}
   .modal{position:fixed;inset:0;background:#0b214455;display:flex;justify-content:center;
     align-items:flex-end;z-index:50;}
   .modal[hidden]{display:none;}
@@ -180,7 +183,8 @@ const busEls = new Map();        // id -> strip element
 const mapBusEls = new Map();     // id -> svg marker (map view)
 const SVGNS = 'http://www.w3.org/2000/svg';
 let GEO = null, lastEta = [];
-let EDITABLE = false, posEdit = false, stopDragEl = null;   // admin stop-position editing
+let EDITABLE = false, posEdit = false, stopDragEl = null, stopDragStart = null;
+const posUndo = [];               // stack of {i, prev:[x,y]} for undo of stop moves
 const busData = new Map();        // id -> latest bus payload (for the bus-click popup)
 
 const BUS_PATH = "M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-1 1.73V19a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-1H6v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-2.27A2 2 0 0 1 2 15V6a2 2 0 0 1 2-2Zm1 3v4h6V7H5Zm8 0v4h6V7h-6ZM6.5 13.5A1.5 1.5 0 1 0 6.5 16.5 1.5 1.5 0 0 0 6.5 13.5Zm11 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z";
@@ -308,8 +312,25 @@ function renderMapBase(){
     + `<polyline class="mroute" points="${pts}"/>`
     + `<g id="mapstops">${dots}</g><g id="maplabels">${labels}</g><g id="mapbuses"></g>`;
   mapBusEls.clear();
-  svg.querySelectorAll('.mapstop').forEach(c=>c.addEventListener('click', ev=>{ if(!_dragged) showStopPopup(+c.dataset.i, ev); }));
+  svg.querySelectorAll('.mapstop').forEach(c=>{
+    c.addEventListener('click', ev=>{ if(!_dragged) showStopPopup(+c.dataset.i, ev); });
+    c.addEventListener('contextmenu', ev=>{ if(posEdit){ ev.preventDefault(); resetStop(+c.dataset.i); } });
+  });
   initMapView();          // fit whole route, then zoom/pan takes over
+}
+
+// undo the last stop move / reset a stop to its original (spline) position
+function undoStopMove(){
+  const u = posUndo.pop(); if(!u) return;
+  const el = $('mapsvg').querySelector(`.mapstop[data-i="${u.i}"]`); if(!el) return;
+  moveStop(el, u.prev[0], u.prev[1]); saveStopPos(el);
+}
+function resetStop(i){
+  const st = ROUTE.stops[i]; if(!st) return;
+  fetch('/api/stoppos/reset', {method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({dir:ROUTE.dir, id:String(st.id)})}).then(r=>r.json()).then(j=>{
+    if(j && j.xy){ const el=$('mapsvg').querySelector(`.mapstop[data-i="${i}"]`); if(el) moveStop(el, j.xy[0], j.xy[1]); }
+  }).catch(()=>{});
 }
 
 // ── zoom & pan (viewBox), with markers/labels kept at constant screen size ──
@@ -363,7 +384,7 @@ function setupMapInteraction(){
   let drag=null, moved=false;
   svg.addEventListener('pointerdown', e=>{ if(!vb) return;
     const st = posEdit ? e.target.closest('.mapstop') : null;   // admin: drag a stop
-    if(st){ stopDragEl=st; moved=false; e.preventDefault(); return; }
+    if(st){ stopDragEl=st; stopDragStart=[+st.dataset.cx, +st.dataset.cy]; moved=false; e.preventDefault(); return; }
     drag={x:e.clientX,y:e.clientY}; moved=false; svg.style.cursor='grabbing'; });
   svg.addEventListener('pointermove', e=>{ if(!vb) return; const r=svg.getBoundingClientRect();
     if(stopDragEl){ moved=true;
@@ -373,7 +394,9 @@ function setupMapInteraction(){
     vb.x-=(e.clientX-drag.x)/r.width*vb.w; vb.y-=(e.clientY-drag.y)/r.height*vb.h;
     drag={x:e.clientX,y:e.clientY}; applyView(); });
   const end=()=>{
-    if(stopDragEl){ saveStopPos(stopDragEl); stopDragEl=null; setTimeout(()=>{ _dragged=true; }, 0); return; }
+    if(stopDragEl){
+      if(moved && stopDragStart) posUndo.push({i:+stopDragEl.dataset.i, prev:stopDragStart});
+      saveStopPos(stopDragEl); stopDragEl=null; stopDragStart=null; setTimeout(()=>{ _dragged=true; }, 0); return; }
     drag=null; svg.style.cursor=posEdit?'move':'grab'; setTimeout(()=>{ _dragged=moved; }, 0); };
   svg.addEventListener('pointerup', end); svg.addEventListener('pointercancel', end);
   window.addEventListener('resize', ()=>{ if(vb) initMapView(); });
@@ -556,9 +579,14 @@ $('posbtn').onclick = ()=>{
   applyView();                         // reveal/hide labels
   let n=$('posnote');
   if(posEdit && !n){ n=document.createElement('div'); n.id='posnote'; n.className='posnote';
-    n.textContent='정류장을 드래그해 위치 수정 (자동 저장)'; $('mappane').appendChild(n); }
+    n.innerHTML='드래그=이동 · 우클릭=원위치 · <button id="undopos">↩ 되돌리기(Ctrl+Z)</button>';
+    $('mappane').appendChild(n); $('undopos').onclick=undoStopMove; }
   else if(!posEdit && n){ n.remove(); }
 };
+
+window.addEventListener('keydown', e=>{
+  if(posEdit && (e.ctrlKey||e.metaKey) && (e.key==='z'||e.key==='Z')){ e.preventDefault(); undoStopMove(); }
+});
 
 setupMapInteraction();
 
