@@ -109,6 +109,9 @@
   .dirtab{flex:1;text-align:center;padding:8px 0;border-radius:8px;font-weight:700;font-size:14px;
     background:#eef1f6;color:#7b8699;cursor:pointer;border:1px solid transparent;user-select:none;}
   .dirtab.on{background:#e8f0ff;color:#2f6bff;border-color:#b9d0ff;}
+  .sidebrand{display:flex;align-items:center;gap:8px;padding:13px 18px 12px;font-size:16px;
+    font-weight:800;color:#152a52;letter-spacing:-.3px;border-bottom:1px solid #eef0f4;flex:none;}
+  .sidebrand .rg{color:#2f6bff;} .sidebrand .sub{font-weight:600;color:#54607a;font-size:14px;}
   .sidetabs{display:flex;border-bottom:2px solid #eef0f4;flex:none;}
   .sidetab{flex:1;text-align:center;padding:13px 0;font-weight:700;font-size:14px;color:#8a93a6;
     cursor:pointer;user-select:none;border-bottom:2px solid transparent;margin-bottom:-2px;}
@@ -210,6 +213,7 @@
   </nav>
   <div id="main">
     <aside id="sidebar">
+      <div class="sidebrand" id="sidebrand"></div>
       <div class="sidetabs">
         <span class="sidetab on" data-side="routes">노선현황</span>
         <span class="sidetab" data-side="stops">정류소현황</span>
@@ -693,6 +697,11 @@ function renderNav(){
     if(s.dataset.region) CURRENT_REGION = s.dataset.region;
     setPage(s.dataset.page);
   });
+  updateSideBrand();
+}
+function updateSideBrand(){
+  const r = REGIONS.find(x=>x.key===CURRENT_REGION) || REGIONS[0];
+  $('sidebrand').innerHTML = `🚍 <span class="rg">${r.name}</span> <span class="sub">버스정보시스템</span>`;
 }
 
 function setPage(p){
@@ -704,6 +713,7 @@ function setPage(p){
   $('main').hidden = !mainOn;
   $('page').hidden = mainOn;
   $('mappop').hidden = true;
+  updateSideBrand();
   if(p==='home') renderHome();
   else if(p==='notices') loadNotices();
   if(mainOn && GEO) setTimeout(()=>{ if(vb) initMapView(); }, 30);   // re-fit map when shown again
