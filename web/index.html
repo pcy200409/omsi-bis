@@ -69,6 +69,13 @@
   .editbtn{margin-left:auto;align-self:center;background:#eef1f6;border:1px solid #dde3ec;
     color:#54607a;font-size:13px;font-weight:700;padding:6px 11px;border-radius:8px;cursor:pointer;}
   .editbtn:hover{background:#e5eaf3;}
+  .editbtn.on{background:#e8f0ff;color:#2f6bff;border-color:#b9d0ff;}
+  #posbtn{margin-left:auto;} #editbtn{margin-left:6px;}
+  #mapsvg.posedit{cursor:move;} #mapsvg.posedit .mapstop{cursor:grab;}
+  .posedit .mapstop{opacity:1;}
+  .posnote{position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:15;
+    background:#2f6bff;color:#fff;font-size:12.5px;font-weight:700;padding:6px 14px;border-radius:20px;
+    box-shadow:0 2px 10px #2f6bff55;pointer-events:none;}
   .modal{position:fixed;inset:0;background:#0b214455;display:flex;justify-content:center;
     align-items:flex-end;z-index:50;}
   .modal[hidden]{display:none;}
@@ -133,6 +140,7 @@
     <aside id="sidebar">
       <header>
         <div class="rownum"><span class="badge" id="badge">일반</span><span class="num" id="num">—</span>
+          <button class="editbtn" id="posbtn" title="지도에서 정류장 위치 드래그 수정" hidden>📍 위치</button>
           <button class="editbtn" id="editbtn" title="정류장명 편집">✎ 편집</button></div>
         <div class="ends" id="ends"></div>
         <div class="summary">총 <span id="nstops">0</span>개 정류소 ·
@@ -172,6 +180,7 @@ const busEls = new Map();        // id -> strip element
 const mapBusEls = new Map();     // id -> svg marker (map view)
 const SVGNS = 'http://www.w3.org/2000/svg';
 let GEO = null, lastEta = [];
+let EDITABLE = false, posEdit = false, stopDragEl = null;   // admin stop-position editing
 const busData = new Map();        // id -> latest bus payload (for the bus-click popup)
 
 const BUS_PATH = "M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-1 1.73V19a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-1H6v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-2.27A2 2 0 0 1 2 15V6a2 2 0 0 1 2-2Zm1 3v4h6V7H5Zm8 0v4h6V7h-6ZM6.5 13.5A1.5 1.5 0 1 0 6.5 16.5 1.5 1.5 0 0 0 6.5 13.5Zm11 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z";
@@ -293,7 +302,7 @@ function renderMapBase(){
   g.stops.forEach((s,i)=>{ const nm = ROUTE.stops[i] ? (ROUTE.stops[i].kname||ROUTE.stops[i].name) : '';
     const [x,y]=s.xy;
     dots   += `<use href="#stopicon" class="mapstop" data-cx="${x}" data-cy="${y}" data-i="${i}"><title>${nm}</title></use>`;
-    labels += `<text class="mlabel" data-cx="${x}" data-cy="${y}" text-anchor="middle" style="display:none">${nm}</text>`; });
+    labels += `<text class="mlabel" data-cx="${x}" data-cy="${y}" data-i="${i}" text-anchor="middle" style="display:none">${nm}</text>`; });
   svg.innerHTML = MAP_DEFS
     + `<image href="/geo_bg.png" x="0" y="0" width="${GEO.W}" height="${GEO.H}"/>`
     + `<polyline class="mroute" points="${pts}"/>`
@@ -328,7 +337,7 @@ function applyView(){
   svg.querySelectorAll('.mbus').forEach(u=>{ const cx=+u.dataset.cx, cy=+u.dataset.cy;
     u.setAttribute('x',cx-bs/2); u.setAttribute('y',cy-bs/2); u.setAttribute('width',bs); u.setAttribute('height',bs); });
   const rt = svg.querySelector('.mroute'); if(rt) rt.setAttribute('stroke-width', ROUTE_PX*mScale);
-  const show = vb.w < baseVB.w*0.55;          // only show labels once zoomed in (avoid clutter)
+  const show = posEdit || vb.w < baseVB.w*0.55;   // labels when zoomed in, or while editing positions
   svg.querySelectorAll('.mlabel').forEach(t=>{
     if(!show){ t.style.display='none'; return; }
     t.style.display=''; t.setAttribute('font-size', LABEL_PX*mScale);
@@ -352,17 +361,42 @@ function setupMapInteraction(){
     vb.x=wx-fx*nw; vb.y=wy-fy*nh; vb.w=nw; vb.h=nh; applyView();
   }, {passive:false});
   let drag=null, moved=false;
-  svg.addEventListener('pointerdown', e=>{ if(!vb) return; drag={x:e.clientX,y:e.clientY}; moved=false; svg.style.cursor='grabbing'; });
-  svg.addEventListener('pointermove', e=>{ if(!drag||!vb) return; const r=svg.getBoundingClientRect();
+  svg.addEventListener('pointerdown', e=>{ if(!vb) return;
+    const st = posEdit ? e.target.closest('.mapstop') : null;   // admin: drag a stop
+    if(st){ stopDragEl=st; moved=false; e.preventDefault(); return; }
+    drag={x:e.clientX,y:e.clientY}; moved=false; svg.style.cursor='grabbing'; });
+  svg.addEventListener('pointermove', e=>{ if(!vb) return; const r=svg.getBoundingClientRect();
+    if(stopDragEl){ moved=true;
+      moveStop(stopDragEl, vb.x+(e.clientX-r.left)/r.width*vb.w, vb.y+(e.clientY-r.top)/r.height*vb.h); return; }
+    if(!drag) return;
     if(Math.hypot(e.clientX-drag.x,e.clientY-drag.y)>3) moved=true;
     vb.x-=(e.clientX-drag.x)/r.width*vb.w; vb.y-=(e.clientY-drag.y)/r.height*vb.h;
     drag={x:e.clientX,y:e.clientY}; applyView(); });
-  const end=()=>{ drag=null; svg.style.cursor='grab'; setTimeout(()=>{ _dragged=moved; }, 0); };
+  const end=()=>{
+    if(stopDragEl){ saveStopPos(stopDragEl); stopDragEl=null; setTimeout(()=>{ _dragged=true; }, 0); return; }
+    drag=null; svg.style.cursor=posEdit?'move':'grab'; setTimeout(()=>{ _dragged=moved; }, 0); };
   svg.addEventListener('pointerup', end); svg.addEventListener('pointercancel', end);
   window.addEventListener('resize', ()=>{ if(vb) initMapView(); });
   svg.style.cursor='grab';
 }
 let _dragged = false;
+
+// admin: move a stop marker (+ its label) live, and remember the new position
+function moveStop(el, wx, wy){
+  const svg=$('mapsvg'), i=+el.dataset.i, ss=STOP_PX*mScale;
+  el.dataset.cx=wx; el.dataset.cy=wy;
+  el.setAttribute('x', wx-ss/2); el.setAttribute('y', wy-ss/2);
+  const lbl=svg.querySelector(`.mlabel[data-i="${i}"]`);
+  if(lbl){ lbl.dataset.cx=wx; lbl.dataset.cy=wy; lbl.setAttribute('x', wx); lbl.setAttribute('y', wy-ss*0.8); }
+  if(GEO && GEO[ROUTE.dir]) GEO[ROUTE.dir].stops[i].xy=[wx,wy];   // buses interpolate on new pos
+}
+function saveStopPos(el){
+  const i=+el.dataset.i, st=ROUTE.stops[i];
+  if(!st) return;
+  fetch('/api/stoppos', {method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({dir:ROUTE.dir, id:String(st.id), x:+el.dataset.cx, y:+el.dataset.cy})})
+    .then(r=>{ if(!r.ok) r.json().then(j=>console.error('위치 저장 실패', j)); });
+}
 
 function updateMapBuses(pl, alive){
   if(!GEO || !ROUTE || !GEO[ROUTE.dir]) return;
@@ -507,10 +541,24 @@ async function saveKname(s, value, row, btn){
   }
 }
 
-// hide the editor entirely on a view-only (cloud) deployment
+// admin tools (name + position editing) only on an editable (local) deployment
 fetch('/api/config').then(r=>r.json()).then(c=>{
-  if(!c.editable) $('editbtn').style.display = 'none';
+  EDITABLE = !!c.editable;
+  if(!EDITABLE){ $('editbtn').style.display='none'; }
+  else { $('posbtn').hidden = false; }
 }).catch(()=>{});
+
+$('posbtn').onclick = ()=>{
+  if(!EDITABLE) return;
+  posEdit = !posEdit;
+  $('posbtn').classList.toggle('on', posEdit);
+  const svg=$('mapsvg'); svg.classList.toggle('posedit', posEdit); svg.style.cursor = posEdit?'move':'grab';
+  applyView();                         // reveal/hide labels
+  let n=$('posnote');
+  if(posEdit && !n){ n=document.createElement('div'); n.id='posnote'; n.className='posnote';
+    n.textContent='정류장을 드래그해 위치 수정 (자동 저장)'; $('mappane').appendChild(n); }
+  else if(!posEdit && n){ n.remove(); }
+};
 
 setupMapInteraction();
 

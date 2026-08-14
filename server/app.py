@@ -222,6 +222,37 @@ async def edit_kname(e: KnameEdit):
     return {"ok": True, "id": sid, "kname": kname}
 
 
+class StopPos(BaseModel):
+    dir: str
+    id: str
+    x: float
+    y: float
+
+
+@app.post("/api/stoppos")
+async def edit_stoppos(e: StopPos):
+    """Admin-only: nudge a stop's map pixel position. Patches geo_124.json live and
+    records the override (by id) so a build_geo.py rerun keeps the manual position."""
+    if READONLY:
+        return JSONResponse({"error": "이 서버는 보기 전용입니다. 편집은 로컬에서 하세요."}, status_code=403)
+    d = e.dir if e.dir in ("up", "down") else None
+    gp = DATA_DIR / "geo_124.json"
+    if not d or not gp.exists():
+        return JSONResponse({"error": "bad request"}, status_code=400)
+    geo = json.loads(gp.read_text(encoding="utf-8"))
+    xy = [round(e.x, 1), round(e.y, 1)]
+    hit = next((s for s in geo[d]["stops"] if str(s["id"]) == str(e.id)), None)
+    if hit is None:
+        return JSONResponse({"error": "stop not found"}, status_code=404)
+    hit["xy"] = xy
+    gp.write_text(json.dumps(geo, ensure_ascii=False), encoding="utf-8")
+    op = DATA_DIR / "geo_overrides.json"
+    ov = json.loads(op.read_text(encoding="utf-8")) if op.exists() else {}
+    ov[str(e.id)] = xy
+    op.write_text(json.dumps(ov, ensure_ascii=False, indent=2), encoding="utf-8")
+    return {"ok": True, "id": str(e.id), "xy": xy}
+
+
 @app.get("/api/geo")
 async def geo():
     p = DATA_DIR / "geo_124.json"
