@@ -29,6 +29,8 @@ class Settings
     public string Nick { get; set; } = "";
     public string Line { get; set; } = "124";
     public string Map { get; set; } = "Segang Alpha";
+    public string VehNo { get; set; } = "";
+    public string Company { get; set; } = "";
 
     static string Path_ => System.IO.Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "OmsiBisClient", "settings.json");
@@ -51,7 +53,8 @@ class Settings
 
 class MainForm : Form
 {
-    readonly TextBox txtServer = new(), txtNick = new(), txtLine = new(), txtMap = new();
+    readonly TextBox txtServer = new(), txtNick = new(), txtLine = new(), txtMap = new(),
+                     txtVeh = new(), txtCompany = new();
     readonly Button btnStart = new(), btnServer = new();
     readonly Label lblStatus = new(), lblInfo = new(), lblAdmin = new(), lblServer = new();
     readonly TextBox txtLog = new();
@@ -66,7 +69,7 @@ class MainForm : Form
         var s = Settings.Load();
         Text = "OMSI BIS 클라이언트";
         Font = new System.Drawing.Font("Malgun Gothic", 9f);
-        ClientSize = new System.Drawing.Size(470, 540);
+        ClientSize = new System.Drawing.Size(470, 574);
         FormBorderStyle = FormBorderStyle.FixedSingle;
         MaximizeBox = false;
         StartPosition = FormStartPosition.CenterScreen;
@@ -90,30 +93,35 @@ class MainForm : Form
         Controls.Add(L("맵", 16, 82));
         txtMap.SetBounds(92, 80, 200, 24); txtMap.Text = s.Map;
 
-        btnStart.SetBounds(16, 116, 436, 40);
+        Controls.Add(L("차량번호", 16, 116, 70));
+        txtVeh.SetBounds(92, 114, 150, 24); txtVeh.Text = s.VehNo;
+        Controls.Add(L("운행회사", 250, 116, 55));
+        txtCompany.SetBounds(308, 114, 144, 24); txtCompany.Text = s.Company;
+
+        btnStart.SetBounds(16, 150, 436, 40);
         btnStart.Text = "▶  시작";
         btnStart.Font = new System.Drawing.Font("Malgun Gothic", 11f, System.Drawing.FontStyle.Bold);
         btnStart.Click += (_, __) => Toggle();
 
-        lblStatus.SetBounds(16, 166, 436, 22);
+        lblStatus.SetBounds(16, 200, 436, 22);
         lblStatus.Text = "대기 중";
         lblStatus.Font = new System.Drawing.Font("Malgun Gothic", 9.5f, System.Drawing.FontStyle.Bold);
-        lblInfo.SetBounds(16, 190, 436, 20);
+        lblInfo.SetBounds(16, 224, 436, 20);
         lblInfo.ForeColor = System.Drawing.Color.DimGray;
 
-        var sep = new Label { Text = "─────  로컬 서버 (개발용)  ─────", Left = 16, Top = 222, Width = 436,
+        var sep = new Label { Text = "─────  로컬 서버 (개발용)  ─────", Left = 16, Top = 256, Width = 436,
             TextAlign = System.Drawing.ContentAlignment.MiddleCenter, ForeColor = System.Drawing.Color.Silver };
-        btnServer.SetBounds(16, 246, 150, 30); btnServer.Text = "로컬 서버 켜기";
+        btnServer.SetBounds(16, 280, 150, 30); btnServer.Text = "로컬 서버 켜기";
         btnServer.Click += (_, __) => ToggleServer();
-        lblServer.SetBounds(178, 246, 280, 30); lblServer.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+        lblServer.SetBounds(178, 280, 280, 30); lblServer.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
         lblServer.Text = "꺼짐";
 
-        txtLog.SetBounds(16, 288, 436, 236);
+        txtLog.SetBounds(16, 322, 436, 236);
         txtLog.Multiline = true; txtLog.ReadOnly = true; txtLog.ScrollBars = ScrollBars.Vertical;
         txtLog.BackColor = System.Drawing.Color.FromArgb(245, 246, 248);
         txtLog.Font = new System.Drawing.Font("Consolas", 8.5f);
 
-        Controls.AddRange(new Control[] { lblAdmin, txtServer, txtNick, txtLine, txtMap,
+        Controls.AddRange(new Control[] { lblAdmin, txtServer, txtNick, txtLine, txtMap, txtVeh, txtCompany,
             btnStart, lblStatus, lblInfo, sep, btnServer, lblServer, txtLog });
 
         // enable the local-server button only if we can find server/.venv nearby
@@ -134,7 +142,8 @@ class MainForm : Form
 
     void SaveSettings() => new Settings {
         Server = txtServer.Text.Trim(), Nick = txtNick.Text.Trim(),
-        Line = txtLine.Text.Trim(), Map = txtMap.Text.Trim() }.Save();
+        Line = txtLine.Text.Trim(), Map = txtMap.Text.Trim(),
+        VehNo = txtVeh.Text.Trim(), Company = txtCompany.Text.Trim() }.Save();
 
     // ── client stream ──────────────────────────────────────────────────
     void Toggle()
@@ -164,12 +173,14 @@ class MainForm : Form
     }
 
     void SetInputs(bool on)
-    { txtServer.Enabled = txtNick.Enabled = txtLine.Enabled = txtMap.Enabled = on; }
+    { txtServer.Enabled = txtNick.Enabled = txtLine.Enabled = txtMap.Enabled =
+        txtVeh.Enabled = txtCompany.Enabled = on; }
 
     async Task RunClient(CancellationToken ct)
     {
         string server = txtServer.Text.Trim().TrimEnd('/');
         string nick = txtNick.Text.Trim(), line = txtLine.Text.Trim(), map = txtMap.Text.Trim();
+        string vehNo = txtVeh.Text.Trim(), company = txtCompany.Text.Trim();
         string id = $"{Environment.MachineName}-{Environment.UserName}".ToLowerInvariant();
         string url = server + "/api/update";
 
@@ -217,7 +228,7 @@ class MainForm : Form
                 {
                     try
                     {
-                        await http.PostAsJsonAsync(url, new { id, nick, line, map,
+                        await http.PostAsJsonAsync(url, new { id, nick, line, map, vehNo, company,
                             nextIdx, nextIdCode, nextDist, prevDist, atStation, nextName, schedValid }, ct);
                         sent++; lastPost = DateTime.UtcNow; lastIdCode = nextIdCode;
                         State("● 전송 중", System.Drawing.Color.SeaGreen);

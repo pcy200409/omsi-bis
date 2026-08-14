@@ -20,6 +20,9 @@
   #topnav .navlinks{display:flex;gap:26px;margin-left:14px;font-size:14.5px;color:#c7d2ea;}
   #topnav .navlinks span{cursor:pointer;padding:4px 0;}
   #topnav .navlinks span.on,#topnav .navlinks span:hover{color:#fff;font-weight:700;}
+  #topnav .navlinks .brandlink{font-weight:800;color:#fff;}
+  #topnav .navlinks .disabled{color:#7f8db0;cursor:default;}
+  #topnav .navlinks .disabled:hover{color:#7f8db0;font-weight:400;}
   #main{flex:1;display:flex;min-height:0;}
   #main[hidden]{display:none;}
   #side-routes[hidden],#side-stops[hidden]{display:none;}
@@ -32,7 +35,9 @@
   .badge.trunk{background:#2f6bff;}
   .num{font-size:30px;font-weight:800;letter-spacing:-.5px;}
   .ends{margin-top:8px;color:#3b465c;font-weight:600;}
-  .summary{margin-top:6px;color:var(--sub);font-size:14px;}
+  .times{margin-top:7px;color:#3b465c;font-size:13.5px;}
+  .times b{color:#2f6bff;font-weight:800;} .times .sep{color:#c7cdd8;margin:0 7px;}
+  .summary{margin-top:5px;color:var(--sub);font-size:14px;}
   .summary .run{color:var(--orange);font-weight:700;}
   .refresh{display:flex;justify-content:space-between;align-items:center;
     padding:8px 20px;color:var(--sub);font-size:13px;border-bottom:1px solid #eef0f4;background:#fafbfc;}
@@ -225,7 +230,8 @@
             <button class="editbtn" id="posbtn" title="지도에서 정류장 위치 드래그 수정" hidden>📍 위치</button>
             <button class="editbtn" id="editbtn" title="정류장명 편집">✎ 편집</button></div>
           <div class="ends" id="ends"></div>
-          <div class="summary">총 <span id="nstops">0</span>개 정류소 ·
+          <div class="times" id="times"></div>
+          <div class="summary"><span id="span"></span>총 <span id="nstops">0</span>개 정류소 ·
             <span class="run">현재 <span id="running">0</span>대 운행중</span></div>
           <div class="dirtabs" id="dirtabs"></div>
         </header>
@@ -305,6 +311,9 @@ async function selectRoute(key){
   $('badge').className = 'badge' + (ROUTE.type==='간선'?' trunk':'');
   $('num').textContent = ROUTE.no;
   $('ends').textContent = `${ROUTE.from} ↔ ${ROUTE.to}`;
+  $('times').innerHTML = (ROUTE.first && ROUTE.last)
+    ? `첫차 <b>${ROUTE.first}</b><span class="sep">|</span>막차 <b>${ROUTE.last}</b>` : '';
+  $('span').textContent = (ROUTE.first && ROUTE.last) ? `${ROUTE.first}~${ROUTE.last} · ` : '';
   $('nstops').textContent = ROUTE.stops.length;
   stopsEl.querySelectorAll('.stop').forEach(e=>e.remove());
   for(const [,e] of busEls) e.remove(); busEls.clear();   // markers re-place on next tick
@@ -555,14 +564,16 @@ function showBusPopup(id, ev){
   const pop = $('mappop');
   const line = b.line || '—', nick = b.nick || b.id;
   const next = b.schedValid ? (b.nextName||'') : '';
+  const row=(k,v,c)=>`<div class="pl"><span>${k}</span><b style="color:${c||'#20293b'}">${esc(v)}</b></div>`;
   pop.innerHTML = `<span class="px">✕</span>
     <div style="color:#8a93a6;font-size:11.5px;font-weight:700">운행버스정보</div>
     <div style="display:flex;align-items:baseline;gap:8px;margin:3px 0 7px">
       <span class="badge">일반</span>
-      <span style="font-size:23px;font-weight:800;color:#2f6bff;letter-spacing:-.5px">${line}</span></div>
-    <div class="pl"><span>기사</span><b style="color:#20293b">${nick}</b></div>
-    ${next?`<div class="pl"><span>다음 정류장</span><b style="color:#0f8a4f">${next}</b></div>`:
-           `<div class="pl"><span style="color:#c26a12">운행 스케줄 없음</span></div>`}`;
+      <span style="font-size:23px;font-weight:800;color:#2f6bff;letter-spacing:-.5px">${esc(line)}</span></div>
+    ${b.vehNo?row('차량번호', b.vehNo):''}
+    ${b.company?row('운행회사', b.company):''}
+    ${row('기사', nick)}
+    ${next?row('다음 정류장', next, '#0f8a4f'):`<div class="pl"><span style="color:#c26a12">운행 스케줄 없음</span></div>`}`;
   pop.querySelector('.px').onclick = ()=>pop.hidden=true;
   placePop(ev);
 }
@@ -682,22 +693,50 @@ $('editclose').onclick = closeEditor;
 $('editor').onclick = e => { if(e.target.id==='editor') closeEditor(); };
 $('editsearch').oninput = e => renderEditList(e.target.value);
 
-// ── site navigation: HOME / <지역들> / 공지사항 ─────────────────────────────
-// regions are data-driven so more can be added later; each opens 통합검색(app)
-const REGIONS = [{key:'segang', name:'세강시', map:'Segang Alpha'}];
+// ── site navigation ─────────────────────────────────────────────────────
+// Two nav contexts (like the national BIS): on HOME the top nav lists regions
+// (HOME | <지역들> | 공지사항); inside a region it becomes the region BIS menu
+// (<지역> 버스정보시스템 | 노선현황 | 정류소현황 | 이용안내 | 공지사항).
+const REGIONS = [{key:'segang', name:'세강시', map:'Segang Alpha'}];   // add more later
 let CURRENT_REGION = REGIONS[0].key;
+let PAGE = 'home', SIDE = 'routes', NAVMODE = 'home';
 
 function renderNav(){
   const el = $('navlinks');
-  let h = `<span class="on" data-page="home">HOME</span>`;
-  for(const r of REGIONS) h += `<span data-page="app" data-region="${r.key}">${r.name}</span>`;
-  h += `<span data-page="notices">공지사항</span>`;
-  el.innerHTML = h;
-  el.querySelectorAll('span').forEach(s=>s.onclick=()=>{
-    if(s.dataset.region) CURRENT_REGION = s.dataset.region;
-    setPage(s.dataset.page);
+  if(NAVMODE==='region'){
+    const r = REGIONS.find(x=>x.key===CURRENT_REGION) || REGIONS[0];
+    el.innerHTML =
+      `<span class="brandlink" data-act="home">${r.name} 버스정보시스템</span>`+
+      `<span data-act="side" data-side="routes">노선현황</span>`+
+      `<span data-act="side" data-side="stops">정류소현황</span>`+
+      `<span class="disabled">이용안내</span>`+
+      `<span data-act="notices">공지사항</span>`;
+  } else {
+    el.innerHTML =
+      `<span data-act="home">HOME</span>`+
+      REGIONS.map(r=>`<span data-act="region" data-region="${r.key}">${r.name}</span>`).join('')+
+      `<span data-act="notices">공지사항</span>`;
+  }
+  el.querySelectorAll('span').forEach(s=>s.onclick=()=>onNav(s));
+  highlightNav();
+}
+function onNav(s){
+  if(s.classList.contains('disabled')) return;
+  const a = s.dataset.act;
+  if(a==='home') setPage('home');
+  else if(a==='region'){ CURRENT_REGION = s.dataset.region; setPage('app'); setSide('routes'); }
+  else if(a==='side'){ if(PAGE!=='app') setPage('app'); setSide(s.dataset.side); }
+  else if(a==='notices') setPage('notices');
+}
+function highlightNav(){
+  $('navlinks').querySelectorAll('span').forEach(s=>{
+    const a = s.dataset.act; let on=false;
+    if(a==='home') on = (NAVMODE==='home' && PAGE==='home');
+    else if(a==='region') on = (PAGE==='app' && s.dataset.region===CURRENT_REGION);
+    else if(a==='side') on = (PAGE==='app' && s.dataset.side===SIDE);
+    else if(a==='notices') on = (PAGE==='notices');
+    s.classList.toggle('on', on);
   });
-  updateSideBrand();
 }
 function updateSideBrand(){
   const r = REGIONS.find(x=>x.key===CURRENT_REGION) || REGIONS[0];
@@ -705,27 +744,28 @@ function updateSideBrand(){
 }
 
 function setPage(p){
-  $('navlinks').querySelectorAll('span').forEach(s=>{
-    const active = s.dataset.page===p && (p!=='app' || s.dataset.region===CURRENT_REGION);
-    s.classList.toggle('on', active);
-  });
+  PAGE = p;
+  if(p==='home') NAVMODE='home';
+  else if(p==='app') NAVMODE='region';      // notices keeps whatever context we were in
   const mainOn = (p==='app');
   $('main').hidden = !mainOn;
   $('page').hidden = mainOn;
   $('mappop').hidden = true;
+  renderNav();
   updateSideBrand();
   if(p==='home') renderHome();
   else if(p==='notices') loadNotices();
   if(mainOn && GEO) setTimeout(()=>{ if(vb) initMapView(); }, 30);   // re-fit map when shown again
 }
-// sidebar sub-tabs inside 통합검색: 노선현황 / 정류소현황
+// sidebar sub-tabs inside 통합검색: 노선현황 / 정류소현황 (kept in sync with the nav)
 function setSide(sd){
+  SIDE = sd;
   document.querySelectorAll('.sidetab').forEach(t=>t.classList.toggle('on', t.dataset.side===sd));
   $('side-routes').hidden = sd!=='routes';
   $('side-stops').hidden = sd!=='stops';
   if(sd==='stops') renderStopList($('stopsearch').value||'');
+  highlightNav();
 }
-renderNav();
 setPage('home');   // land on HOME first
 document.querySelectorAll('.sidetab').forEach(t=>t.onclick=()=>{ if(!t.classList.contains('disabled') && t.dataset.side) setSide(t.dataset.side); });
 

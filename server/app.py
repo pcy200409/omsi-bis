@@ -54,6 +54,8 @@ class Update(BaseModel):
     nick: str = "bus"
     line: str = ""
     map: str = ""
+    vehNo: str = ""       # 차량번호 (driver-entered)
+    company: str = ""     # 운행회사 (driver-entered)
     # OMSI's own schedule read-out (the ground truth for marker placement).
     nextIdx: int = -1
     nextIdCode: int = 0
@@ -76,7 +78,7 @@ async def update(u: Update):
         direction = ID2DIR[u.nextIdCode]
     buses[u.id] = {
         "id": u.id, "nick": u.nick, "line": u.line, "map": u.map,
-        "dir": direction,
+        "vehNo": u.vehNo, "company": u.company, "dir": direction,
         "nextIdCode": u.nextIdCode, "nextIdx": u.nextIdx,
         "nextDist": u.nextDist, "prevDist": u.prevDist,
         "atStation": u.atStation, "nextName": u.nextName,

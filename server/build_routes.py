@@ -75,6 +75,29 @@ def interp_monotonic(dists, total):
     return dists
 
 
+def parse_ttl_deps(p: Path) -> list:
+    """Departure times (minutes from midnight) of every trip in a line .ttl."""
+    if not p.exists():
+        return []
+    lines = [l.rstrip("\r") for l in read_text(p).split("\n")]
+    deps = []
+    for i, l in enumerate(lines):
+        if l.strip() == "[addtrip]":
+            try:
+                deps.append(float(lines[i + 3].strip()))
+            except (ValueError, IndexError):
+                pass
+    return deps
+
+
+def hhmm(m) -> str:
+    return f"{int(m) // 60 % 24:02d}:{int(m) % 60:02d}" if m is not None else ""
+
+
+_deps = parse_ttl_deps(MAP / "124.ttl")
+FIRST = hhmm(min(_deps)) if _deps else ""
+LAST = hhmm(max(_deps)) if _deps else ""
+
 master = parse_busstops(MAP / "Busstops.cfg")
 ids_up = ttp_ids(MAP / "124 A.ttp")
 ids_dn = ttp_ids(MAP / "124 B.ttp")
@@ -131,7 +154,7 @@ def build(ids, key, label, direction):
     route = {
         "key": key, "no": "124", "type": "일반", "dir": direction, "label": label,
         "from": stops[0]["kname"], "to": stops[-1]["kname"],
-        "length": stops[-1]["dist"], "stops": stops,
+        "length": stops[-1]["dist"], "first": FIRST, "last": LAST, "stops": stops,
     }
     (DATA / f"route_{key}.json").write_text(json.dumps(route, ensure_ascii=False, indent=2), encoding="utf-8")
     return route
