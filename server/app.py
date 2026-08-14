@@ -298,6 +298,52 @@ async def geo():
     return JSONResponse(g)
 
 
+# ── notices (공지사항): anyone can read, only the admin (local) can post/delete ──
+NOTICES_FILE = DATA_DIR / "notices.json"
+
+
+def _load_notices() -> list:
+    return json.loads(NOTICES_FILE.read_text(encoding="utf-8")) if NOTICES_FILE.exists() else []
+
+
+def _save_notices(items: list):
+    NOTICES_FILE.write_text(json.dumps(items, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+class Notice(BaseModel):
+    title: str
+    body: str = ""
+
+
+@app.get("/api/notices")
+async def notices():
+    return sorted(_load_notices(), key=lambda n: n.get("id", 0), reverse=True)   # newest first
+
+
+@app.post("/api/notices")
+async def add_notice(n: Notice):
+    if READONLY:
+        return JSONResponse({"error": "공지 작성은 관리자만 가능합니다."}, status_code=403)
+    title = n.title.strip()
+    if not title:
+        return JSONResponse({"error": "제목을 입력하세요."}, status_code=400)
+    items = _load_notices()
+    nid = (max((i.get("id", 0) for i in items), default=0)) + 1
+    items.append({"id": nid, "title": title[:200], "body": n.body.strip(),
+                  "date": time.strftime("%Y-%m-%d")})
+    _save_notices(items)
+    return {"ok": True, "id": nid}
+
+
+@app.delete("/api/notices/{nid}")
+async def del_notice(nid: int):
+    if READONLY:
+        return JSONResponse({"error": "관리자만 삭제할 수 있습니다."}, status_code=403)
+    items = [i for i in _load_notices() if i.get("id") != nid]
+    _save_notices(items)
+    return {"ok": True}
+
+
 @app.get("/geo_bg.png")
 async def geo_bg():
     return FileResponse(WEB_DIR / "geo_bg.png", media_type="image/png")
