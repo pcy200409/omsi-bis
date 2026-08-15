@@ -993,7 +993,9 @@ function updateRgHint(){
   if(!one){
     const all = (m&&m.lines)||[];
     const geo = all.filter(l=>l.trips.some(t=>t.track)).length;
-    $('rghint').textContent = `노선 ${all.length}개를 한 번에 등록 · 지도 있는 노선 ${geo}개`;
+    $('rghint').textContent = geo
+      ? `노선 ${all.length}개를 한 번에 등록 · 그중 ${geo}개는 지도에도 그려집니다`
+      : `노선 ${all.length}개를 한 번에 등록 · 이 맵엔 노선 경로파일(.ttr)이 없어 정류장 목록만 만들어집니다`;
     return;
   }
   const l = m && (m.lines||[]).find(x=>x.line===one);
@@ -1001,8 +1003,8 @@ function updateRgHint(){
   const tr = f => (trips.find(t=>t.file===f)||{}).track;
   const up = $('rgup').value, dn = $('rgdown').value;
   const geo = tr(up) || (dn && tr(dn));
-  $('rghint').textContent = geo ? '지도(노선 경로) 있음 — 지도 관제까지 됩니다'
-                                : '지도 데이터(.ttr) 없음 — 정류장 목록만 만들어집니다';
+  $('rghint').textContent = geo ? '노선 경로(.ttr) 있음 — 지도에 노선·버스가 그려집니다'
+                                : '노선 경로(.ttr) 없음 — 정류장 목록만 만들어집니다';
 }
 
 function showRegLog(text, bad){

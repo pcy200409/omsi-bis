@@ -22,6 +22,9 @@ from fastapi import FastAPI, WebSocket
 from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import tripscan  # noqa: E402  (맵 TTData 훑기 — build_region.py와 같은 규칙)
+
 STALE_SECONDS = 6.0
 PUSH_HZ = 2          # broadcasts/sec to viewers; schedule markers + CSS easing stay
                      # smooth at 2 Hz, and this halves per-viewer send cost vs 5 Hz.
@@ -337,41 +340,21 @@ def _slug(s: str) -> str:
     return re.sub(r"[^0-9a-z]", "", (s or "").lower())
 
 
-def _line_of(stem: str) -> str:
-    """Trip files are named freely per map, but they all start with the line:
-    "124 A" · "92 (to Munsan Univ)" · "725_WBG_hin" · "102_1" -> 124 · 92 · 725 · 102"""
-    m = re.match(r"[^\s_(]+", stem.strip())
-    return m.group(0) if m else stem.strip()
-
-
-def _line_sort(ln: str):
-    m = re.match(r"(\d+)(.*)", ln)
-    return (0, int(m.group(1)), m.group(2)) if m else (1, 0, ln)
-
-
 @app.get("/api/maps")
 async def maps_list():
     """Every OMSI map here, its trip files (.ttp) grouped by line number.
 
-    We don't assume any naming convention — the admin picks which trip file is
-    the up/down direction. `track` says whether a .ttr exists for the map view
-    (same name as the trip, or just the line number, as maps differ)."""
+    No naming convention is assumed — the admin picks which trip file is the
+    up/down direction. `track` says whether a route path (.ttr) was found, i.e.
+    whether this line can appear on the map at all (tripscan does the matching,
+    the same way build_region.py will)."""
     if READONLY or not OMSI_MAPS.is_dir():
         return []
     out = []
     for d in sorted(p for p in OMSI_MAPS.iterdir() if p.is_dir()):
-        tt = d / "TTData"
-        if not tt.is_dir():
-            continue
-        lines: dict[str, list] = {}
-        for f in sorted(tt.glob("*.ttp")):
-            ln = _line_of(f.stem)
-            has_track = (tt / f"{f.stem}.ttr").exists() or (tt / f"{ln}.ttr").exists()
-            lines.setdefault(ln, []).append({"file": f.stem, "track": has_track})
+        lines = tripscan.scan(d / "TTData")
         if lines:
-            out.append({"map": d.name, "region": MAP2REGION.get(d.name),
-                        "lines": [{"line": ln, "trips": lines[ln]}
-                                  for ln in sorted(lines, key=_line_sort)]})
+            out.append({"map": d.name, "region": MAP2REGION.get(d.name), "lines": lines})
     return out
 
 
@@ -395,17 +378,13 @@ class RegionNew(BaseModel):
 def _auto_lines(mp: str) -> list[LineIn]:
     """Every line the map offers, with its first two trip files as up/down —
     'add the whole map at once' is the normal case."""
-    tt = OMSI_MAPS / mp / "TTData"
-    groups: dict[str, list[str]] = {}
-    for f in sorted(tt.glob("*.ttp")):
-        groups.setdefault(_line_of(f.stem), []).append(f.stem)
     out = []
-    for ln in sorted(groups, key=_line_sort):
-        files = groups[ln]
+    for g in tripscan.scan(OMSI_MAPS / mp / "TTData"):
+        files = [t["file"] for t in g["trips"]]
         up = next((f for f in files if f.strip().upper().endswith(" A")), files[0])
         down = next((f for f in files if f.strip().upper().endswith(" B")),
                     next((f for f in files if f != up), ""))
-        out.append(LineIn(line=ln, tripUp=up, tripDown=down))
+        out.append(LineIn(line=g["line"], tripUp=up, tripDown=down))
     return out
 
 

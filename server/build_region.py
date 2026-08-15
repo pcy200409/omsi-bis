@@ -24,7 +24,9 @@ from pathlib import Path
 
 TOOL = r"C:\Users\pcy20\OneDrive\Desktop\CC\OMSI_TTData_Tool"
 sys.path.insert(0, TOOL)
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 import omsi_ttdata as T  # noqa: E402
+from tripscan import find_track  # noqa: E402  (맵마다 다른 .ttr 이름 규칙 흡수)
 
 OMSI_MAPS = Path(r"C:\Program Files (x86)\Steam\steamapps\common\OMSI 2\maps")
 DATA = Path(__file__).resolve().parent.parent / "data"
@@ -59,15 +61,6 @@ def trip_stems(ent: dict) -> dict:
     t = ent.get("trips") or {}
     line = ent["line"]
     return {"up": t.get("up") or f"{line} A", "down": t.get("down") or f"{line} B"}
-
-
-def find_track(ttdata: Path, stem: str, line: str) -> Path | None:
-    """.ttr naming varies: same as the trip, or just the line number, or absent."""
-    for cand in (stem, line):
-        p = ttdata / f"{cand}.ttr"
-        if p.exists():
-            return p
-    return None
 
 
 def ttl_first_last(ttdata: Path, line: str, stem: str = ""):
