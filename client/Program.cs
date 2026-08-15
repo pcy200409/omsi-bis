@@ -88,8 +88,11 @@ class MainForm : Form
         lblAdmin.SetBounds(300, 12, 160, 18);
         lblAdmin.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
         bool admin = IsElevated();
-        lblAdmin.Text = admin ? "관리자 권한 ✓" : "⚠ 관리자 아님";
+        // 기사용은 정상일 때 아무 말 없이 (권한 없을 때만 경고 — 그땐 메모리를 못 읽는다)
+        lblAdmin.Text = UserEdition ? (admin ? "" : "⚠ 관리자 권한으로 실행하세요")
+                                    : (admin ? "관리자 권한 ✓" : "⚠ 관리자 아님");
         lblAdmin.ForeColor = admin ? System.Drawing.Color.SeaGreen : System.Drawing.Color.OrangeRed;
+        if (UserEdition) lblAdmin.SetBounds(240, 12, 220, 18);
 
         Controls.Add(L("서버 주소", 16, 14, 70));
         txtServer.SetBounds(92, 12, 360, 24); txtServer.Text = s.Server;
