@@ -42,6 +42,11 @@
   .refresh{display:flex;justify-content:space-between;align-items:center;
     padding:8px 20px;color:var(--sub);font-size:13px;border-bottom:1px solid #eef0f4;background:#fafbfc;}
   .conn.ok{color:var(--green);} .conn.bad{color:#d5495f;}
+  .rfbtn{margin-left:6px;border:none;background:none;color:var(--sub);font-size:14px;cursor:pointer;
+    padding:0 3px;border-radius:5px;line-height:1;}
+  .rfbtn:hover{color:#2f6bff;background:#eef3ff;}
+  .rfbtn.spin{animation:rfspin .7s linear infinite;display:inline-block;color:#2f6bff;}
+  @keyframes rfspin{to{transform:rotate(360deg);}}
   .stops{flex:1;overflow-y:auto;position:relative;padding:6px 0 60px;}
   .stop{position:relative;display:flex;gap:14px;padding:0 20px;min-height:62px;}
   .rail{position:relative;width:28px;flex:none;}
@@ -278,7 +283,9 @@
             <span class="run">현재 <span id="running">0</span>대 운행중</span></div>
           <div class="dirtabs" id="dirtabs"></div>
         </header>
-        <div class="refresh"><span id="clock"></span><span class="conn bad" id="conn">● 연결 안 됨</span></div>
+        <div class="refresh">
+          <span><span id="clock"></span><button class="rfbtn" id="rfbtn" title="노선·정류장 정보 새로고침">↻</button></span>
+          <span class="conn bad" id="conn">● 연결 안 됨</span></div>
         <div id="stripview">
           <div class="note" id="note">실제 124번 노선 · 마커는 OMSI 실시간 운행스케줄 기준</div>
           <div class="stops" id="stops"></div>
@@ -359,7 +366,7 @@ const MAP_DEFS = `<defs>
 </defs>`;
 
 // 한 지역(=맵)이 노선을 여러 개 갖는다. 노선을 고르면 그 노선의 상/하행 탭이 뜬다.
-let ROUTES = [], LINE = '';
+let ROUTES = [], LINE = '', DIR = 'up';
 
 async function loadRoutes(){
   ROUTES = await (await fetch('/api/routes'+rq(), {cache:'no-store'})).json();
@@ -383,13 +390,16 @@ async function selectLine(no){
     tabs.appendChild(t);
   });
   tabs.hidden = dirs.length < 2;
-  await selectRoute(dirs[0].key);
+  const keep = dirs.find(r=>r.dir===DIR) || dirs[0];    // 보던 방향 유지 (새로고침·노선변경)
+  await selectRoute(keep.key);
   await loadGeo();                                // 노선마다 경로가 다르다
 }
 
 async function selectRoute(key){
   document.querySelectorAll('.dirtab').forEach(t=>t.classList.toggle('on', t.dataset.key===key));
   ROUTE = await (await fetch('/api/route/'+key+rq(), {cache:'no-store'})).json();
+  DIR = ROUTE.dir || 'up';
+  syncURL();                       // 새로고침(F5)해도 이 노선·방향으로 돌아오게
   $('badge').textContent = ROUTE.type || '일반';
   $('badge').className = 'badge' + (ROUTE.type==='간선'?' trunk':'');
   $('num').textContent = ROUTE.no;
@@ -752,7 +762,26 @@ function renderEta(eta){
 }
 
 setInterval(()=>{ const d=new Date();
-  $('clock').textContent=`${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')} ↻`; },1000);
+  $('clock').textContent=`${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`; },1000);
+
+// ↻ : 화면을 갈아엎지 않고 노선·정류장·지도·운행버스만 다시 읽는다 (F5 대신)
+let refreshing = false;
+async function refreshNow(){
+  if(refreshing) return;
+  refreshing = true;
+  const b = $('rfbtn'); b.classList.add('spin');
+  const t0 = Date.now();
+  try{
+    await loadRoutes();                     // 지금 보던 노선(LINE)·방향은 유지된다
+    const st = await (await fetch('/api/state?t='+Date.now(), {cache:'no-store'})).json();
+    if(ROUTE) apply(st);
+  }catch(e){ console.error('refresh failed', e); }
+  finally{
+    setTimeout(()=>{ b.classList.remove('spin'); refreshing = false; },
+              Math.max(0, 450-(Date.now()-t0)));   // 너무 빨리 끝나도 돈 티는 나게
+  }
+}
+$('rfbtn').onclick = refreshNow;
 
 // ── station-name editor ────────────────────────────────────────────────
 let EDIT_STOPS = [];
@@ -1128,6 +1157,28 @@ function updateSideBrand(){
   $('sidebrand').innerHTML = `🚍 <span class="rg">${r.name}</span> <span class="sub">버스정보시스템</span>`;
 }
 
+// ── 지금 보고 있는 화면을 주소에 남긴다 (#/지역/노선/방향[/stops], #notices) ──
+// F5나 링크 공유로 같은 화면에 그대로 돌아온다. 뒤로가기를 어지럽히지 않게 replaceState.
+let booted = false;              // 초기 setPage('home')이 주소의 해시를 지우지 않도록
+function syncURL(){
+  if(!booted) return;
+  let h = '';
+  if(PAGE === 'notices') h = '#notices';
+  else if(PAGE === 'app' && ROUTE)
+    h = `#/${encodeURIComponent(CURRENT_REGION)}/${encodeURIComponent(LINE)}/${ROUTE.dir}`
+        + (SIDE === 'stops' ? '/stops' : '');
+  if(location.hash !== h) history.replaceState(null, '', h || location.pathname + location.search);
+}
+
+function parseHash(){
+  const h = decodeURI(location.hash || '');
+  if(h === '#notices') return {page:'notices'};
+  const m = h.match(/^#\/([^/]+)\/([^/]*)\/(up|down)(\/stops)?$/);
+  if(!m) return null;
+  return {page:'app', region:decodeURIComponent(m[1]), line:decodeURIComponent(m[2]),
+          dir:m[3], side:m[4] ? 'stops' : 'routes'};
+}
+
 function setPage(p){
   PAGE = p;
   if(p==='home') NAVMODE='home';
@@ -1141,6 +1192,7 @@ function setPage(p){
   if(p==='home') renderHome();
   else if(p==='notices') loadNotices();
   if(mainOn && GEO) setTimeout(()=>{ if(vb) initMapView(); }, 30);   // re-fit map when shown again
+  syncURL();
 }
 // sidebar sub-tabs inside 통합검색: 노선현황 / 정류소현황 (kept in sync with the nav)
 function setSide(sd){
@@ -1150,6 +1202,7 @@ function setSide(sd){
   $('side-stops').hidden = sd!=='stops';
   if(sd==='stops') renderStopList($('stopsearch').value||'');
   highlightNav();
+  syncURL();
 }
 setPage('home');   // land on HOME first
 document.querySelectorAll('.sidetab').forEach(t=>t.onclick=()=>{ if(!t.classList.contains('disabled') && t.dataset.side) setSide(t.dataset.side); });
@@ -1282,8 +1335,16 @@ async function init(){
   try{ const rs = await (await fetch('/api/regions?t='+Date.now())).json();
        if(Array.isArray(rs) && rs.length) REGIONS = rs; }catch(e){}
   CURRENT_REGION = REGIONS[0].key;
+  const back = parseHash();    // F5 / 링크로 들어온 경우 보던 화면 복원
+  if(back && back.page==='app' && REGIONS.some(r=>r.key===back.region)){
+    CURRENT_REGION = back.region; LINE = back.line || ''; DIR = back.dir;
+  }
   renderNav();                 // re-render nav with the real region list
   await loadRoutes();          // preload default region so entering it is instant
+  booted = true;
+  if(back && back.page==='app'){ setPage('app'); if(back.side==='stops') setSide('stops'); }
+  else if(back && back.page==='notices') setPage('notices');
+  else syncURL();
   connect();
 }
 init();
