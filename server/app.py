@@ -253,7 +253,10 @@ def _load_geo_merged(rk: str):
     if not p.exists():
         return None
     ovp = region_dir(rk) / "geo_overrides.json"
-    stamp = (p.stat().st_mtime_ns, ovp.stat().st_mtime_ns if ovp.exists() else 0)
+    pvp = region_dir(rk) / "path_overrides.json"
+    stamp = (p.stat().st_mtime_ns,
+             ovp.stat().st_mtime_ns if ovp.exists() else 0,
+             pvp.stat().st_mtime_ns if pvp.exists() else 0)
     cached = _GEO_CACHE.get(rk)
     if cached and cached[0] == stamp:
         return cached[1]
@@ -270,6 +273,15 @@ def _load_geo_merged(rk: str):
                 for s in per.get(d, {}).get("stops", []):
                     if str(s["id"]) in ov:
                         s["xy"] = ov[str(s["id"])]
+    if pvp.exists():                     # 손으로 그린 노선 경로 (원본 geo는 그대로 둔다)
+        pv = json.loads(pvp.read_text(encoding="utf-8"))
+        for line, per in geo["lines"].items():
+            for d in ("up", "down"):
+                pts = (pv.get(line) or {}).get(d)
+                if pts and d in per:
+                    per[d]["path"] = pts
+                    per[d]["noroute"] = False
+                    per[d]["drawn"] = True
     _GEO_CACHE[rk] = (stamp, geo)
     return geo
 
@@ -552,6 +564,66 @@ async def edit_stoppos(e: StopPos):
     ov[str(e.id)] = xy
     p.write_text(json.dumps(ov, ensure_ascii=False, indent=2), encoding="utf-8")
     return {"ok": True, "id": str(e.id), "xy": xy}
+
+
+# ── 노선 경로 직접 그리기 (관리자) ─────────────────────────────────────────
+# .ttr이 없거나 복원이 어긋난 노선은 지도에서 직접 선을 그린다. geo.json은 건드리지
+# 않고 path_overrides.json에만 쌓아, 언제든 원래대로 되돌릴 수 있다.
+MAX_PATH_PTS = 4000
+
+
+class PathEdit(BaseModel):
+    region: str = ""
+    line: str
+    dir: str = "up"
+    path: list[list[float]] = []
+
+
+class PathReset(BaseModel):
+    region: str = ""
+    line: str
+    dir: str = "up"
+
+
+def _path_ov_path(rk: str) -> Path:
+    return region_dir(rk) / "path_overrides.json"
+
+
+@app.post("/api/routepath")
+async def edit_routepath(e: PathEdit):
+    if READONLY:
+        return JSONResponse({"error": "경로 편집은 로컬(관리자)에서만 가능합니다."}, status_code=403)
+    rk = valid_region(e.region or DEFAULT_REGION)
+    d = e.dir if e.dir in ("up", "down") else "up"
+    pts = [[round(float(p[0]), 1), round(float(p[1]), 1)]
+           for p in e.path if isinstance(p, (list, tuple)) and len(p) >= 2]
+    if len(pts) < 2:
+        return JSONResponse({"error": "점을 두 개 이상 찍어야 경로가 됩니다."}, status_code=400)
+    if len(pts) > MAX_PATH_PTS:
+        return JSONResponse({"error": f"점이 너무 많습니다 (최대 {MAX_PATH_PTS})."}, status_code=400)
+    p = _path_ov_path(rk)
+    ov = json.loads(p.read_text(encoding="utf-8")) if p.exists() else {}
+    ov.setdefault(e.line, {})[d] = pts
+    p.write_text(json.dumps(ov, ensure_ascii=False), encoding="utf-8")
+    return {"ok": True, "line": e.line, "dir": d, "points": len(pts)}
+
+
+@app.post("/api/routepath/reset")
+async def reset_routepath(e: PathReset):
+    if READONLY:
+        return JSONResponse({"error": "보기 전용"}, status_code=403)
+    rk = valid_region(e.region or DEFAULT_REGION)
+    d = e.dir if e.dir in ("up", "down") else "up"
+    p = _path_ov_path(rk)
+    ov = json.loads(p.read_text(encoding="utf-8")) if p.exists() else {}
+    (ov.get(e.line) or {}).pop(d, None)
+    if not ov.get(e.line):
+        ov.pop(e.line, None)
+    p.write_text(json.dumps(ov, ensure_ascii=False), encoding="utf-8")
+    base = _load_geo_merged(rk) or {}          # override 지운 뒤의 원본 경로
+    per = (base.get("lines") or {}).get(e.line, {}).get(d, {})
+    return {"ok": True, "line": e.line, "dir": d,
+            "path": per.get("path", []), "noroute": per.get("noroute", False)}
 
 
 @app.post("/api/stoppos/reset")

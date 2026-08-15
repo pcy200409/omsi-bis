@@ -82,7 +82,20 @@
     color:#54607a;font-size:13px;font-weight:700;padding:6px 11px;border-radius:8px;cursor:pointer;}
   .editbtn:hover{background:#e5eaf3;}
   .editbtn.on{background:#e8f0ff;color:#2f6bff;border-color:#b9d0ff;}
-  #posbtn{margin-left:auto;} #editbtn{margin-left:6px;}
+  #pathbtn{margin-left:auto;} #posbtn{margin-left:6px;} #editbtn{margin-left:6px;}
+  #mapsvg.pathedit{cursor:crosshair;}
+  .ppt{fill:#fff;stroke:#2f6bff;cursor:grab;}
+  .ppt.first{stroke:#0f8a4f;} .ppt.last{stroke:#d5495f;}
+  .pline{fill:none;stroke:#2f6bff;stroke-opacity:.85;stroke-linejoin:round;stroke-linecap:round;
+    stroke-dasharray:9 6;pointer-events:stroke;cursor:copy;}
+  .pathbar{position:absolute;left:50%;transform:translateX(-50%);bottom:14px;z-index:8;display:flex;
+    gap:6px;align-items:center;background:#fff;border:1px solid #dde3ec;border-radius:10px;
+    padding:7px 10px;box-shadow:0 4px 16px #0b214426;font-size:12.5px;font-weight:700;color:#54607a;}
+  .pathbar button{border:1px solid #dde3ec;background:#eef1f6;border-radius:7px;padding:6px 9px;
+    font-size:12.5px;font-weight:700;color:#54607a;cursor:pointer;}
+  .pathbar button.pri{background:#2f6bff;border-color:#2f6bff;color:#fff;}
+  .pathbar button.warn{color:#d5495f;}
+  .pathbar .n{color:#8a93a6;font-weight:600;padding-right:2px;}
   #mapsvg.posedit{cursor:move;} #mapsvg.posedit .mapstop{cursor:grab;}
   .posedit .mapstop{opacity:1;}
   .posnote{position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:15;display:flex;
@@ -277,6 +290,7 @@
       <div id="side-routes">
         <header>
           <div class="rownum"><span class="badge" id="badge">일반</span><span class="num" id="num">—</span>
+            <button class="editbtn" id="pathbtn" title="지도에서 노선 경로를 직접 그리기" hidden>✏ 경로</button>
             <button class="editbtn" id="posbtn" title="지도에서 정류장 위치 드래그 수정" hidden>📍 위치</button>
             <button class="editbtn" id="editbtn" title="정류장명 편집">✎ 편집</button></div>
           <select id="linesel" class="linesel" title="노선 선택" hidden></select>
@@ -399,6 +413,7 @@ async function selectLine(no){
 }
 
 async function selectRoute(key){
+  if(pathEdit) $('pathbtn').click();      // 다른 노선으로 가면 그리던 건 접는다
   document.querySelectorAll('.dirtab').forEach(t=>t.classList.toggle('on', t.dataset.key===key));
   ROUTE = await (await fetch('/api/route/'+key+rq(), {cache:'no-store'})).json();
   DIR = ROUTE.dir || 'up';
@@ -577,6 +592,7 @@ function applyView(){
   svg.querySelectorAll('.mbus').forEach(u=>{ const cx=+u.dataset.cx, cy=+u.dataset.cy;
     u.setAttribute('x',cx-bs/2); u.setAttribute('y',cy-bs/2); u.setAttribute('width',bs); u.setAttribute('height',bs); });
   const rt = svg.querySelector('.mroute'); if(rt) rt.setAttribute('stroke-width', ROUTE_PX*mScale);
+  if(pathEdit) drawPathEdit();                    // 경로 편집 점·선도 화면크기 유지
   const show = posEdit || vb.w < baseVB.w*0.55;   // labels when zoomed in, or while editing positions
   svg.querySelectorAll('.mlabel').forEach(t=>{
     if(!show){ t.style.display='none'; return; }
@@ -602,11 +618,18 @@ function setupMapInteraction(){
     vb.x=wx-fx*nw; vb.y=wy-fy*nh; vb.w=nw; vb.h=nh; applyView();
   }, {passive:false});
   let drag=null, moved=false;
+  const world = e => { const r=svg.getBoundingClientRect();
+    return [vb.x+(e.clientX-r.left)/r.width*vb.w, vb.y+(e.clientY-r.top)/r.height*vb.h]; };
   svg.addEventListener('pointerdown', e=>{ if(!vb) return;
+    if(pathEdit){                                   // admin: 경로 점 잡기 (없으면 팬)
+      const pt = e.target.closest('.ppt');
+      if(pt){ pptDrag={i:+pt.dataset.i, from:PPTS[+pt.dataset.i].slice()}; moved=false; e.preventDefault(); return; }
+    }
     const st = posEdit ? e.target.closest('.mapstop') : null;   // admin: drag a stop
     if(st){ stopDragEl=st; stopDragStart=[+st.dataset.cx, +st.dataset.cy]; moved=false; e.preventDefault(); return; }
     drag={x:e.clientX,y:e.clientY}; moved=false; svg.style.cursor='grabbing'; });
   svg.addEventListener('pointermove', e=>{ if(!vb) return; const r=svg.getBoundingClientRect();
+    if(pptDrag){ moved=true; PPTS[pptDrag.i] = world(e); drawPathEdit(); return; }
     if(stopDragEl){ moved=true;
       moveStop(stopDragEl, vb.x+(e.clientX-r.left)/r.width*vb.w, vb.y+(e.clientY-r.top)/r.height*vb.h); return; }
     if(!drag) return;
@@ -614,11 +637,29 @@ function setupMapInteraction(){
     vb.x-=(e.clientX-drag.x)/r.width*vb.w; vb.y-=(e.clientY-drag.y)/r.height*vb.h;
     drag={x:e.clientX,y:e.clientY}; applyView(); });
   const end=()=>{
+    if(pptDrag){
+      if(moved) pathUndo.push({t:'move', i:pptDrag.i, p:pptDrag.from});
+      else PPTS[pptDrag.i] = pptDrag.from;
+      pptDrag=null; drawPathEdit(); setTimeout(()=>{ _dragged=true; }, 0); return; }
     if(stopDragEl){
       if(moved && stopDragStart) posUndo.push({i:+stopDragEl.dataset.i, prev:stopDragStart});
       saveStopPos(stopDragEl); stopDragEl=null; stopDragStart=null; setTimeout(()=>{ _dragged=true; }, 0); return; }
     drag=null; svg.style.cursor=posEdit?'move':'grab'; setTimeout(()=>{ _dragged=moved; }, 0); };
   svg.addEventListener('pointerup', end); svg.addEventListener('pointercancel', end);
+  svg.addEventListener('click', e=>{                 // 경로 모드: 클릭 = 점 추가
+    if(!pathEdit || !vb || _dragged || e.target.closest('.ppt')) return;
+    const w = world(e);
+    // 그려둔 선 위를 클릭하면 그 구간에 끼우고, 그 외에는 끝에 이어 그린다
+    addPathPoint(w[0], w[1], e.target.closest('.pline') ? nearestSegment(w) : null);
+  });
+  svg.addEventListener('contextmenu', e=>{           // 경로 모드: 점 우클릭 = 삭제
+    const pt = pathEdit ? e.target.closest('.ppt') : null;
+    if(!pt) return;
+    e.preventDefault();
+    const i = +pt.dataset.i;
+    pathUndo.push({t:'del', i, p:PPTS[i]});
+    PPTS.splice(i, 1); drawPathEdit();
+  });
   window.addEventListener('resize', ()=>{ if(vb) initMapView(); });
   svg.style.cursor='grab';
 }
@@ -855,9 +896,174 @@ async function saveKname(s, value, row, btn){
 fetch('/api/config').then(r=>r.json()).then(c=>{
   EDITABLE = !!c.editable;
   if(!EDITABLE){ $('editbtn').style.display='none'; }
-  else { $('posbtn').hidden = false; }
+  else { $('posbtn').hidden = false; $('pathbtn').hidden = false; }
   renderNav();                      // 관리자면 '⚙ 지역관리' 항목이 이제 붙는다
 }).catch(()=>{});
+
+// ── 노선 경로 직접 그리기 (관리자) ──────────────────────────────────────
+// 지도를 클릭해 점을 찍으면 그게 그 노선의 경로가 된다. 저장하면 서버의
+// path_overrides.json에만 쌓이고 원본은 그대로라, 언제든 되돌릴 수 있다.
+let pathEdit = false, PPTS = [], pathUndo = [], pptDrag = null;
+
+$('pathbtn').onclick = ()=>{
+  if(!EDITABLE || !GEO || !ROUTE) return;
+  pathEdit = !pathEdit;
+  $('pathbtn').classList.toggle('on', pathEdit);
+  if(pathEdit && posEdit) $('posbtn').click();          // 두 편집모드는 같이 못 켠다
+  $('mapsvg').classList.toggle('pathedit', pathEdit);
+  if(pathEdit){
+    const g = GEO[ROUTE.dir] || {};
+    PPTS = (g.path || []).map(p=>[p[0], p[1]]);
+    if(PPTS.length > 400) PPTS = thinPath(PPTS, 400);   // 복원 경로는 점이 수천 개다
+    pathUndo = [];
+    drawPathEdit(); showPathBar();
+  } else { clearPathEdit(); }
+};
+
+// 점이 너무 많으면 손으로 못 고친다 — 모양을 유지하며 개수만 줄인다
+function thinPath(pts, max){
+  const step = Math.ceil(pts.length/max), out = [];
+  for(let i=0;i<pts.length;i+=step) out.push(pts[i]);
+  if(out[out.length-1] !== pts[pts.length-1]) out.push(pts[pts.length-1]);
+  return out;
+}
+
+function drawPathEdit(){
+  const svg = $('mapsvg');
+  let layer = svg.querySelector('#patheditor');
+  if(!layer){ layer = document.createElementNS(SVGNS,'g'); layer.id='patheditor'; svg.appendChild(layer); }
+  const r = 6*mScale;
+  layer.innerHTML = `<polyline class="pline" points="${PPTS.map(p=>p.join(',')).join(' ')}"
+      stroke-width="${ROUTE_PX*mScale}"/>`
+    + PPTS.map((p,i)=>`<circle class="ppt${i===0?' first':i===PPTS.length-1?' last':''}" data-i="${i}"
+        cx="${p[0]}" cy="${p[1]}" r="${r}" stroke-width="${2.2*mScale}"/>`).join('');
+  const n = $('pptcount'); if(n) n.textContent = `${PPTS.length}점`;
+}
+
+function clearPathEdit(){
+  const l = $('mapsvg').querySelector('#patheditor'); if(l) l.remove();
+  const b = $('pathbar'); if(b) b.remove();
+}
+
+function showPathBar(){
+  if($('pathbar')) return;
+  const bar = document.createElement('div'); bar.id='pathbar'; bar.className='pathbar';
+  bar.innerHTML = `<span class="n" id="pptcount"></span>
+    <button class="pri" data-p="save">저장</button>
+    <button data-p="undo">↩ 되돌리기</button>
+    <button data-p="export">내보내기</button>
+    <button data-p="import">불러오기</button>
+    <button class="warn" data-p="reset">원래대로</button>
+    <button data-p="close">닫기</button>
+    <input type="file" id="pathfile" accept=".json,.geojson,application/json" hidden>`;
+  $('mappane').appendChild(bar);
+  bar.querySelectorAll('button').forEach(b=>b.onclick = ()=>({
+    save: savePath, undo: undoPathPoint, export: exportPath,
+    import: ()=>$('pathfile').click(), reset: resetPath, close: ()=>$('pathbtn').click(),
+  })[b.dataset.p]());
+  $('pathfile').onchange = importPath;
+  $('pptcount').textContent = `${PPTS.length}점`;
+}
+
+// 기본은 '끝에 이어 그리기' — 노선이 자기 옆을 스쳐 지나가도 순서가 안 엉킨다.
+// 중간에 점을 끼우고 싶으면 그려둔 선(점선) 위를 클릭한다.
+function addPathPoint(wx, wy, insertAt){
+  const i = (insertAt == null) ? PPTS.length : insertAt;
+  PPTS.splice(i, 0, [wx, wy]);
+  pathUndo.push({t:'add', i});
+  drawPathEdit();
+}
+
+function nearestSegment(p){
+  let bi = null, bd = Infinity;
+  for(let i=1;i<PPTS.length;i++){
+    const d = distToSeg(p, PPTS[i-1], PPTS[i]);
+    if(d < bd){ bd = d; bi = i; }
+  }
+  return bi;
+}
+
+function distToSeg(p, a, b){
+  const vx=b[0]-a[0], vy=b[1]-a[1], wx=p[0]-a[0], wy=p[1]-a[1], L=vx*vx+vy*vy;
+  const t = L ? Math.max(0, Math.min(1, (wx*vx+wy*vy)/L)) : 0;
+  return Math.hypot(wx-vx*t, wy-vy*t);
+}
+
+function undoPathPoint(){
+  const u = pathUndo.pop(); if(!u) return;
+  if(u.t==='add') PPTS.splice(u.i, 1);
+  else if(u.t==='del') PPTS.splice(u.i, 0, u.p);
+  else if(u.t==='move') PPTS[u.i] = u.p;
+  drawPathEdit();
+}
+
+async function savePath(){
+  if(PPTS.length < 2){ alert('점을 두 개 이상 찍어야 경로가 됩니다.'); return; }
+  try{
+    const res = await fetch('/api/routepath', {method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({region:CURRENT_REGION, line:ROUTE.no, dir:ROUTE.dir, path:PPTS})});
+    const j = await res.json();
+    if(!res.ok){ alert(j.error || '저장 실패'); return; }
+    const g = GEO[ROUTE.dir];
+    g.path = PPTS.map(p=>[p[0], p[1]]); g.noroute = false; g.drawn = true;
+    delete g._pi;                                   // 버스가 새 경로를 따라가도록
+    renderMapBase(); if(pathEdit){ drawPathEdit(); showPathBar(); }
+    flashPathBar(`저장됨 · ${j.points}점`);
+  }catch(e){ alert('저장 실패: '+e); }
+}
+
+async function resetPath(){
+  if(!confirm('직접 그린 경로를 버리고 원래대로 되돌릴까요?')) return;
+  try{
+    const res = await fetch('/api/routepath/reset', {method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({region:CURRENT_REGION, line:ROUTE.no, dir:ROUTE.dir})});
+    const j = await res.json();
+    if(!res.ok){ alert(j.error || '실패'); return; }
+    const g = GEO[ROUTE.dir];
+    g.path = j.path || []; g.noroute = !!j.noroute; g.drawn = false; delete g._pi;
+    PPTS = (g.path||[]).map(p=>[p[0],p[1]]); if(PPTS.length>400) PPTS = thinPath(PPTS, 400);
+    pathUndo = [];
+    renderMapBase(); if(pathEdit){ drawPathEdit(); showPathBar(); }
+    flashPathBar('원래대로 되돌림');
+  }catch(e){ alert('실패: '+e); }
+}
+
+// ② 그린 경로를 파일로 주고받기 (백업·공유·다른 도구에서 그린 것 가져오기)
+function exportPath(){
+  const data = {format:'omsi-bis-path/1', region:CURRENT_REGION, line:ROUTE.no, dir:ROUTE.dir,
+                W:GEO.W, H:GEO.H, path:PPTS};
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(data)], {type:'application/json'}));
+  a.download = `${CURRENT_REGION}_${ROUTE.no}${ROUTE.dir==='up'?'A':'B'}_path.json`;
+  a.click(); URL.revokeObjectURL(a.href);
+}
+
+async function importPath(ev){
+  const f = ev.target.files && ev.target.files[0]; if(!f) return;
+  ev.target.value = '';
+  try{
+    const j = JSON.parse(await f.text());
+    let pts = Array.isArray(j) ? j
+            : j.path ? j.path
+            : (j.coordinates || (j.geometry && j.geometry.coordinates) ||
+               (j.features && j.features[0] && j.features[0].geometry.coordinates));
+    if(!Array.isArray(pts) || pts.length < 2) throw new Error('경로 점을 찾지 못했습니다');
+    pts = pts.map(p=>[+p[0], +p[1]]).filter(p=>isFinite(p[0]) && isFinite(p[1]));
+    if(j.W && j.H && (j.W !== GEO.W || j.H !== GEO.H)){        // 다른 크기로 그린 것 맞추기
+      const sx = GEO.W/j.W, sy = GEO.H/j.H;
+      pts = pts.map(p=>[p[0]*sx, p[1]*sy]);
+    }
+    PPTS = pts; pathUndo = []; drawPathEdit();
+    flashPathBar(`${pts.length}점 불러옴 · [저장]을 눌러야 반영됩니다`);
+  }catch(e){ alert('불러오기 실패: '+e.message); }
+}
+
+function flashPathBar(msg){
+  const n = $('pptcount'); if(!n) return;
+  const before = `${PPTS.length}점`;
+  n.textContent = `${before} · ${msg}`;
+  setTimeout(()=>{ if($('pptcount')) $('pptcount').textContent = `${PPTS.length}점`; }, 2500);
+}
 
 $('posbtn').onclick = ()=>{
   if(!EDITABLE) return;
@@ -873,7 +1079,9 @@ $('posbtn').onclick = ()=>{
 };
 
 window.addEventListener('keydown', e=>{
-  if(posEdit && (e.ctrlKey||e.metaKey) && (e.key==='z'||e.key==='Z')){ e.preventDefault(); undoStopMove(); }
+  if(!(e.ctrlKey||e.metaKey) || (e.key!=='z' && e.key!=='Z')) return;
+  if(pathEdit){ e.preventDefault(); undoPathPoint(); }
+  else if(posEdit){ e.preventDefault(); undoStopMove(); }
 });
 
 setupMapInteraction();
