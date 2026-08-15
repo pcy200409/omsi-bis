@@ -39,10 +39,25 @@ def hhmm(m) -> str:
     return f"{int(m) // 60 % 24:02d}:{int(m) % 60:02d}" if m is not None else ""
 
 
-def trip_stems(reg: dict) -> dict:
+def region_lines(reg: dict) -> list[dict]:
+    """A region is a MAP and carries many lines: [{"line", "trips":{"up","down"}}].
+    Old single-line entries ({"line","trips"}) are read as a one-line region."""
+    raw = reg.get("lines")
+    if not raw:
+        return [{"line": reg["line"], "trips": reg.get("trips") or {}}]
+    out = []
+    for l in raw:
+        if isinstance(l, str):
+            out.append({"line": l, "trips": {}})
+        else:
+            out.append({"line": l["line"], "trips": l.get("trips") or {}})
+    return out
+
+
+def trip_stems(ent: dict) -> dict:
     """Which .ttp file is each direction? (explicit, else the "<line> A/B" convention)"""
-    t = reg.get("trips") or {}
-    line = reg["line"]
+    t = ent.get("trips") or {}
+    line = ent["line"]
     return {"up": t.get("up") or f"{line} A", "down": t.get("down") or f"{line} B"}
 
 
@@ -79,17 +94,15 @@ def build_region(key: str, log=print):
         raise SystemExit(f"region '{key}' not found in data/regions.json")
     mapdir = OMSI_MAPS / reg["map"]
     ttdata = mapdir / "TTData"
-    line = reg["line"]
     if not ttdata.exists():
         raise SystemExit(f"map TTData not found: {ttdata}")
     out = DATA / "regions" / key
     out.mkdir(parents=True, exist_ok=True)
-    trips = trip_stems(reg)
-    log(f"building region '{key}'  map='{reg['map']}'  line={line}  trips={trips}")
+    entries = region_lines(reg)
+    log(f"building region '{key}'  map='{reg['map']}'  lines={[e['line'] for e in entries]}")
 
     ovf = out / "kname_overrides.json"                       # authoritative Korean names
     OV = json.loads(ovf.read_text(encoding="utf-8")) if ovf.exists() else {}
-    first, last = ttl_first_last(ttdata, line, trips["up"])
 
     def kname_for(st):
         sid = str(st["index"])
@@ -98,15 +111,7 @@ def build_region(key: str, log=print):
         ko = T.koreanize(st["name"])                         # auto RR->Hangul + glossary
         return ko if has_hangul(ko) else st["name"]
 
-    def parse_dir(direction):
-        p = ttdata / f"{trips[direction]}.ttp"
-        return T.parse_ttp(str(p)) if p.exists() else None
-
-    tripA, tripB = parse_dir("up"), parse_dir("down")
-    if not tripA:
-        raise SystemExit(f"trip file not found: {ttdata / (trips['up'] + '.ttp')}")
-
-    def mkroute(trip, rkey, direction):
+    def mkroute(trip, line, rkey, direction, first, last):
         stops = [{"id": str(st["index"]), "name": st["name"], "kname": kname_for(st),
                   "kachel": st.get("busstop", ""), "dist": round(st.get("dist", 0.0), 1)}
                  for st in trip["stations"]]
@@ -114,26 +119,48 @@ def build_region(key: str, log=print):
                 "from": stops[0]["kname"], "to": stops[-1]["kname"],
                 "length": stops[-1]["dist"], "first": first, "last": last, "stops": stops}
 
-    routes, index = {}, []
-    upA = mkroute(tripA, f"{line}A", "up"); routes[f"{line}A"] = upA
-    index.append({"key": f"{line}A", "no": line, "dir": "up",
-                  "label": f"{line} 상행 · {upA['from']}→{upA['to']}", "stops": len(upA["stops"])})
-    if tripB:
-        dnB = mkroute(tripB, f"{line}B", "down"); routes[f"{line}B"] = dnB
-        index.append({"key": f"{line}B", "no": line, "dir": "down",
-                      "label": f"{line} 하행 · {dnB['from']}→{dnB['to']}", "stops": len(dnB["stops"])})
+    routes, index, trips_of = {}, [], {}
+    for ent in entries:
+        line, trips = ent["line"], trip_stems(ent)
+        trips_of[line] = trips
+        parsed = {}
+        for d in ("up", "down"):
+            p = ttdata / f"{trips[d]}.ttp"
+            parsed[d] = T.parse_ttp(str(p)) if p.exists() else None
+        if not parsed["up"]:
+            log(f"  ! {line}: trip file not found ({trips['up']}.ttp) - skipped")
+            continue
+        first, last = ttl_first_last(ttdata, line, trips["up"])
+        for d, suffix, label in (("up", "A", "상행"), ("down", "B", "하행")):
+            if not parsed[d]:
+                continue
+            rkey = f"{line}{suffix}"
+            r = mkroute(parsed[d], line, rkey, d, first, last)
+            routes[rkey] = r
+            index.append({"key": rkey, "no": line, "dir": d,
+                          "label": f"{line} {label} · {r['from']}→{r['to']}", "stops": len(r["stops"])})
+        ent["_parsed"] = parsed
+    if not routes:
+        raise SystemExit("no line could be built - check the trip files in data/regions.json")
+
+    for stale in out.glob("route_*.json"):                   # 빠진 노선 파일은 정리
+        if stale.stem[len("route_"):] not in routes:
+            stale.unlink()
     for rkey, r in routes.items():
         (out / f"route_{rkey}.json").write_text(json.dumps(r, ensure_ascii=False, indent=2), encoding="utf-8")
     (out / "routes.json").write_text(json.dumps(index, ensure_ascii=False, indent=2), encoding="utf-8")
     log(f"  routes: " + ", ".join(f"{k}={len(r['stops'])} stops" for k, r in routes.items()))
 
     # ── map geometry (spline reconstruction) ────────────────────────────
-    # Only worth the (slow) spline indexing if some direction has a track file.
-    tracks = {d: find_track(ttdata, trips[d], line) for d in ("up", "down")}
-    for d, trf in tracks.items():
-        if not trf:
-            log(f"  ! {d}: no .ttr track - this direction gets no map")
-    if not any(tracks.values()):
+    # Every line of the region shares ONE pixel frame / background, so the map
+    # can show them together and a stop keeps the same spot on every line.
+    tracks = {}          # line -> {dir: .ttr path}
+    for ent in entries:
+        line, trips = ent["line"], trips_of.get(ent["line"], {})
+        if not trips:
+            continue
+        tracks[line] = {d: find_track(ttdata, trips[d], line) for d in ("up", "down")}
+    if not any(t for per in tracks.values() for t in per.values()):
         log("  ! no track files at all - strip view only (map view is skipped)")
         return
     log("  indexing tile splines + road map ...")
@@ -146,18 +173,22 @@ def build_region(key: str, log=print):
     except Exception as e:
         log(f"  ! roadmap image unusable ({type(e).__name__}) - plain background")
         roadmap = None
-    geos = {}
-    for direction in ("up", "down"):
-        trip = tripA if direction == "up" else tripB
-        if not trip or not tracks[direction]:
-            continue
-        g = T.build_geo(trip, T.parse_track(str(tracks[direction])), splines)
-        if g:
-            geos[direction] = (trip, g)
+
+    geos = {}            # line -> {dir: (trip, geo)}
+    for ent in entries:
+        line, parsed = ent["line"], ent.get("_parsed") or {}
+        for d in ("up", "down"):
+            trf = tracks.get(line, {}).get(d)
+            if not parsed.get(d) or not trf:
+                continue
+            g = T.build_geo(parsed[d], T.parse_track(str(trf)), splines)
+            if g:
+                geos.setdefault(line, {})[d] = (parsed[d], g)
     if not geos:
         log("  ! geometry reconstruction failed - skipping map")
         return
-    bg, px, W, H = T._geo_canvas([g for _, g in geos.values()], roadmap, MAPW, SS)
+    bg, px, W, H = T._geo_canvas([g for per in geos.values() for _, g in per.values()],
+                                 roadmap, MAPW, SS)
     if bg is None:
         from PIL import Image
         bg = Image.new("RGB", (W, H), "white")
@@ -169,11 +200,12 @@ def build_region(key: str, log=print):
         path = [[round(px(x, z)[0], 1), round(px(x, z)[1], 1)] for s in geo["segs"] for x, z in s["pts"]]
         return {"stops": stops, "path": path}
 
-    geo_out = {"W": W, "H": H, "bg": "geo_bg.png"}
-    for direction, (trip, g) in geos.items():
-        geo_out[direction] = emit(trip, g)
+    geo_out = {"W": W, "H": H, "bg": "geo_bg.png",
+               "lines": {line: {d: emit(trip, g) for d, (trip, g) in per.items()}
+                         for line, per in geos.items()}}
     (out / "geo.json").write_text(json.dumps(geo_out, ensure_ascii=False), encoding="utf-8")
-    log(f"  geo_bg.png {W}x{H} + geo.json ({', '.join(geos)})")
+    log(f"  geo_bg.png {W}x{H} + geo.json (" +
+        ", ".join(f"{line}:{'/'.join(per)}" for line, per in geos.items()) + ")")
     log(f"done: region '{key}'")
 
 

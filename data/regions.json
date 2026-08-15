@@ -3,6 +3,14 @@
     "key": "segang",
     "name": "세강시",
     "map": "Segang Alpha",
-    "line": "124"
+    "lines": [
+      {
+        "line": "124",
+        "trips": {
+          "up": "124 A",
+          "down": "124 B"
+        }
+      }
+    ]
   }
 ]

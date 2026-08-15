@@ -9,8 +9,11 @@ using OmsiHook;
 // A window to stream the player bus position to the BIS server: fill in the
 // server address / nickname / line / map and press 시작. Reads OMSI memory via
 // OmsiHook (read-only, no plugin). Needs admin (app.manifest requests it) because
-// OMSI is usually elevated. Also has a toggle to run a LOCAL server (dev machines
-// that have server/.venv), for solo/local testing.
+// OMSI is usually elevated.
+//
+// Two editions from one source (csproj: -p:BisEdition=User|Admin):
+//   USER_BUILD  = 기사용. 운행 정보 보내기만. 로컬 서버 조작·로그창 없음.
+//   (default)   = 관리자용. 로컬 서버 켜기/끄기 + 상세 로그.
 
 static class Program
 {
@@ -64,12 +67,18 @@ class MainForm : Form
     Process? serverProc;
     int sent;
 
+#if USER_BUILD
+    const bool UserEdition = true;
+#else
+    const bool UserEdition = false;
+#endif
+
     public MainForm()
     {
         var s = Settings.Load();
-        Text = "OMSI BIS 클라이언트";
+        Text = UserEdition ? "OMSI BIS 클라이언트 (기사용)" : "OMSI BIS 클라이언트 (관리자용)";
         Font = new System.Drawing.Font("Malgun Gothic", 9f);
-        ClientSize = new System.Drawing.Size(470, 574);
+        ClientSize = new System.Drawing.Size(470, UserEdition ? 400 : 574);
         FormBorderStyle = FormBorderStyle.FixedSingle;
         MaximizeBox = false;
         StartPosition = FormStartPosition.CenterScreen;
@@ -109,35 +118,46 @@ class MainForm : Form
         lblInfo.SetBounds(16, 224, 436, 20);
         lblInfo.ForeColor = System.Drawing.Color.DimGray;
 
-        var sep = new Label { Text = "─────  로컬 서버 (개발용)  ─────", Left = 16, Top = 256, Width = 436,
-            TextAlign = System.Drawing.ContentAlignment.MiddleCenter, ForeColor = System.Drawing.Color.Silver };
-        btnServer.SetBounds(16, 280, 150, 30); btnServer.Text = "로컬 서버 켜기";
-        btnServer.Click += (_, __) => ToggleServer();
-        lblServer.SetBounds(178, 280, 280, 30); lblServer.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-        lblServer.Text = "꺼짐";
+        var ctrls = new List<Control> { lblAdmin, txtServer, txtNick, txtLine, txtMap, txtVeh, txtCompany,
+            btnStart, lblStatus, lblInfo, txtLog };
 
-        txtLog.SetBounds(16, 322, 436, 236);
+        if (!UserEdition)      // 관리자용에만: 로컬 서버 켜기/끄기
+        {
+            var sep = new Label { Text = "─────  로컬 서버 (관리자)  ─────", Left = 16, Top = 256, Width = 436,
+                TextAlign = System.Drawing.ContentAlignment.MiddleCenter, ForeColor = System.Drawing.Color.Silver };
+            btnServer.SetBounds(16, 280, 150, 30); btnServer.Text = "로컬 서버 켜기";
+            btnServer.Click += (_, __) => ToggleServer();
+            lblServer.SetBounds(178, 280, 280, 30); lblServer.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            lblServer.Text = "꺼짐";
+            ctrls.Add(sep); ctrls.Add(btnServer); ctrls.Add(lblServer);
+
+            txtLog.SetBounds(16, 322, 436, 236);
+            // enable the local-server button only if we can find server/.venv nearby
+            (serverDir, pythonExe) = FindServer();
+            if (serverDir == null)
+            {
+                btnServer.Enabled = false;
+                lblServer.Text = "서버 폴더 없음 (배포본은 불필요)";
+                lblServer.ForeColor = System.Drawing.Color.Silver;
+            }
+        }
+        else
+        {
+            txtLog.SetBounds(16, 252, 436, 132);       // 기사용은 작은 안내 로그만
+        }
         txtLog.Multiline = true; txtLog.ReadOnly = true; txtLog.ScrollBars = ScrollBars.Vertical;
         txtLog.BackColor = System.Drawing.Color.FromArgb(245, 246, 248);
         txtLog.Font = new System.Drawing.Font("Consolas", 8.5f);
 
-        Controls.AddRange(new Control[] { lblAdmin, txtServer, txtNick, txtLine, txtMap, txtVeh, txtCompany,
-            btnStart, lblStatus, lblInfo, sep, btnServer, lblServer, txtLog });
-
-        // enable the local-server button only if we can find server/.venv nearby
-        (serverDir, pythonExe) = FindServer();
-        if (serverDir == null)
-        {
-            btnServer.Enabled = false;
-            lblServer.Text = "서버 폴더 없음 (친구 배포본은 불필요)";
-            lblServer.ForeColor = System.Drawing.Color.Silver;
-        }
+        Controls.AddRange(ctrls.ToArray());
 
         if (!admin)
             Log("⚠ 관리자 권한이 아니면 OMSI 메모리를 못 읽습니다. 이 창을 관리자 권한으로 다시 실행하세요.");
-        Log("준비 완료. 서버주소·닉네임 확인 후 [시작]을 누르세요.");
+        Log(UserEdition
+            ? "기사용 클라이언트입니다. 닉네임·노선·차량번호를 넣고 [시작]을 누르세요."
+            : "관리자용 클라이언트입니다. 서버주소·닉네임 확인 후 [시작]을 누르세요.");
 
-        FormClosing += (_, __) => { cts?.Cancel(); StopServer(); SaveSettings(); };
+        FormClosing += (_, __) => { cts?.Cancel(); if (!UserEdition) StopServer(); SaveSettings(); };
     }
 
     void SaveSettings() => new Settings {

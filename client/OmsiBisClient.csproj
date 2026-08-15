@@ -13,6 +13,19 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
+  <!-- 두 벌로 낸다: 기사(사용자)용과 관리자용.
+       사용자용 = 서버를 켜거나 만지는 기능 없이 '운행 정보 보내기'만.
+       빌드:  dotnet publish -p:BisEdition=User   /   -p:BisEdition=Admin        -->
+  <PropertyGroup>
+    <BisEdition Condition="'$(BisEdition)' == ''">Admin</BisEdition>
+    <AssemblyName Condition="'$(BisEdition)' == 'User'">OmsiBisClient</AssemblyName>
+    <AssemblyName Condition="'$(BisEdition)' != 'User'">OmsiBisAdmin</AssemblyName>
+    <DefineConstants Condition="'$(BisEdition)' == 'User'">$(DefineConstants);USER_BUILD</DefineConstants>
+    <!-- 배포본은 한 파일로, 압축해서 (친구들이 받아야 하니) -->
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="OmsiHook" Version="2.5.3" />
   </ItemGroup>

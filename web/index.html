@@ -122,6 +122,18 @@
   .rrow .rb{flex:none;background:#eef1f6;border:1px solid #dde3ec;color:#54607a;font-size:12px;
     font-weight:700;padding:6px 9px;border-radius:8px;cursor:pointer;}
   .rrow .rb.del{color:#d5495f;} .rrow .rb:disabled{opacity:.45;cursor:default;}
+  .lrow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:0 18px 11px;
+    border-bottom:1px solid #f3f5f9;}
+  .chip{display:inline-flex;align-items:center;gap:5px;background:#eef1f6;border-radius:7px;
+    padding:3px 7px;font-size:12px;font-weight:700;color:#54607a;}
+  .chip b{color:#b3bac8;cursor:pointer;font-weight:800;} .chip b:hover{color:#d5495f;}
+  .chipadd{background:none;border:1px dashed #c7d2e6;border-radius:7px;padding:3px 8px;
+    font-size:12px;font-weight:700;color:#2f6bff;cursor:pointer;}
+  .laddbox{flex-basis:100%;background:#f5f8ff;border:1px solid #e0e9ff;border-radius:9px;
+    padding:10px 12px 12px;margin-top:6px;}
+  .laddbox[hidden]{display:none;}
+  .addbtn.sm{padding:8px 0;font-size:13px;margin-top:2px;}
+  .fl[hidden]{display:none;}
   .regform{flex:none;border-top:2px solid #eef0f4;padding:14px 18px 18px;background:#fafbfd;
     border-radius:0 0 16px 16px;overflow-y:auto;max-height:56%;}
   .regform h4{font-size:13.5px;color:#152a52;margin-bottom:10px;}
@@ -136,7 +148,11 @@
   .reglog{margin-top:10px;background:#101a2e;color:#c8d6f0;font-size:11.5px;line-height:1.55;
     border-radius:8px;padding:9px 11px;white-space:pre-wrap;max-height:130px;overflow-y:auto;}
   .reglog.bad{background:#3a1220;color:#ffd3dc;}
+  .linesel{width:100%;margin-top:10px;padding:9px 11px;border:1px solid #dde3ec;border-radius:9px;
+    font-size:14px;font-weight:700;color:#20293b;background:#fff;cursor:pointer;}
+  .linesel[hidden]{display:none;}
   .dirtabs{display:flex;gap:8px;margin-top:12px;}
+  .dirtabs[hidden]{display:none;}
   .dirtab{flex:1;text-align:center;padding:8px 0;border-radius:8px;font-weight:700;font-size:14px;
     background:#eef1f6;color:#7b8699;cursor:pointer;border:1px solid transparent;user-select:none;}
   .dirtab.on{background:#e8f0ff;color:#2f6bff;border-color:#b9d0ff;}
@@ -255,6 +271,7 @@
           <div class="rownum"><span class="badge" id="badge">일반</span><span class="num" id="num">—</span>
             <button class="editbtn" id="posbtn" title="지도에서 정류장 위치 드래그 수정" hidden>📍 위치</button>
             <button class="editbtn" id="editbtn" title="정류장명 편집">✎ 편집</button></div>
+          <select id="linesel" class="linesel" title="노선 선택" hidden></select>
           <div class="ends" id="ends"></div>
           <div class="times" id="times"></div>
           <div class="summary"><span id="span"></span>총 <span id="nstops">0</span>개 정류소 ·
@@ -341,16 +358,33 @@ const MAP_DEFS = `<defs>
     <path d="${BUS_PATH}" fill="#fff"/></symbol>
 </defs>`;
 
+// 한 지역(=맵)이 노선을 여러 개 갖는다. 노선을 고르면 그 노선의 상/하행 탭이 뜬다.
+let ROUTES = [], LINE = '';
+
 async function loadRoutes(){
-  const list = await (await fetch('/api/routes'+rq(), {cache:'no-store'})).json();
+  ROUTES = await (await fetch('/api/routes'+rq(), {cache:'no-store'})).json();
+  const lines = [...new Set(ROUTES.map(r=>r.no))];
+  const sel = $('linesel');
+  sel.innerHTML = lines.map(n=>`<option value="${esc(n)}">${esc(n)}번</option>`).join('');
+  sel.hidden = lines.length < 2;                 // 노선 하나뿐이면 고를 게 없다
+  sel.onchange = ()=>selectLine(sel.value);
+  await selectLine(lines.includes(LINE) ? LINE : lines[0]);
+}
+
+async function selectLine(no){
+  LINE = no;
+  if($('linesel').value !== no) $('linesel').value = no;
+  const dirs = ROUTES.filter(r=>r.no===no);
   const tabs = $('dirtabs'); tabs.innerHTML='';
-  list.forEach(r=>{
+  dirs.forEach(r=>{
     const t=document.createElement('div'); t.className='dirtab';
     t.textContent = r.dir==='up' ? '상행' : '하행';
     t.dataset.key = r.key; t.onclick = ()=>selectRoute(r.key);
     tabs.appendChild(t);
   });
-  await selectRoute(list[0].key);
+  tabs.hidden = dirs.length < 2;
+  await selectRoute(dirs[0].key);
+  await loadGeo();                                // 노선마다 경로가 다르다
 }
 
 async function selectRoute(key){
@@ -392,8 +426,9 @@ const ETA_WINDOW = 8;      // only annotate stops within this many stops of a bu
 const AVG_MPS = 5.2;       // assumed effective city-bus speed (~19 km/h incl. stops)
 
 function apply(buses){
-  // a bus only belongs on the strip of the direction it's actually running
-  buses = buses.filter(b => (b.region||CURRENT_REGION) === CURRENT_REGION && (b.dir||null) === ROUTE.dir);
+  // 버스는 자기가 실제로 뛰는 노선·방향의 화면에만 올린다 (서버가 스케줄로 판정한 route)
+  buses = buses.filter(b => (b.region||CURRENT_REGION) === CURRENT_REGION &&
+                            (b.route ? b.route === ROUTE.key : (b.dir||null) === ROUTE.dir));
   $('running').textContent = buses.length;
   busData.clear(); for(const b of buses) busData.set(b.id, b);
   const alive=new Set();
@@ -436,7 +471,7 @@ function apply(buses){
 
 // ── map view ───────────────────────────────────────────────────────────
 async function loadGeo(){
-  try{ const r = await fetch('/api/geo'+rq(), {cache:'no-store'});
+  try{ const r = await fetch('/api/geo'+rq()+'&line='+encodeURIComponent(LINE||''), {cache:'no-store'});
        const j = r.ok ? await r.json() : null;      // 지도 없는 지역은 404 -> 스트립만
        GEO = (j && j.W) ? j : null; }
   catch(e){ GEO = null; }
@@ -498,6 +533,7 @@ const STOP_PX = 17, BUS_PX = 30, ROUTE_PX = 4, LABEL_PX = 12;
 function paneSize(){ const p = $('mappane'); return {w: p.clientWidth||1, h: p.clientHeight||1}; }
 
 function initMapView(){
+  if(!GEO) return;                             // 지역·노선 전환 중엔 지도가 잠깐 비어 있다
   const {w:pw, h:ph} = paneSize(), ar = pw/ph;
   baseVB = {x:0, y:0, w:GEO.W, h:GEO.H};
   let w, h;                                   // fit the whole map, matching pane aspect (no letterbox)
@@ -535,6 +571,7 @@ function setupMapInteraction(){
     const fx=(e.clientX-r.left)/r.width, fy=(e.clientY-r.top)/r.height;
     const wx=vb.x+fx*vb.w, wy=vb.y+fy*vb.h, ar=paneSize().w/paneSize().h;
     let nw = vb.w*(e.deltaY<0?0.83:1/0.83);
+    if(!GEO) return;
     nw = Math.min(baseVB.w, Math.max(GEO.W*0.05, nw));   // zoom range
     const nh = nw/ar;
     vb.x=wx-fx*nw; vb.y=wy-fy*nh; vb.w=nw; vb.h=nh; applyView();
@@ -818,15 +855,85 @@ async function loadRegionPanel(){
 }
 
 function renderRegionList(){
-  $('reglist').innerHTML = REGIONS.map(r=>`
-    <div class="rrow${r.key===CURRENT_REGION?' cur':''}">
-      <div class="rn"><b>${esc(r.name)}</b> <span style="color:#8a93a6;font-size:12.5px">${esc(r.line||'')}번</span>
+  $('reglist').innerHTML = REGIONS.map(r=>{
+    const lines = r.lines || (r.line?[r.line]:[]);
+    return `<div class="rrow${r.key===CURRENT_REGION?' cur':''}">
+      <div class="rn"><b>${esc(r.name)}</b> <span style="color:#8a93a6;font-size:12.5px">노선 ${lines.length}개</span>
         <span class="rm">${esc(r.map||'')} · /${esc(r.key)}</span></div>
-      <button class="rb" data-rb="build" data-key="${esc(r.key)}" title="맵을 고친 뒤 노선·지도 다시 만들기">↻ 재생성</button>
+      <button class="rb" data-rb="build" data-key="${esc(r.key)}" title="맵을 고친 뒤 노선·정류장·지도 다시 읽기">↻ 재생성</button>
       <button class="rb del" data-rb="del" data-key="${esc(r.key)}" ${REGIONS.length<2?'disabled title="마지막 지역은 지울 수 없습니다"':''}>삭제</button>
-    </div>`).join('');
-  $('reglist').querySelectorAll('.rb').forEach(b=>b.onclick = ()=>
+    </div>
+    <div class="lrow">${lines.map(l=>
+        `<span class="chip">${esc(l)}<b data-lx="${esc(r.key)}" data-line="${esc(l)}" title="이 노선 빼기">✕</b></span>`).join('')}
+      <button class="chipadd" data-ladd="${esc(r.key)}">＋ 노선</button>
+      <div class="laddbox" id="ladd-${esc(r.key)}" hidden></div>
+    </div>`;
+  }).join('');
+  const el = $('reglist');
+  el.querySelectorAll('.rb').forEach(b=>b.onclick = ()=>
     b.dataset.rb==='build' ? rebuildRegion(b.dataset.key) : removeRegion(b.dataset.key));
+  el.querySelectorAll('[data-lx]').forEach(b=>b.onclick = ()=>removeLine(b.dataset.lx, b.dataset.line));
+  el.querySelectorAll('[data-ladd]').forEach(b=>b.onclick = ()=>toggleAddLine(b.dataset.ladd));
+}
+
+// 지역에 노선만 새로 붙이기 (OMSI 에디터로 노선을 새로 만든 뒤)
+function toggleAddLine(rkey){
+  const box = $('ladd-'+rkey);
+  if(!box) return;
+  if(!box.hidden){ box.hidden = true; return; }
+  const reg = REGIONS.find(r=>r.key===rkey) || {};
+  const m = MAPS.find(x=>x.map===reg.map);
+  const have = new Set(reg.lines || (reg.line?[reg.line]:[]));
+  const avail = ((m&&m.lines)||[]).filter(l=>!have.has(l.line));
+  if(!m){ showRegLog(`'${reg.map||rkey}' 맵을 찾을 수 없습니다.`, true); return; }
+  if(!avail.length){ showRegLog(`'${reg.name}'에 더 추가할 노선이 없습니다. (맵에서 노선을 새로 만들었다면 ↻재생성 후 다시 열어보세요)`, true); return; }
+  box.hidden = false;
+  box.innerHTML = `
+    <div class="fl"><label>노선</label><select class="lsel"></select></div>
+    <div class="fl"><label>상행</label><select class="lup"></select></div>
+    <div class="fl"><label>하행</label><select class="ldn"></select></div>
+    <button class="addbtn sm">이 노선 추가</button>`;
+  const lsel = box.querySelector('.lsel'), lup = box.querySelector('.lup'), ldn = box.querySelector('.ldn');
+  lsel.innerHTML = avail.map(l=>`<option value="${esc(l.line)}">${esc(l.line)}번 · 운행 ${l.trips.length}개${l.trips.some(t=>t.track)?'':' · 지도 없음'}</option>`).join('');
+  const fillTrips = ()=>{
+    const l = avail.find(x=>x.line===lsel.value) || {trips:[]};
+    const opt = t=>`<option value="${esc(t.file)}">${esc(t.file)}${t.track?'':' (지도 없음)'}</option>`;
+    lup.innerHTML = l.trips.map(opt).join('');
+    ldn.innerHTML = '<option value="">— 없음 (편도)</option>' + l.trips.map(opt).join('');
+    const a = l.trips.find(t=>t.file.trim().toUpperCase().endsWith(' A'));
+    const b = l.trips.find(t=>t.file.trim().toUpperCase().endsWith(' B'));
+    lup.value = (a||l.trips[0]||{}).file || '';
+    ldn.value = (b||l.trips.find(t=>t.file!==lup.value)||{}).file || '';
+  };
+  lsel.onchange = fillTrips; fillTrips();
+  box.querySelector('.addbtn').onclick = async (ev)=>{
+    const btn = ev.target; btn.disabled = true; btn.textContent = '만드는 중…';
+    showRegLog(`${lsel.value}번 추가 중 …`);
+    try{
+      const res = await fetch(`/api/regions/${encodeURIComponent(rkey)}/lines`, {method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({line:lsel.value, tripUp:lup.value, tripDown:ldn.value})});
+      const j = await res.json();
+      if(!res.ok){ showRegLog((j.error||'추가 실패')+(j.log?'\n\n'+j.log:''), true); return; }
+      showRegLog(j.log || '완료');
+      await refreshRegions();
+      if(rkey===CURRENT_REGION){ LINE = j.line; await loadRoutes(); }
+    }catch(e){ showRegLog('요청 실패: '+e, true); }
+    finally{ btn.disabled = false; btn.textContent = '이 노선 추가'; }
+  };
+}
+
+async function removeLine(rkey, line){
+  if(!confirm(`'${line}'번 노선을 이 지역에서 뺄까요?`)) return;
+  showRegLog(`${line}번 빼는 중 …`);
+  try{
+    const res = await fetch(`/api/regions/${encodeURIComponent(rkey)}/lines/${encodeURIComponent(line)}`, {method:'DELETE'});
+    const j = await res.json();
+    if(!res.ok){ showRegLog((j.error||'삭제 실패')+(j.log?'\n\n'+j.log:''), true); return; }
+    showRegLog(j.log || '완료');
+    await refreshRegions();
+    if(rkey===CURRENT_REGION){ LINE = ''; await loadRoutes(); }
+  }catch(e){ showRegLog('요청 실패: '+e, true); }
 }
 
 function fillMapSelect(){
@@ -845,7 +952,8 @@ function fillMapSelect(){
 
 function onMapPick(){
   const m = MAPS.find(x=>x.map===$('rgmap').value);
-  $('rgline').innerHTML = ((m&&m.lines)||[]).map(l=>{
+  const all = (m&&m.lines)||[];
+  $('rgline').innerHTML = `<option value="">전체 노선 (${all.length}개) — 통째로 등록</option>` + all.map(l=>{
     const n = l.trips.length, geo = l.trips.some(t=>t.track);
     return `<option value="${esc(l.line)}">${esc(l.line)}번 · 운행 ${n}개${geo?'':' · 지도 없음'}</option>`;
   }).join('');
@@ -863,7 +971,8 @@ function onMapPick(){
 // "725_WBG_hin"…) 어느 파일이 상행/하행인지는 사람이 고른다. A/B가 있으면 그걸 기본으로.
 function onLinePick(){
   const m = MAPS.find(x=>x.map===$('rgmap').value);
-  const l = m && (m.lines||[]).find(x=>x.line===$('rgline').value);
+  const one = $('rgline').value;                 // '' = 맵의 노선 전체
+  const l = m && (m.lines||[]).find(x=>x.line===one);
   const trips = (l&&l.trips)||[];
   const opt = t => `<option value="${esc(t.file)}">${esc(t.file)}${t.track?'':' (지도 없음)'}</option>`;
   $('rgup').innerHTML = trips.map(opt).join('');
@@ -872,13 +981,22 @@ function onLinePick(){
   const a = endsWith(' A'), b = endsWith(' B');
   $('rgup').value   = (a||trips[0]||{}).file || '';
   $('rgdown').value = (b|| (trips[1]&&trips[1]!==a ? trips[1] : null) || {}).file || '';
+  // 전체 등록이면 상/하행은 자동(파일명 A/B, 없으면 앞의 두 개)이라 고를 게 없다
+  $('rgup').closest('.fl').hidden = $('rgdown').closest('.fl').hidden = !one;
   updateRgHint();
   $('rgup').onchange = $('rgdown').onchange = updateRgHint;
 }
 
 function updateRgHint(){
   const m = MAPS.find(x=>x.map===$('rgmap').value);
-  const l = m && (m.lines||[]).find(x=>x.line===$('rgline').value);
+  const one = $('rgline').value;
+  if(!one){
+    const all = (m&&m.lines)||[];
+    const geo = all.filter(l=>l.trips.some(t=>t.track)).length;
+    $('rghint').textContent = `노선 ${all.length}개를 한 번에 등록 · 지도 있는 노선 ${geo}개`;
+    return;
+  }
+  const l = m && (m.lines||[]).find(x=>x.line===one);
   const trips = (l&&l.trips)||[];
   const tr = f => (trips.find(t=>t.file===f)||{}).track;
   const up = $('rgup').value, dn = $('rgdown').value;
@@ -900,12 +1018,12 @@ async function refreshRegions(){
 }
 
 $('rgadd').onclick = async ()=>{
-  const body = {map:$('rgmap').value, line:$('rgline').value,
-                tripUp:$('rgup').value, tripDown:$('rgdown').value,
-                name:$('rgname').value.trim(), key:$('rgkey').value.trim()};
+  const one = $('rgline').value;                 // '' = 맵의 노선 전체 등록
+  const body = {map:$('rgmap').value, name:$('rgname').value.trim(), key:$('rgkey').value.trim(),
+                lines: one ? [{line:one, tripUp:$('rgup').value, tripDown:$('rgdown').value}] : []};
   if(!body.name){ showRegLog('지역명을 입력하세요. (예: 세강시)', true); $('rgname').focus(); return; }
   const btn = $('rgadd'); btn.disabled = true; btn.textContent = '노선·지도 만드는 중…';
-  showRegLog(`${body.map} · ${body.line}번 생성 중 …`);
+  showRegLog(`${body.map} · ${one?one+'번':'전체 노선'} 생성 중 …`);
   try{
     const res = await fetch('/api/regions', {method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify(body)});
@@ -959,10 +1077,9 @@ const rq = () => '?region='+encodeURIComponent(CURRENT_REGION)+'&t='+Date.now();
 
 // switch to another region: reload its routes + map, refresh nav/brand
 async function switchRegion(key){
-  CURRENT_REGION = key; GEO = null;
+  CURRENT_REGION = key; GEO = null; LINE = '';
   renderNav(); updateSideBrand();
-  await loadRoutes();          // rebuilds dir tabs + selects first route (uses rq())
-  await loadGeo();             // reloads geo + redraws the map
+  await loadRoutes();          // 노선목록 -> 첫 노선 -> 상/하행 -> 지도까지 이어서 로드
 }
 
 function renderNav(){
@@ -1165,7 +1282,6 @@ async function init(){
   CURRENT_REGION = REGIONS[0].key;
   renderNav();                 // re-render nav with the real region list
   await loadRoutes();          // preload default region so entering it is instant
-  await loadGeo();
   connect();
 }
 init();

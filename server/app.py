@@ -42,6 +42,16 @@ buses: dict[str, dict] = {}
 
 
 # ── regions ──────────────────────────────────────────────────────────────
+def region_lines(reg: dict) -> list[dict]:
+    """A region is a MAP with many lines: [{"line", "trips":{"up","down"}}].
+    Older single-line entries ({"line","trips"}) still read as a one-line region."""
+    raw = reg.get("lines")
+    if not raw:
+        return [{"line": reg.get("line", ""), "trips": reg.get("trips") or {}}]
+    return [{"line": l, "trips": {}} if isinstance(l, str)
+            else {"line": l["line"], "trips": l.get("trips") or {}} for l in raw]
+
+
 def load_regions() -> list[dict]:
     p = DATA_DIR / "regions.json"
     return json.loads(p.read_text(encoding="utf-8")) if p.exists() else []
@@ -66,20 +76,22 @@ def valid_region(key: str) -> str:
     return key if key in REGION_KEYS else DEFAULT_REGION
 
 
-def build_id2dir(key: str) -> dict[int, str]:
-    """stop-id -> direction for one region (its schedule tells us which line)."""
-    d: dict[int, str] = {}
-    for f in region_dir(key).glob("route_*.json"):
+def build_id2dir(key: str) -> dict[int, list[dict]]:
+    """stop-id -> the routes that serve it, so a bus's schedule tells us both its
+    line and its direction (a region now holds many lines, sharing stops)."""
+    d: dict[int, list[dict]] = {}
+    for f in sorted(region_dir(key).glob("route_*.json")):
         try:
             r = json.loads(f.read_text(encoding="utf-8"))
-            for s in r["stops"]:
-                d[int(s["id"])] = r.get("dir")
         except Exception:
-            pass
+            continue
+        info = {"key": r.get("key", ""), "no": r.get("no", ""), "dir": r.get("dir")}
+        for s in r["stops"]:
+            d.setdefault(int(s["id"]), []).append(info)
     return d
 
 
-ID2DIR: dict[str, dict[int, str]] = {r["key"]: build_id2dir(r["key"]) for r in REGIONS}
+ID2DIR: dict[str, dict[int, list[dict]]] = {r["key"]: build_id2dir(r["key"]) for r in REGIONS}
 
 
 def reload_regions():
@@ -114,12 +126,16 @@ async def update(u: Update):
     region = MAP2REGION.get(u.map, DEFAULT_REGION)     # which region this bus is on
     prev = buses.get(u.id)
     direction = prev["dir"] if prev else None
-    id2 = ID2DIR.get(region, {})
-    if u.schedValid and u.nextIdCode in id2:
-        direction = id2[u.nextIdCode]
+    route = prev.get("route") if prev else None
+    cands = ID2DIR.get(region, {}).get(u.nextIdCode, []) if u.schedValid else []
+    if cands:
+        # the driver's line number picks between routes sharing this stop
+        same = [c for c in cands if u.line and c["no"] == u.line]
+        hit = (same or cands)[0]
+        direction, route = hit["dir"], hit["key"]
     buses[u.id] = {
         "id": u.id, "nick": u.nick, "line": u.line, "map": u.map, "region": region,
-        "vehNo": u.vehNo, "company": u.company, "dir": direction,
+        "vehNo": u.vehNo, "company": u.company, "dir": direction, "route": route,
         "nextIdCode": u.nextIdCode, "nextIdx": u.nextIdx,
         "nextDist": u.nextDist, "prevDist": u.prevDist,
         "atStation": u.atStation, "nextName": u.nextName,
@@ -176,8 +192,8 @@ async def _startup():
 # ── region-scoped route + geo data ───────────────────────────────────────
 @app.get("/api/regions")
 async def regions_list():
-    return [{"key": r["key"], "name": r["name"], "line": r.get("line", ""),
-             "map": r.get("map", "")} for r in REGIONS]
+    return [{"key": r["key"], "name": r["name"], "map": r.get("map", ""),
+             "lines": [e["line"] for e in region_lines(r)]} for r in REGIONS]
 
 
 @app.get("/api/routes")
@@ -224,28 +240,47 @@ async def stops_list(region: str = ""):
     return out
 
 
+_GEO_CACHE: dict[str, tuple[tuple, dict]] = {}      # 한 지역의 geo.json은 수 MB까지 간다
+
+
 def _load_geo_merged(rk: str):
-    """Original spline geometry with any admin position overrides merged in."""
+    """Original spline geometry (all lines, one shared pixel frame) with any admin
+    position overrides merged in. Pre-multiline files are normalized on read."""
     p = region_dir(rk) / "geo.json"
     if not p.exists():
         return None
-    geo = json.loads(p.read_text(encoding="utf-8"))
     ovp = region_dir(rk) / "geo_overrides.json"
+    stamp = (p.stat().st_mtime_ns, ovp.stat().st_mtime_ns if ovp.exists() else 0)
+    cached = _GEO_CACHE.get(rk)
+    if cached and cached[0] == stamp:
+        return cached[1]
+    geo = json.loads(p.read_text(encoding="utf-8"))
+    if "lines" not in geo:                       # 옛 형식: 지역에 노선 하나뿐이던 시절
+        one = {d: geo.pop(d) for d in ("up", "down") if d in geo}
+        first = next((json.loads(f.read_text(encoding="utf-8")).get("no", "")
+                      for f in sorted(region_dir(rk).glob("route_*.json"))), "")
+        geo["lines"] = {first: one} if one else {}
     if ovp.exists():
         ov = json.loads(ovp.read_text(encoding="utf-8"))
-        for d in ("up", "down"):
-            for s in geo.get(d, {}).get("stops", []):
-                if str(s["id"]) in ov:
-                    s["xy"] = ov[str(s["id"])]
+        for per in geo["lines"].values():
+            for d in ("up", "down"):
+                for s in per.get(d, {}).get("stops", []):
+                    if str(s["id"]) in ov:
+                        s["xy"] = ov[str(s["id"])]
+    _GEO_CACHE[rk] = (stamp, geo)
     return geo
 
 
 @app.get("/api/geo")
-async def geo(region: str = ""):
+async def geo(region: str = "", line: str = ""):
+    """One line's geometry ({W,H,up,down}); every line shares the same frame."""
     g = _load_geo_merged(valid_region(region or DEFAULT_REGION))
-    if g is None:
+    if g is None or not g.get("lines"):
         return JSONResponse({"error": "no geo"}, status_code=404)
-    return JSONResponse(g)
+    per = g["lines"].get(line) or (g["lines"].get(next(iter(g["lines"]))) if not line else None)
+    if per is None:
+        return JSONResponse({"error": "no geo for line"}, status_code=404)
+    return JSONResponse({"W": g["W"], "H": g["H"], "bg": g.get("bg", ""), **per})
 
 
 @app.get("/api/geo_bg")
@@ -340,38 +375,81 @@ async def maps_list():
     return out
 
 
+class LineIn(BaseModel):
+    line: str
+    tripUp: str = ""        # .ttp stem (empty = the "<line> A" convention)
+    tripDown: str = ""
+
+
 class RegionNew(BaseModel):
     key: str = ""
     name: str
     map: str
-    line: str
-    tripUp: str = ""        # .ttp stem (empty = "<line> A" convention)
+    lines: list[LineIn] = []
+    # 예전(노선 1개) 형식도 그대로 받는다
+    line: str = ""
+    tripUp: str = ""
     tripDown: str = ""
+
+
+def _auto_lines(mp: str) -> list[LineIn]:
+    """Every line the map offers, with its first two trip files as up/down —
+    'add the whole map at once' is the normal case."""
+    tt = OMSI_MAPS / mp / "TTData"
+    groups: dict[str, list[str]] = {}
+    for f in sorted(tt.glob("*.ttp")):
+        groups.setdefault(_line_of(f.stem), []).append(f.stem)
+    out = []
+    for ln in sorted(groups, key=_line_sort):
+        files = groups[ln]
+        up = next((f for f in files if f.strip().upper().endswith(" A")), files[0])
+        down = next((f for f in files if f.strip().upper().endswith(" B")),
+                    next((f for f in files if f != up), ""))
+        out.append(LineIn(line=ln, tripUp=up, tripDown=down))
+    return out
+
+
+def _check_lines(mp: str, lines: list[LineIn]) -> tuple[list[dict] | None, str]:
+    tt = OMSI_MAPS / mp / "TTData"
+    out, seen = [], set()
+    for l in lines:
+        ln = l.line.strip()
+        if not ln or ln in seen:
+            continue
+        seen.add(ln)
+        up = (l.tripUp or f"{ln} A").strip()
+        down = (l.tripDown or "").strip()
+        if not (tt / f"{up}.ttp").exists():
+            return None, f"운행 파일이 없습니다: {up}.ttp"
+        if down and not (tt / f"{down}.ttp").exists():
+            return None, f"운행 파일이 없습니다: {down}.ttp"
+        out.append({"line": ln, "trips": {"up": up, "down": down}})
+    if not out:
+        return None, "노선을 하나 이상 지정하세요."
+    return out, ""
 
 
 @app.post("/api/regions")
 async def add_region(r: RegionNew):
     if READONLY:
         return JSONResponse({"error": "지역 추가는 로컬(관리자)에서만 가능합니다."}, status_code=403)
-    name, mp, line = r.name.strip(), r.map.strip(), r.line.strip()
+    name, mp = r.name.strip(), r.map.strip()
     key = _slug(r.key) or _slug(mp)
-    if not (name and mp and line and key):
-        return JSONResponse({"error": "지역 이름 · 맵 · 노선을 모두 지정하세요."}, status_code=400)
+    if not (name and mp and key):
+        return JSONResponse({"error": "지역 이름과 맵을 지정하세요."}, status_code=400)
     regs = load_regions()
     if any(x["key"] == key for x in regs):
         return JSONResponse({"error": f"이미 쓰는 지역 키입니다: {key}"}, status_code=409)
     if any(x.get("map") == mp for x in regs):
         return JSONResponse({"error": f"이 맵은 이미 등록돼 있습니다: {mp}"}, status_code=409)
-    tt = OMSI_MAPS / mp / "TTData"
-    up = (r.tripUp or f"{line} A").strip()
-    down = (r.tripDown or "").strip()
-    if not (tt / f"{up}.ttp").exists():
-        return JSONResponse({"error": f"운행 파일이 없습니다: {up}.ttp"}, status_code=400)
-    if down and not (tt / f"{down}.ttp").exists():
-        return JSONResponse({"error": f"운행 파일이 없습니다: {down}.ttp"}, status_code=400)
-    entry = {"key": key, "name": name, "map": mp, "line": line,
-             "trips": {"up": up, "down": down}}
-    save_regions(regs + [entry])
+    if not (OMSI_MAPS / mp / "TTData").is_dir():
+        return JSONResponse({"error": f"맵을 찾을 수 없습니다: {mp}"}, status_code=400)
+    wanted = r.lines or ([LineIn(line=r.line, tripUp=r.tripUp, tripDown=r.tripDown)]
+                         if r.line else _auto_lines(mp))       # 지정 없으면 맵 전체
+    lines, err = _check_lines(mp, wanted)
+    if err:
+        return JSONResponse({"error": err}, status_code=400)
+    save_regions(regs + [{"key": key, "name": name, "map": mp, "lines": lines}])
     ok, log = await asyncio.to_thread(_rebuild_region, key)      # keeps the server responsive
     if not ok:
         save_regions(regs)                  # failed build -> leave no half-registered region
@@ -392,6 +470,57 @@ async def rebuild_region(key: str):
     if not ok:
         return JSONResponse({"error": "재생성 실패", "log": log}, status_code=500)
     return {"ok": True, "key": key, "log": log}
+
+
+@app.post("/api/regions/{key}/lines")
+async def add_line(key: str, l: LineIn):
+    """OMSI 에디터로 노선을 새로 만든 뒤 그 노선만 지역에 붙일 때."""
+    if READONLY:
+        return JSONResponse({"error": "노선 추가는 로컬(관리자)에서만 가능합니다."}, status_code=403)
+    key = _slug(key)
+    regs = load_regions()
+    reg = next((x for x in regs if x["key"] == key), None)
+    if not reg:
+        return JSONResponse({"error": "없는 지역입니다."}, status_code=404)
+    have = region_lines(reg)
+    if any(e["line"] == l.line.strip() for e in have):
+        return JSONResponse({"error": f"이미 있는 노선입니다: {l.line}"}, status_code=409)
+    checked, err = _check_lines(reg.get("map", ""), [l])
+    if err:
+        return JSONResponse({"error": err}, status_code=400)
+    reg.pop("line", None); reg.pop("trips", None)          # 옛 단일노선 필드 정리
+    reg["lines"] = [{"line": e["line"], "trips": e["trips"]} for e in have] + checked
+    save_regions(regs)
+    ok, log = await asyncio.to_thread(_rebuild_region, key)
+    if not ok:
+        return JSONResponse({"error": "노선 데이터 생성 실패", "log": log}, status_code=500)
+    reload_regions()
+    return {"ok": True, "key": key, "line": checked[0]["line"], "log": log}
+
+
+@app.delete("/api/regions/{key}/lines/{line}")
+async def del_line(key: str, line: str):
+    if READONLY:
+        return JSONResponse({"error": "노선 삭제는 로컬(관리자)에서만 가능합니다."}, status_code=403)
+    key = _slug(key)
+    regs = load_regions()
+    reg = next((x for x in regs if x["key"] == key), None)
+    if not reg:
+        return JSONResponse({"error": "없는 지역입니다."}, status_code=404)
+    have = region_lines(reg)
+    left = [e for e in have if e["line"] != line]
+    if len(left) == len(have):
+        return JSONResponse({"error": "없는 노선입니다."}, status_code=404)
+    if not left:
+        return JSONResponse({"error": "지역의 마지막 노선입니다. 지역째 삭제하세요."}, status_code=400)
+    reg.pop("line", None); reg.pop("trips", None)
+    reg["lines"] = [{"line": e["line"], "trips": e["trips"]} for e in left]
+    save_regions(regs)
+    ok, log = await asyncio.to_thread(_rebuild_region, key)
+    reload_regions()
+    if not ok:
+        return JSONResponse({"error": "재생성 실패", "log": log}, status_code=500)
+    return {"ok": True, "key": key, "line": line, "log": log}
 
 
 @app.delete("/api/regions/{key}")
@@ -456,8 +585,11 @@ async def reset_stoppos(e: StopReset):
     ov.pop(str(e.id), None)
     p.write_text(json.dumps(ov, ensure_ascii=False, indent=2), encoding="utf-8")
     base = _load_geo_merged(rk)          # override just removed -> original
-    d = e.dir if e.dir in ("up", "down") else "up"
-    hit = next((s for s in base[d]["stops"] if str(s["id"]) == str(e.id)), None) if base else None
+    hit = None
+    for per in (base or {}).get("lines", {}).values():
+        for d in ("up", "down"):
+            hit = hit or next((s for s in per.get(d, {}).get("stops", [])
+                               if str(s["id"]) == str(e.id)), None)
     return {"ok": True, "id": str(e.id), "xy": hit["xy"] if hit else None}
 
 
