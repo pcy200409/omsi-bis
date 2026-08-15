@@ -24,6 +24,7 @@ from pydantic import BaseModel
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import tripscan  # noqa: E402  (맵 TTData 훑기 — build_region.py와 같은 규칙)
+import stopscan  # noqa: E402  (Busstops.cfg 정류장 목록)
 
 STALE_SECONDS = 6.0
 PUSH_HZ = 2          # broadcasts/sec to viewers; schedule markers + CSS easing stay
@@ -564,6 +565,78 @@ async def edit_stoppos(e: StopPos):
     ov[str(e.id)] = xy
     p.write_text(json.dumps(ov, ensure_ascii=False, indent=2), encoding="utf-8")
     return {"ok": True, "id": str(e.id), "xy": xy}
+
+
+# ── 노선에 정류장 넣고 빼기 (관리자) ───────────────────────────────────────
+# 운행파일(.ttp)에 빠진 정류장을 손으로 넣는다. extra_stops.json에만 쌓고
+# build_region.py가 재생성 때마다 다시 끼워 넣으므로 맵을 다시 읽어도 남는다.
+class RouteStop(BaseModel):
+    region: str = ""
+    line: str
+    dir: str = "up"
+    id: str
+    name: str = ""
+    after: str = ""        # 이 정류장 '뒤에' 넣는다 (빈 값 = 맨 앞)
+
+
+def _extras_path(rk: str) -> Path:
+    return region_dir(rk) / "extra_stops.json"
+
+
+@app.get("/api/mapstops")
+async def map_stops_list(region: str = ""):
+    """맵이 아는 정류장 전부(Busstops.cfg) — 노선에 넣을 후보 고르기용."""
+    if READONLY:
+        return []
+    rk = valid_region(region or DEFAULT_REGION)
+    reg = next((r for r in REGIONS if r["key"] == rk), None)
+    if not reg:
+        return []
+    known = stopscan.map_stops(OMSI_MAPS / reg.get("map", "") / "TTData")
+    return [{"id": str(i), "name": n} for i, n in sorted(known.items(), key=lambda kv: kv[1])]
+
+
+@app.post("/api/route/stop")
+async def add_route_stop(e: RouteStop):
+    if READONLY:
+        return JSONResponse({"error": "정류장 추가는 로컬(관리자)에서만 가능합니다."}, status_code=403)
+    rk = valid_region(e.region or DEFAULT_REGION)
+    d = e.dir if e.dir in ("up", "down") else "up"
+    sid = re.sub(r"[^0-9]", "", e.id)
+    if not sid:
+        return JSONResponse({"error": "정류장 번호가 필요합니다."}, status_code=400)
+    p = _extras_path(rk)
+    ex = json.loads(p.read_text(encoding="utf-8")) if p.exists() else {}
+    per = ex.setdefault(e.line, {}).setdefault(d, [])
+    if any(str(x.get("id")) == sid for x in per):
+        return JSONResponse({"error": "이미 넣은 정류장입니다."}, status_code=409)
+    per.append({"id": sid, "name": e.name.strip(), "after": re.sub(r"[^0-9]", "", e.after)})
+    p.write_text(json.dumps(ex, ensure_ascii=False, indent=2), encoding="utf-8")
+    ok, log = await asyncio.to_thread(_rebuild_region, rk)
+    if not ok:
+        return JSONResponse({"error": "노선 재생성 실패", "log": log}, status_code=500)
+    return {"ok": True, "id": sid, "line": e.line, "dir": d}
+
+
+@app.post("/api/route/stop/remove")
+async def del_route_stop(e: RouteStop):
+    if READONLY:
+        return JSONResponse({"error": "보기 전용"}, status_code=403)
+    rk = valid_region(e.region or DEFAULT_REGION)
+    d = e.dir if e.dir in ("up", "down") else "up"
+    sid = re.sub(r"[^0-9]", "", e.id)
+    p = _extras_path(rk)
+    ex = json.loads(p.read_text(encoding="utf-8")) if p.exists() else {}
+    per = (ex.get(e.line) or {}).get(d, [])
+    left = [x for x in per if str(x.get("id")) != sid]
+    if len(left) == len(per):
+        return JSONResponse({"error": "직접 넣은 정류장만 뺄 수 있습니다."}, status_code=400)
+    ex[e.line][d] = left
+    p.write_text(json.dumps(ex, ensure_ascii=False, indent=2), encoding="utf-8")
+    ok, log = await asyncio.to_thread(_rebuild_region, rk)
+    if not ok:
+        return JSONResponse({"error": "노선 재생성 실패", "log": log}, status_code=500)
+    return {"ok": True, "id": sid}
 
 
 # ── 노선 경로 직접 그리기 (관리자) ─────────────────────────────────────────

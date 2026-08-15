@@ -21,6 +21,35 @@ import re
 TILE = 300.0                      # OMSI 타일 한 변(m)
 
 
+def read_text(path) -> str:
+    """OMSI 파일 인코딩이 제각각(UTF-16 / cp949 / UTF-8)이라 BOM부터 본다."""
+    data = open(path, "rb").read()
+    if data[:2] in (b"\xff\xfe", b"\xfe\xff"):
+        return data.decode("utf-16", "replace")
+    for enc in ("utf-8-sig", "cp949", "utf-8", "latin-1"):
+        try:
+            return data.decode(enc)
+        except UnicodeDecodeError:
+            continue
+    return data.decode("latin-1", "replace")
+
+
+def map_stops(ttdata) -> dict[int, str]:
+    """맵이 아는 정류장 전부: Busstops.cfg의 id -> 이름 (노선에 없는 것도 포함)."""
+    p = os.path.join(str(ttdata), "Busstops.cfg")
+    if not os.path.exists(p):
+        return {}
+    lines = [l.strip() for l in read_text(p).splitlines()]
+    out = {}
+    for i, l in enumerate(lines):
+        if l == "[busstop]":
+            try:
+                out[int(lines[i+3])] = lines[i+1]
+            except (ValueError, IndexError):
+                pass
+    return out
+
+
 def _spline_geom(body: list[str], gx: int, gy: int) -> dict | None:
     try:
         return {"x": gx*TILE + float(body[5]), "z": gy*TILE + float(body[7]),
@@ -66,7 +95,6 @@ def _is_stop(path: str) -> bool:
 
 def stops_from_tiles(mapdir: str, log=None) -> dict[int, tuple[float, float]]:
     """정류장 id -> 월드좌표 (x, z). 타일을 전부 훑으므로 지역 빌드당 한 번만."""
-    from omsi_ttdata import read_text          # 인코딩(UTF-16/8bit) 판별은 도구 것 재사용
     out: dict[int, tuple[float, float]] = {}
     for tp in sorted(glob.glob(os.path.join(mapdir, "tile_*.map"))):
         m = re.match(r"tile_(-?\d+)_(-?\d+)\.map$", os.path.basename(tp))

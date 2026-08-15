@@ -143,6 +143,13 @@
   .rrow .rb{flex:none;background:#eef1f6;border:1px solid #dde3ec;color:#54607a;font-size:12px;
     font-weight:700;padding:6px 9px;border-radius:8px;cursor:pointer;}
   .rrow .rb.del{color:#d5495f;} .rrow .rb:disabled{opacity:.45;cursor:default;}
+  .addstop{max-height:46%;}
+  .addstop h4 .hint{color:#2f6bff;font-weight:700;}
+  .addedtag{font-size:10.5px;font-weight:700;color:#2f6bff;background:#e8f0ff;border-radius:5px;
+    padding:1px 5px;margin-left:5px;vertical-align:middle;}
+  .rmadd{flex:none;align-self:center;border:none;background:none;color:#c7cdd8;font-size:13px;
+    font-weight:800;cursor:pointer;padding:2px 6px;border-radius:6px;}
+  .rmadd:hover{color:#d5495f;background:#fdeef1;}
   .lrow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:0 18px 11px;
     border-bottom:1px solid #f3f5f9;}
   .chip{display:inline-flex;align-items:center;gap:5px;background:#eef1f6;border-radius:7px;
@@ -332,6 +339,13 @@
     </div>
     <div class="editfilter"><input id="editsearch" placeholder="정류장 검색 (한글·로마자·번호)"></div>
     <div class="editlist" id="editlist"></div>
+    <div class="regform addstop" id="addstop">
+      <h4>＋ 이 노선에 정류장 넣기 <span id="asroute" class="hint"></span></h4>
+      <div class="fl"><label>정류장</label><select id="asstop"></select></div>
+      <div class="fl"><label>위치</label><select id="asafter"></select></div>
+      <button class="addbtn sm" id="asadd">노선에 넣기</button>
+      <div class="reglog" id="aslog" hidden></div>
+    </div>
   </div>
 </div>
 
@@ -432,8 +446,12 @@ async function selectRoute(key){
   rowEls = ROUTE.stops.map(s=>{
     const row=document.createElement('div'); row.className='stop';
     row.innerHTML=`<div class="rail"><div class="node">▾</div></div>
-      <div class="info"><div class="sname">${s.kname||s.name}</div><div class="scode">${s.id}</div></div>
+      <div class="info"><div class="sname">${esc(s.kname||s.name)}${s.added?' <span class="addedtag">직접추가</span>':''}</div>
+        <div class="scode">${s.id}</div></div>
+      ${s.added && EDITABLE ? '<button class="rmadd" title="이 노선에서 빼기">✕</button>' : ''}
       <div class="eta"></div>`;
+    const rm = row.querySelector('.rmadd');
+    if(rm) rm.onclick = ()=>removeAddedStop(s.id, s.kname||s.name);
     stopsEl.appendChild(row); return row;
   });
   renderMapBase();   // rebuild the map for the new direction
@@ -844,10 +862,66 @@ let EDIT_STOPS = [];
 const DIRLABEL = {up:'상행', down:'하행'};
 
 async function openEditor(){
-  EDIT_STOPS = await (await fetch('/api/stops?t='+Date.now(), {cache:'no-store'})).json();
+  EDIT_STOPS = await (await fetch('/api/stops'+rq(), {cache:'no-store'})).json();
   $('editsearch').value = '';
   renderEditList('');
+  await fillAddStop();
   $('editor').hidden = false;
+}
+
+// 운행파일에 빠진 정류장 넣기 (관리자) — 맵이 아는 정류장 중 이 노선에 없는 것들
+let MAPSTOPS = [];
+async function fillAddStop(){
+  const box = $('addstop');
+  box.hidden = !EDITABLE || !ROUTE;
+  if(box.hidden) return;
+  $('aslog').hidden = true;
+  $('asroute').textContent = `${ROUTE.no}번 ${ROUTE.dir==='up'?'상행':'하행'}`;
+  try{ MAPSTOPS = await (await fetch('/api/mapstops'+rq(), {cache:'no-store'})).json(); }
+  catch(e){ MAPSTOPS = []; }
+  const have = new Set(ROUTE.stops.map(s=>String(s.id)));
+  const cands = MAPSTOPS.filter(s=>!have.has(String(s.id)));
+  $('asstop').innerHTML = cands.length
+    ? cands.map(s=>`<option value="${esc(s.id)}">${esc(s.name)} (${esc(s.id)})</option>`).join('')
+    : '<option value="">넣을 수 있는 정류장이 없습니다</option>';
+  $('asafter').innerHTML = '<option value="">맨 앞에</option>' +
+    ROUTE.stops.map(s=>`<option value="${esc(s.id)}">${esc(s.kname||s.name)} 다음</option>`).join('');
+  $('asadd').disabled = !cands.length;
+}
+
+$('asadd').onclick = async ()=>{
+  const id = $('asstop').value, after = $('asafter').value;
+  if(!id) return;
+  const name = (MAPSTOPS.find(s=>String(s.id)===String(id))||{}).name || '';
+  const btn = $('asadd'); btn.disabled = true; btn.textContent = '넣는 중…';
+  const log = $('aslog'); log.hidden = false; log.classList.remove('bad'); log.textContent = '노선 재생성 중 …';
+  try{
+    const res = await fetch('/api/route/stop', {method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({region:CURRENT_REGION, line:ROUTE.no, dir:ROUTE.dir, id, name, after})});
+    const j = await res.json();
+    if(!res.ok){ log.classList.add('bad'); log.textContent = (j.error||'실패')+(j.log?'\n\n'+j.log:''); return; }
+    await loadRoutes();                       // 새 정류장이 들어간 노선 다시 읽기
+    EDIT_STOPS = await (await fetch('/api/stops'+rq(), {cache:'no-store'})).json();
+    renderEditList($('editsearch').value||'');
+    await fillAddStop();
+    log.hidden = false; log.textContent = `넣었습니다 · ${name} (${id})`;
+  }catch(e){ log.classList.add('bad'); log.textContent = '요청 실패: '+e; }
+  finally{ btn.disabled = false; btn.textContent = '노선에 넣기'; }
+};
+
+async function removeAddedStop(id, kname){
+  if(!confirm(`직접 넣은 정류장 '${kname}'을(를) 이 노선에서 뺄까요?`)) return;
+  try{
+    const res = await fetch('/api/route/stop/remove', {method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({region:CURRENT_REGION, line:ROUTE.no, dir:ROUTE.dir, id:String(id)})});
+    const j = await res.json();
+    if(!res.ok){ alert(j.error||'실패'); return; }
+    await loadRoutes();
+    if(!$('editor').hidden){
+      EDIT_STOPS = await (await fetch('/api/stops'+rq(), {cache:'no-store'})).json();
+      renderEditList($('editsearch').value||''); await fillAddStop();
+    }
+  }catch(e){ alert('요청 실패: '+e); }
 }
 function closeEditor(){ $('editor').hidden = true; }
 

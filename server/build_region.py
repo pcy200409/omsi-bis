@@ -19,6 +19,7 @@ Outputs data/regions/<key>/{routes.json, route_<line>A.json, route_<line>B.json,
 geo.json, geo_bg.png}. Manual kname/geo overrides (same folder) are respected.
 """
 import json
+import math
 import sys
 from pathlib import Path
 
@@ -81,6 +82,53 @@ def ttl_first_last(ttdata: Path, line: str, stem: str = ""):
     return (hhmm(min(deps)), hhmm(max(deps))) if deps else ("", "")
 
 
+SNAP_MAX = 60.0          # 타일 정류장이 복원 경로에서 이보다 멀면 보정하지 않는다
+
+
+def refine_stops(geo: dict, trip: dict, tiles: dict, log=print) -> int:
+    """트랙 '거리'로 찍은 정류장을 타일의 실제 정류장 위치로 보정한다.
+
+    거리 기반은 정류장이 경로 끝에서 한 점으로 뭉치거나(마커가 겹쳐 사라진다)
+    수백 m 밀리는 일이 있다. 타일에 있는 실제 정류장 오브젝트를 경로선에 투영해
+    제자리에 놓되, 노선 진행순서(뒤로 안 감)는 지킨다."""
+    pts = [p for s in geo["segs"] for p in s["pts"]]
+    if len(pts) < 2:
+        return 0
+    cum = [0.0]
+    for i in range(1, len(pts)):
+        cum.append(cum[-1] + math.dist(pts[i-1], pts[i]))
+
+    def project(p, from_s):
+        best = None
+        for i in range(1, len(pts)):
+            if cum[i] < from_s:
+                continue
+            (x0, z0), (x1, z1) = pts[i-1], pts[i]
+            vx, vz = x1-x0, z1-z0
+            L = vx*vx + vz*vz
+            t = 0.0 if L == 0 else max(0.0, min(1.0, ((p[0]-x0)*vx + (p[1]-z0)*vz) / L))
+            qx, qz = x0 + vx*t, z0 + vz*t
+            d = math.dist(p, (qx, qz))
+            if best is None or d < best[0]:
+                best = (d, cum[i-1] + math.dist((x0, z0), (qx, qz)), (qx, qz))
+        return best
+
+    fixed, prev_s = 0, 0.0
+    for k, st in enumerate(trip["stations"]):
+        t = tiles.get(int(st["index"]))
+        if not t:
+            continue
+        hit = project(t, prev_s)
+        if not hit or hit[0] > SNAP_MAX:
+            continue
+        geo["stops"][k] = hit[2]
+        prev_s = hit[1]
+        fixed += 1
+    if fixed:
+        log(f"    정류장 {fixed}/{len(trip['stations'])}개를 타일 위치로 보정")
+    return fixed
+
+
 def build_region(key: str, log=print):
     regions = json.loads((DATA / "regions.json").read_text(encoding="utf-8"))
     reg = next((r for r in regions if r["key"] == key), None)
@@ -97,6 +145,8 @@ def build_region(key: str, log=print):
 
     ovf = out / "kname_overrides.json"                       # authoritative Korean names
     OV = json.loads(ovf.read_text(encoding="utf-8")) if ovf.exists() else {}
+    exf = out / "extra_stops.json"          # 운행파일에 없는데 사람이 넣은 정류장
+    EXTRA = json.loads(exf.read_text(encoding="utf-8")) if exf.exists() else {}
 
     def kname_for(st):
         sid = str(st["index"])
@@ -105,9 +155,26 @@ def build_region(key: str, log=print):
         ko = T.koreanize(st["name"])                         # auto RR->Hangul + glossary
         return ko if has_hangul(ko) else st["name"]
 
+    def add_extras(trip, line, direction):
+        """운행파일에 빠진 정류장을 사람이 넣어둔 대로 끼워 넣는다(재생성해도 유지).
+        trip 자체에 넣어야 노선 목록·지도 좌표가 같은 순서로 따라온다."""
+        for e in (EXTRA.get(line) or {}).get(direction, []):
+            sid = int(e["id"])
+            if any(int(st["index"]) == sid for st in trip["stations"]):
+                continue                                     # 이미 있으면 건너뛴다
+            after = str(e.get("after", ""))
+            at = next((i+1 for i, st in enumerate(trip["stations"])
+                       if str(st["index"]) == after), 0 if after == "" else len(trip["stations"]))
+            prev = trip["stations"][at-1]["dist"] if at > 0 else 0.0
+            nxt = trip["stations"][at]["dist"] if at < len(trip["stations"]) else prev + 400.0
+            trip["stations"].insert(at, {"index": sid, "name": e.get("name") or str(sid),
+                                         "busstop": "", "dist": (prev + nxt) / 2,
+                                         "_extra": True})
+
     def mkroute(trip, line, rkey, direction, first, last):
         stops = [{"id": str(st["index"]), "name": st["name"], "kname": kname_for(st),
-                  "kachel": st.get("busstop", ""), "dist": round(st.get("dist", 0.0), 1)}
+                  "kachel": st.get("busstop", ""), "dist": round(st.get("dist", 0.0), 1),
+                  **({"added": True} if st.get("_extra") else {})}
                  for st in trip["stations"]]
         return {"key": rkey, "no": line, "type": "일반", "dir": direction,
                 "from": stops[0]["kname"], "to": stops[-1]["kname"],
@@ -124,6 +191,9 @@ def build_region(key: str, log=print):
         if not parsed["up"]:
             log(f"  ! {line}: trip file not found ({trips['up']}.ttp) - skipped")
             continue
+        for d in ("up", "down"):
+            if parsed[d]:
+                add_extras(parsed[d], line, d)
         first, last = ttl_first_last(ttdata, line, trips["up"])
         for d, suffix, label in (("up", "A", "상행"), ("down", "B", "하행")):
             if not parsed[d]:
@@ -164,15 +234,18 @@ def build_region(key: str, log=print):
         log(f"  ! roadmap image unusable ({type(e).__name__}) - plain background")
         roadmap = None
 
-    tile_stops: dict | None = None                  # 타일에서 뽑은 정류장 좌표(필요할 때만)
+    tile_stops: dict | None = None                  # 타일에서 뽑은 정류장 좌표(한 번만)
+
+    def tiles():
+        nonlocal tile_stops
+        if tile_stops is None:
+            tile_stops = stops_from_tiles(str(mapdir), log)
+        return tile_stops
 
     def stops_only(trip):
         """트랙 없는 노선: 타일의 정류장 오브젝트 위치만으로 지오를 만든다.
         (노선 선은 못 그리고 버스는 정류장 사이를 직선으로 간다)"""
-        nonlocal tile_stops
-        if tile_stops is None:
-            tile_stops = stops_from_tiles(str(mapdir), log)
-        pts = [tile_stops.get(int(st["index"])) for st in trip["stations"]]
+        pts = [tiles().get(int(st["index"])) for st in trip["stations"]]
         known = [i for i, p in enumerate(pts) if p]
         if len(known) < 2:
             return None
@@ -195,7 +268,10 @@ def build_region(key: str, log=print):
                 continue
             trf = tracks.get(line, {}).get(d)
             g = T.build_geo(parsed[d], T.parse_track(str(trf)), splines) if trf else None
-            if not g:
+            if g:
+                log(f"  {line} {d}:")
+                refine_stops(g, parsed[d], tiles(), log)   # 겹치거나 밀린 정류장 바로잡기
+            else:
                 g = stops_only(parsed[d])           # 트랙이 없거나 복원 실패
             if g:
                 geos.setdefault(line, {})[d] = (parsed[d], g)
