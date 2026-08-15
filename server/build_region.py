@@ -27,6 +27,7 @@ sys.path.insert(0, TOOL)
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import omsi_ttdata as T  # noqa: E402
 from tripscan import find_track  # noqa: E402  (맵마다 다른 .ttr 이름 규칙 흡수)
+from stopscan import stops_from_tiles  # noqa: E402  (.ttr 없는 맵: 타일에서 정류장 좌표)
 
 OMSI_MAPS = Path(r"C:\Program Files (x86)\Steam\steamapps\common\OMSI 2\maps")
 DATA = Path(__file__).resolve().parent.parent / "data"
@@ -153,32 +154,53 @@ def build_region(key: str, log=print):
         if not trips:
             continue
         tracks[line] = {d: find_track(ttdata, trips[d], line) for d in ("up", "down")}
-    if not any(t for per in tracks.values() for t in per.values()):
-        log("  ! no track files at all - strip view only (map view is skipped)")
-        return
-    log("  indexing tile splines + road map ...")
-    splines = T.index_splines(str(mapdir))
-    if not splines:
-        log("  ! no tile splines - skipping map (strip view still works)")
-        return
+    has_track = any(t for per in tracks.values() for t in per.values())
+    log("  indexing tile splines + road map ..." if has_track
+        else "  no .ttr track - recovering stop positions from the map tiles ...")
+    splines = T.index_splines(str(mapdir)) if has_track else {}
     try:
         roadmap = T.load_roadmap(str(mapdir))       # 맵마다 없거나 깨져 있기도 하다
     except Exception as e:
         log(f"  ! roadmap image unusable ({type(e).__name__}) - plain background")
         roadmap = None
 
+    tile_stops: dict | None = None                  # 타일에서 뽑은 정류장 좌표(필요할 때만)
+
+    def stops_only(trip):
+        """트랙 없는 노선: 타일의 정류장 오브젝트 위치만으로 지오를 만든다.
+        (노선 선은 못 그리고 버스는 정류장 사이를 직선으로 간다)"""
+        nonlocal tile_stops
+        if tile_stops is None:
+            tile_stops = stops_from_tiles(str(mapdir), log)
+        pts = [tile_stops.get(int(st["index"])) for st in trip["stations"]]
+        known = [i for i, p in enumerate(pts) if p]
+        if len(known) < 2:
+            return None
+        for i, p in enumerate(pts):                 # 못 찾은 정류장은 이웃 사이로 보간
+            if p:
+                continue
+            lo = max([k for k in known if k < i], default=known[0])
+            hi = min([k for k in known if k > i], default=known[-1])
+            f = 0.5 if lo == hi else (i-lo)/(hi-lo)
+            pts[i] = (pts[lo][0] + (pts[hi][0]-pts[lo][0])*f,
+                      pts[lo][1] + (pts[hi][1]-pts[lo][1])*f)
+        # segs 는 화면 범위 계산용으로만 쓰인다 (노선 선으로는 내보내지 않는다)
+        return {"segs": [{"d0": 0, "d1": 1, "pts": pts}], "stops": pts, "noroute": True}
+
     geos = {}            # line -> {dir: (trip, geo)}
     for ent in entries:
         line, parsed = ent["line"], ent.get("_parsed") or {}
         for d in ("up", "down"):
-            trf = tracks.get(line, {}).get(d)
-            if not parsed.get(d) or not trf:
+            if not parsed.get(d):
                 continue
-            g = T.build_geo(parsed[d], T.parse_track(str(trf)), splines)
+            trf = tracks.get(line, {}).get(d)
+            g = T.build_geo(parsed[d], T.parse_track(str(trf)), splines) if trf else None
+            if not g:
+                g = stops_only(parsed[d])           # 트랙이 없거나 복원 실패
             if g:
                 geos.setdefault(line, {})[d] = (parsed[d], g)
     if not geos:
-        log("  ! geometry reconstruction failed - skipping map")
+        log("  ! no geometry at all - strip view only (map view is skipped)")
         return
     bg, px, W, H = T._geo_canvas([g for per in geos.values() for _, g in per.values()],
                                  roadmap, MAPW, SS)
@@ -190,8 +212,10 @@ def build_region(key: str, log=print):
     def emit(trip, geo):
         stops = [{"id": str(st["index"]), "xy": [round(px(x, z)[0], 1), round(px(x, z)[1], 1)]}
                  for st, (x, z) in zip(trip["stations"], geo["stops"])]
-        path = [[round(px(x, z)[0], 1), round(px(x, z)[1], 1)] for s in geo["segs"] for x, z in s["pts"]]
-        return {"stops": stops, "path": path}
+        path = ([] if geo.get("noroute") else                 # 트랙 없는 노선은 선을 안 그린다
+                [[round(px(x, z)[0], 1), round(px(x, z)[1], 1)]
+                 for s in geo["segs"] for x, z in s["pts"]])
+        return {"stops": stops, "path": path, "noroute": bool(geo.get("noroute"))}
 
     geo_out = {"W": W, "H": H, "bg": "geo_bg.png",
                "lines": {line: {d: emit(trip, g) for d, (trip, g) in per.items()}

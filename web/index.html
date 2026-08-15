@@ -115,6 +115,9 @@
     padding:8px 12px;border-radius:8px;cursor:pointer;}
   .erow .save:disabled{background:#c7d2e6;cursor:default;}
   .erow.saved input{border-color:var(--green);background:#f2fbf6;}
+  .maphint{position:absolute;left:12px;top:12px;z-index:5;background:#fff;border:1px solid #e7ebf1;
+    border-radius:8px;padding:6px 10px;font-size:12px;font-weight:600;color:#7b8699;
+    box-shadow:0 2px 8px #0b214418;}
   .mapnone{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
     align-items:center;gap:6px;text-align:center;color:#7b8699;font-size:15px;font-weight:700;
     background:#f4f6fa;line-height:1.7;}
@@ -287,7 +290,7 @@
           <span><span id="clock"></span><button class="rfbtn" id="rfbtn" title="노선·정류장 정보 새로고침">↻</button></span>
           <span class="conn bad" id="conn">● 연결 안 됨</span></div>
         <div id="stripview">
-          <div class="note" id="note">실제 124번 노선 · 마커는 OMSI 실시간 운행스케줄 기준</div>
+          <div class="note" id="note">마커는 OMSI 실시간 운행스케줄 기준</div>
           <div class="stops" id="stops"></div>
         </div>
       </div>
@@ -408,6 +411,7 @@ async function selectRoute(key){
     ? `첫차 <b>${ROUTE.first}</b><span class="sep">|</span>막차 <b>${ROUTE.last}</b>` : '';
   $('span').textContent = (ROUTE.first && ROUTE.last) ? `${ROUTE.first}~${ROUTE.last} · ` : '';
   $('nstops').textContent = ROUTE.stops.length;
+  $('note').textContent = `${ROUTE.no}번 ${ROUTE.dir==='up'?'상행':'하행'} · 마커는 OMSI 실시간 운행스케줄 기준`;
   stopsEl.querySelectorAll('.stop').forEach(e=>e.remove());
   for(const [,e] of busEls) e.remove(); busEls.clear();   // markers re-place on next tick
   rowEls = ROUTE.stops.map(s=>{
@@ -500,9 +504,10 @@ function renderMapBase(){
     const [x,y]=s.xy;
     dots   += `<use href="#stopicon" class="mapstop" data-cx="${x}" data-cy="${y}" data-i="${i}"><title>${nm}</title></use>`;
     labels += `<text class="mlabel" data-cx="${x}" data-cy="${y}" data-i="${i}" text-anchor="middle" style="display:none">${nm}</text>`; });
+  showMapHint(!!g.noroute);        // 경로(.ttr) 없이 정류장만 복원한 노선
   svg.innerHTML = MAP_DEFS
     + `<image href="/api/geo_bg?region=${encodeURIComponent(CURRENT_REGION)}" x="0" y="0" width="${GEO.W}" height="${GEO.H}"/>`
-    + `<polyline class="mroute" points="${pts}"/>`
+    + (pts ? `<polyline class="mroute" points="${pts}"/>` : '')
     + `<g id="mapstops">${dots}</g><g id="maplabels">${labels}</g><g id="mapbuses"></g>`;
   mapBusEls.clear();
   svg.querySelectorAll('.mapstop').forEach(c=>{
@@ -510,6 +515,16 @@ function renderMapBase(){
     c.addEventListener('contextmenu', ev=>{ if(posEdit){ ev.preventDefault(); resetStop(+c.dataset.i); } });
   });
   initMapView();          // fit whole route, then zoom/pan takes over
+}
+
+// 정류장만 복원한 노선이면 지도 위에 작게 알려준다 (선이 없는 이유)
+function showMapHint(on){
+  let h = $('maphint');
+  if(on && !h){
+    h = document.createElement('div'); h.id = 'maphint'; h.className = 'maphint';
+    h.textContent = '경로 데이터(.ttr) 없음 · 정류장 위치만 표시 (버스는 정류장 사이 직선)';
+    $('mappane').appendChild(h);
+  } else if(!on && h){ h.remove(); }
 }
 
 // 지도 데이터(.ttr)가 없는 맵/방향이면 빈 지도 대신 안내를 띄운다
