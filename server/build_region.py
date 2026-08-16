@@ -34,9 +34,26 @@ OMSI_MAPS = Path(r"C:\Program Files (x86)\Steam\steamapps\common\OMSI 2\maps")
 DATA = Path(__file__).resolve().parent.parent / "data"
 MAPW, SS = 1600, 1
 
+# 노선도/시간표 도구와 같은 용어사전을 쓴다 — 한 정류장이 두 곳에서 다른 이름으로
+# 나오면 안 되니, 사전 파일은 도구 쪽 out/ 하나만 본다.
+GLOSSARY = Path(TOOL) / "out" / "glossary_ko.csv"        # 용어 규칙 (구절/단어)
+NAMEMAP = Path(TOOL) / "out" / "stationnames_ko.csv"     # 영문 정류장명 -> 한글
+
 
 def has_hangul(s: str) -> bool:
     return any("가" <= c <= "힣" for c in (s or ""))
+
+
+def load_terms(log=print):
+    """용어사전을 koreanize()에 물리고, 정류장명 대조표를 돌려준다."""
+    if GLOSSARY.exists():
+        T.USER_PHRASES, T.USER_WORDS = T.load_glossary(str(GLOSSARY))
+        if T.USER_PHRASES or T.USER_WORDS:
+            log(f"  용어사전: 구절 {len(T.USER_PHRASES)} · 단어 {len(T.USER_WORDS)}")
+    names = T.load_name_map(str(NAMEMAP)) if NAMEMAP.exists() else {}
+    if names:
+        log(f"  정류장명 대조표: {len(names)}개 (노선도 도구와 공용)")
+    return names
 
 
 def hhmm(m) -> str:
@@ -148,12 +165,19 @@ def build_region(key: str, log=print):
     exf = out / "extra_stops.json"          # 운행파일에 없는데 사람이 넣은 정류장
     EXTRA = json.loads(exf.read_text(encoding="utf-8")) if exf.exists() else {}
 
+    NAMES = load_terms(log)                 # 노선도/시간표 도구와 같은 용어사전
+    learned = {}                            # BIS에서 손으로 고친 이름 -> 대조표에 돌려준다
+
     def kname_for(st):
-        sid = str(st["index"])
-        if sid in OV:
+        sid, en = str(st["index"]), st["name"]
+        if sid in OV:                                        # BIS에서 직접 고친 이름이 최우선
+            if en and OV[sid] != NAMES.get(en):
+                learned[en] = OV[sid]
             return OV[sid]
-        ko = T.koreanize(st["name"])                         # auto RR->Hangul + glossary
-        return ko if has_hangul(ko) else st["name"]
+        if en in NAMES and NAMES[en].strip():                # 도구 쪽에서 정한 이름
+            return NAMES[en]
+        ko = T.koreanize(en)                                 # auto RR->Hangul + glossary
+        return ko if has_hangul(ko) else en
 
     def add_extras(trip, line, direction):
         """운행파일에 빠진 정류장을 사람이 넣어둔 대로 끼워 넣는다(재생성해도 유지).
@@ -214,6 +238,11 @@ def build_region(key: str, log=print):
         (out / f"route_{rkey}.json").write_text(json.dumps(r, ensure_ascii=False, indent=2), encoding="utf-8")
     (out / "routes.json").write_text(json.dumps(index, ensure_ascii=False, indent=2), encoding="utf-8")
     log(f"  routes: " + ", ".join(f"{k}={len(r['stops'])} stops" for k, r in routes.items()))
+
+    if learned and NAMEMAP.exists():        # BIS에서 고친 이름을 도구 쪽 대조표에도 반영
+        NAMES.update(learned)
+        T.save_name_map(str(NAMEMAP), NAMES)
+        log(f"  정류장명 대조표에 {len(learned)}개 반영 (노선도/시간표에도 같은 이름)")
 
     # ── map geometry (spline reconstruction) ────────────────────────────
     # Every line of the region shares ONE pixel frame / background, so the map
