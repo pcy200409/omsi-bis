@@ -117,11 +117,13 @@
   .editfilter input{width:100%;padding:9px 12px;border:1px solid #dde3ec;border-radius:9px;font-size:14px;}
   .editlist{flex:1;overflow-y:auto;padding:6px 0 20px;}
   .erow{display:flex;align-items:center;gap:10px;padding:10px 18px;border-bottom:1px solid #f3f5f9;}
-  .erow .meta{flex:none;width:96px;min-width:96px;}
+  .erow .meta{flex:none;width:118px;min-width:118px;}
   .erow .romaji{font-size:12px;color:#8a93a6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .erow .eid{font-size:11px;color:#b3bac8;}
   .erow .dir{display:inline-block;font-size:10.5px;font-weight:700;color:#7b8699;background:#eef1f6;
     border-radius:5px;padding:1px 5px;margin-top:2px;}
+  .erow .escope{display:block;margin-top:5px;width:100%;font-size:11.5px;font-weight:600;
+    border:1px solid #dde3ec;border-radius:6px;padding:3px 4px;color:#2f6bff;background:#f5f8ff;}
   .erow input{flex:1;min-width:0;padding:8px 10px;border:1px solid #dde3ec;border-radius:8px;font-size:14px;font-weight:600;color:#20293b;}
   .erow input:focus{outline:none;border-color:#2f6bff;}
   .erow .save{flex:none;background:#2f6bff;color:#fff;border:none;font-size:13px;font-weight:700;
@@ -176,9 +178,15 @@
   .reglog{margin-top:10px;background:#101a2e;color:#c8d6f0;font-size:11.5px;line-height:1.55;
     border-radius:8px;padding:9px 11px;white-space:pre-wrap;max-height:130px;overflow-y:auto;}
   .reglog.bad{background:#3a1220;color:#ffd3dc;}
-  .linesel{width:100%;margin-top:10px;padding:9px 11px;border:1px solid #dde3ec;border-radius:9px;
-    font-size:14px;font-weight:700;color:#20293b;background:#fff;cursor:pointer;}
-  .linesel[hidden]{display:none;}
+  #routepick,#routeview{display:flex;flex-direction:column;min-height:0;flex:1;}
+  #routepick[hidden],#routeview[hidden]{display:none;}
+  .routeback{display:inline-block;margin-top:8px;font-size:13px;font-weight:700;color:#2f6bff;
+    cursor:pointer;text-decoration:none;}
+  .routeback[hidden]{display:none;}
+  .rlrow{display:flex;align-items:center;gap:10px;padding:11px 18px;border-bottom:1px solid #f3f5f9;
+    cursor:pointer;} .rlrow:hover{background:#f5f8ff;}
+  .rlrow .rlno{flex:none;min-width:52px;font-size:16px;font-weight:800;color:#2f6bff;}
+  .rlrow .rlend{font-size:13px;color:#54607a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .dirtabs{display:flex;gap:8px;margin-top:12px;}
   .dirtabs[hidden]{display:none;}
   .dirtab{flex:1;text-align:center;padding:8px 0;border-radius:8px;font-weight:700;font-size:14px;
@@ -277,6 +285,18 @@
   #mappop .pt{font-weight:800;margin-bottom:6px;}
   #mappop .pl{display:flex;justify-content:space-between;gap:10px;padding:3px 0;color:#3b465c;}
   #mappop .pl b{color:#0f8a4f;} #mappop .pl.far b{color:#c26a12;}
+  #mappop .scode2{font-size:11.5px;color:#9aa3b2;margin:-4px 0 6px;}
+  #mappop .sllist{max-height:280px;overflow-y:auto;margin:0 -12px -6px;}
+  #mappop .slrow{padding:8px 12px;border-top:1px solid #eef0f4;cursor:pointer;}
+  #mappop .slrow:hover{background:#f5f8ff;}
+  #mappop .sltop{display:flex;align-items:center;gap:6px;}
+  #mappop .slno{font-size:15px;font-weight:800;color:#2f6bff;}
+  #mappop .sldir{font-size:12px;color:#54607a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  #mappop .sleta{font-size:12px;color:#3b465c;margin-top:2px;}
+  #mappop .sleta b{color:#0f8a4f;} #mappop .sleta.far b{color:#c26a12;}
+  #mappop .sleta .muted,#mappop .sldir .muted{color:#9aa3b2;}
+  #mappop .hit{color:#0f8a4f;}
+  #mappop .badge{font-size:10px;padding:1px 6px;}
   #mappop .px{position:absolute;top:6px;right:8px;color:#9aa3b2;cursor:pointer;font-weight:700;}
 </style>
 </head>
@@ -295,24 +315,32 @@
         <span class="sidetab disabled" title="준비 중입니다">이용안내</span>
       </div>
       <div id="side-routes">
-        <header>
-          <div class="rownum"><span class="badge" id="badge">일반</span><span class="num" id="num">—</span>
-            <button class="editbtn" id="pathbtn" title="지도에서 노선 경로를 직접 그리기" hidden>✏ 경로</button>
-            <button class="editbtn" id="posbtn" title="지도에서 정류장 위치 드래그 수정" hidden>📍 위치</button>
-            <button class="editbtn" id="editbtn" title="정류장명 편집">✎ 편집</button></div>
-          <select id="linesel" class="linesel" title="노선 선택" hidden></select>
-          <div class="ends" id="ends"></div>
-          <div class="times" id="times"></div>
-          <div class="summary"><span id="span"></span>총 <span id="nstops">0</span>개 정류소 ·
-            <span class="run">현재 <span id="running">0</span>대 운행중</span></div>
-          <div class="dirtabs" id="dirtabs"></div>
-        </header>
-        <div class="refresh">
-          <span><span id="clock"></span><button class="rfbtn" id="rfbtn" title="노선·정류장 정보 새로고침">↻</button></span>
-          <span class="conn bad" id="conn">● 연결 안 됨</span></div>
-        <div id="stripview">
-          <div class="note" id="note">마커는 OMSI 실시간 운행스케줄 기준</div>
-          <div class="stops" id="stops"></div>
+        <div id="routepick" hidden>
+          <header><div class="rownum"><span class="num" style="font-size:20px">노선 검색</span></div>
+            <div class="summary">노선번호를 입력해 노선을 선택하세요</div></header>
+          <div class="stopsearchbar"><input id="routeq" placeholder="노선번호 입력 (예: 203)"></div>
+          <div class="stoplist" id="routelist"></div>
+        </div>
+        <div id="routeview">
+          <header>
+            <div class="rownum"><span class="badge" id="badge">일반</span><span class="num" id="num">—</span>
+              <button class="editbtn" id="pathbtn" title="지도에서 노선 경로를 직접 그리기" hidden>✏ 경로</button>
+              <button class="editbtn" id="posbtn" title="지도에서 정류장 위치 드래그 수정" hidden>📍 위치</button>
+              <button class="editbtn" id="editbtn" title="정류장명 편집">✎ 편집</button></div>
+            <a id="routeback" class="routeback" hidden>← 노선 목록</a>
+            <div class="ends" id="ends"></div>
+            <div class="times" id="times"></div>
+            <div class="summary"><span id="span"></span>총 <span id="nstops">0</span>개 정류소 ·
+              <span class="run">현재 <span id="running">0</span>대 운행중</span></div>
+            <div class="dirtabs" id="dirtabs"></div>
+          </header>
+          <div class="refresh">
+            <span><span id="clock"></span><button class="rfbtn" id="rfbtn" title="노선·정류장 정보 새로고침">↻</button></span>
+            <span class="conn bad" id="conn">● 연결 안 됨</span></div>
+          <div id="stripview">
+            <div class="note" id="note">마커는 OMSI 실시간 운행스케줄 기준</div>
+            <div class="stops" id="stops"></div>
+          </div>
         </div>
       </div>
       <div id="side-stops" hidden>
@@ -333,8 +361,8 @@
 <div id="editor" class="modal" hidden>
   <div class="sheet">
     <div class="sheethead">
-      <b>정류장명 편집</b>
-      <span class="sub">한글 이름을 고치면 관제화면에 바로 반영됩니다.</span>
+      <b id="edittitle">정류장명 편집</b>
+      <span class="sub" id="editsub">한글 이름을 고치면 관제화면에 바로 반영됩니다.</span>
       <button class="xbtn" id="editclose">✕</button>
     </div>
     <div class="editfilter"><input id="editsearch" placeholder="정류장 검색 (한글·로마자·번호)"></div>
@@ -379,7 +407,13 @@ let ROUTE = null, rowEls = [];
 const busEls = new Map();        // id -> strip element
 const mapBusEls = new Map();     // id -> svg marker (map view)
 const SVGNS = 'http://www.w3.org/2000/svg';
-let GEO = null, lastEta = [];
+let GEO = null, lastEta = [], lastBuses = [];
+const ROUTE_CACHE = new Map();      // key -> route JSON (정류장 팝업의 노선별 도착계산용)
+async function getRoute(key){
+  if(ROUTE_CACHE.has(key)) return ROUTE_CACHE.get(key);
+  const r = await (await fetch('/api/route/'+key+rq(), {cache:'no-store'})).json();
+  ROUTE_CACHE.set(key, r); return r;
+}
 let EDITABLE = false, posEdit = false, stopDragEl = null, stopDragStart = null;
 const posUndo = [];               // stack of {i, prev:[x,y]} for undo of stop moves
 const busData = new Map();        // id -> latest bus payload (for the bus-click popup)
@@ -399,19 +433,48 @@ const MAP_DEFS = `<defs>
 // 한 지역(=맵)이 노선을 여러 개 갖는다. 노선을 고르면 그 노선의 상/하행 탭이 뜬다.
 let ROUTES = [], LINE = '', DIR = 'up';
 
+let MULTILINE = false;
 async function loadRoutes(){
+  ROUTE_CACHE.clear();                           // 편집/재생성 후 최신 노선을 다시 읽는다
   ROUTES = await (await fetch('/api/routes'+rq(), {cache:'no-store'})).json();
   const lines = [...new Set(ROUTES.map(r=>r.no))];
-  const sel = $('linesel');
-  sel.innerHTML = lines.map(n=>`<option value="${esc(n)}">${esc(n)}번</option>`).join('');
-  sel.hidden = lines.length < 2;                 // 노선 하나뿐이면 고를 게 없다
-  sel.onchange = ()=>selectLine(sel.value);
-  await selectLine(lines.includes(LINE) ? LINE : lines[0]);
+  MULTILINE = lines.length > 1;
+  $('routeback').hidden = !MULTILINE;
+  if(!MULTILINE){ await selectLine(lines[0]); return; }   // 노선 하나면 부안식 검색 없이 바로
+  if(LINE && lines.includes(LINE)) await selectLine(LINE); // F5/링크 복원
+  else showRoutePick();                                    // 여러 노선이면 먼저 노선을 고른다
+}
+
+// 노선 여러 개인 지역: 노선번호로 먼저 고르는 화면 (부안 BIS 방식)
+function showRoutePick(){
+  LINE = '';
+  $('routeview').hidden = true;
+  $('routepick').hidden = false;
+  renderRouteList($('routeq').value || '');
+  syncURL();
+}
+
+function renderRouteList(q){
+  q = (q||'').trim().toLowerCase();
+  const seen = new Set(), items = [];
+  for(const r of ROUTES){                          // 노선번호 하나당 한 줄
+    if(seen.has(r.no)) continue; seen.add(r.no);
+    if(q && !String(r.no).toLowerCase().includes(q)) continue;
+    const up = ROUTES.find(x=>x.no===r.no && x.dir==='up') || r;
+    const ends = (up.label||'').split('·').slice(1).join('·').trim() || up.no+'번';
+    items.push(`<div class="rlrow" data-no="${esc(r.no)}"><span class="rlno">${esc(r.no)}</span>
+      <span class="rlend">${esc(ends)}</span></div>`);
+  }
+  const el = $('routelist');
+  el.innerHTML = items.length ? items.join('')
+    : '<div style="padding:20px;color:#8a93a6">해당 노선이 없습니다</div>';
+  el.querySelectorAll('.rlrow').forEach(r=>r.onclick=()=>selectLine(r.dataset.no));
 }
 
 async function selectLine(no){
   LINE = no;
-  if($('linesel').value !== no) $('linesel').value = no;
+  $('routepick').hidden = true;
+  $('routeview').hidden = false;
   const dirs = ROUTES.filter(r=>r.no===no);
   const tabs = $('dirtabs'); tabs.innerHTML='';
   dirs.forEach(r=>{
@@ -769,18 +832,57 @@ function updateMapBuses(pl, alive){
   for(const [id,el] of mapBusEls){ if(!alive.has(id)){ el.remove(); mapBusEls.delete(id); } }
 }
 
-// stop tap -> Korean-BIS style arrival popup (uses the same ETA as the strip)
-function showStopPopup(i, ev){
-  const pop = $('mappop'), st = ROUTE.stops[i];
-  const nm = st ? (st.kname||st.name) : ('#'+i), s = lastEta[i];
-  let body;
-  if(!s) body = '<div class="pl">접근 중인 버스 없음</div>';
-  else{
-    const mins = Math.max(1, Math.round(s.remain/(AVG_MPS*60)));
-    const label = s.at ? '<b>도착</b>' : (s.n===0 ? '<b>곧 도착</b>' : `<b>${s.n}정류장 전</b> · 약 ${mins}분 후`);
-    body = `<div class="pl ${s.n>0?'far':''}">${label}</div>`;
+// 한 노선(route)에서 이 정류장으로 접근 중인 가장 가까운 버스의 도착 추정
+function etaAt(route, sid){
+  const idx = route.stops.findIndex(s=>String(s.id)===String(sid));
+  if(idx < 0) return null;
+  let best = null;
+  for(const b of lastBuses){
+    if(b.route !== route.key) continue;
+    const bi = route.stops.findIndex(s=>String(s.id)===String(b.nextIdCode));
+    if(bi < 0 || bi > idx) continue;                       // 이미 지나간 버스
+    const remain = (route.stops[idx].dist - route.stops[bi].dist) + (b.nextDist||0);
+    if(!best || remain < best.remain)
+      best = {n: idx-bi, remain, at: (b.atStation>0 && bi===idx)};
   }
-  pop.innerHTML = `<span class="px">✕</span><div class="pt">${nm}</div>${body}`;
+  return best;
+}
+function etaText(e){
+  if(!e) return '<span class="muted">운행 중인 버스 없음</span>';
+  if(e.at) return '<b class="hit">도착</b>';
+  const mins = Math.max(1, Math.round(e.remain/(AVG_MPS*60)));
+  return e.n===0 ? '<b class="hit">곧 도착</b>'
+                 : `<b>${e.n}정류장 전</b> · 약 ${mins}분 후`;
+}
+
+// stop tap -> arrival popup. 여러 노선이 지나면 부안 BIS처럼 노선별 목록으로.
+async function showStopPopup(i, ev){
+  const pop = $('mappop'), st = ROUTE.stops[i];
+  const sid = st ? String(st.id) : null;
+  const nm = st ? (st.kname||st.name) : ('#'+i);
+  let info = null;
+  if(MULTILINE && sid){
+    try{ info = await (await fetch('/api/stopinfo/'+sid+rq(), {cache:'no-store'})).json(); }catch(e){}
+  }
+  if(info && info.lines && info.lines.length > 1){
+    const rows = await Promise.all(info.lines.map(async L=>{
+      let e = null; try{ e = etaAt(await getRoute(L.key), sid); }catch(_){}
+      return `<div class="slrow" data-no="${esc(L.no)}" data-dir="${L.dir}">
+        <div class="sltop"><span class="badge">일반</span><span class="slno">${esc(L.no)}</span>
+          <span class="sldir">${esc(L.to)} 방면</span></div>
+        <div class="sleta ${e&&e.n>0?'far':''}">${etaText(e)}</div></div>`;
+    }));
+    pop.innerHTML = `<span class="px">✕</span><div class="pt">${nm}</div>
+      <div class="scode2">${sid}</div><div class="sllist">${rows.join('')}</div>`;
+    pop.querySelectorAll('.slrow').forEach(r=>r.onclick=()=>{
+      pop.hidden=true; DIR=r.dataset.dir; selectLine(r.dataset.no);
+    });
+  } else {
+    const s = lastEta[i];
+    const body = !s ? '<div class="pl">접근 중인 버스 없음</div>'
+      : `<div class="pl ${s.n>0?'far':''}">${etaText(s)}</div>`;
+    pop.innerHTML = `<span class="px">✕</span><div class="pt">${nm}</div>${body}`;
+  }
   pop.querySelector('.px').onclick = ()=>pop.hidden=true;
   placePop(ev);
 }
@@ -856,6 +958,8 @@ async function refreshNow(){
   }
 }
 $('rfbtn').onclick = refreshNow;
+$('routeq').oninput = e => renderRouteList(e.target.value);
+$('routeback').onclick = ()=>{ if(pathEdit)$('pathbtn').click(); if(posEdit)$('posbtn').click(); showRoutePick(); };
 
 // ── station-name editor ────────────────────────────────────────────────
 let EDIT_STOPS = [];
@@ -863,6 +967,11 @@ const DIRLABEL = {up:'상행', down:'하행'};
 
 async function openEditor(){
   EDIT_STOPS = await (await fetch('/api/stops'+rq(), {cache:'no-store'})).json();
+  // 지금 보고 있는 노선의 정류장만 편집한다 (이름 변경도 이 노선에만 적용)
+  $('edittitle').textContent = ROUTE ? `${ROUTE.no}번 정류장명 편집` : '정류장명 편집';
+  $('editsub').textContent = ROUTE
+    ? `${ROUTE.no}번(상·하행)의 정류장 이름만 바뀝니다. 다른 노선은 그대로예요.`
+    : '한글 이름을 고치면 관제화면에 바로 반영됩니다.';
   $('editsearch').value = '';
   renderEditList('');
   await fillAddStop();
@@ -927,19 +1036,24 @@ function closeEditor(){ $('editor').hidden = true; }
 
 function renderEditList(q){
   q = (q||'').trim().toLowerCase();
+  const line = ROUTE ? String(ROUTE.no) : '';
   const list = $('editlist'); list.innerHTML = '';
   for(const s of EDIT_STOPS){
+    // 지금 노선에 속한 정류장만 (다른 노선만 지나는 정류장은 이 편집창에 안 뜬다)
+    const serve = (s.serves||[]).find(v=>String(v.no)===line);
+    if(line && !serve) continue;
     if(q && !(`${s.kname} ${s.name} ${s.id}`.toLowerCase().includes(q))) continue;
+    const kname = serve ? (serve.kname||'') : (s.kname||'');
     const row = document.createElement('div'); row.className = 'erow';
     row.innerHTML =
-      `<div class="meta"><div class="romaji" title="${s.name}">${s.name||'—'}</div>
-         <div class="eid">${s.id}</div>
+      `<div class="meta"><div class="romaji" title="${esc(s.name)}">${esc(s.name)||'—'}</div>
+         <div class="eid">${esc(s.id)}</div>
          <span class="dir">${s.dirs.map(d=>DIRLABEL[d]||d).join('·')}</span></div>
-       <input value="${s.kname.replace(/"/g,'&quot;')}">
+       <input value="${kname.replace(/"/g,'&quot;')}">
        <button class="save">저장</button>`;
     const input = row.querySelector('input');
     const btn = row.querySelector('.save');
-    const commit = ()=>saveKname(s, input.value, row, btn);
+    const commit = ()=>saveKname(s, input.value, row, btn, line);
     btn.onclick = commit;
     input.onkeydown = ev => { if(ev.key==='Enter') commit(); };
     list.appendChild(row);
@@ -947,17 +1061,18 @@ function renderEditList(q){
   if(!list.children.length) list.innerHTML = '<div style="padding:20px;color:#8a93a6">검색 결과 없음</div>';
 }
 
-async function saveKname(s, value, row, btn){
+// line을 주면 그 노선(상·하행)에만 적용, 없으면 지역 전체
+async function saveKname(s, value, row, btn, line){
   const kname = value.trim();
-  if(!kname || kname === s.kname){ return; }
   btn.disabled = true; btn.textContent = '저장중';
   try{
     const res = await fetch('/api/kname', {method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({region:CURRENT_REGION, id:s.id, kname})});
+      body: JSON.stringify({region:CURRENT_REGION, id:s.id, kname, line:line||''})});
     if(!res.ok) throw new Error((await res.json()).error||res.status);
-    s.kname = kname;
     row.classList.add('saved'); btn.textContent = '완료';
-    setTimeout(()=>{ row.classList.remove('saved'); btn.textContent='저장'; btn.disabled=false; }, 1200);
+    EDIT_STOPS = await (await fetch('/api/stops'+rq(), {cache:'no-store'})).json();
+    ROUTE_CACHE.clear();
+    setTimeout(()=>{ renderEditList($('editsearch').value||''); }, 1000);
     if(ROUTE) selectRoute(ROUTE.key);        // reflect the change on the live strip
   }catch(err){
     btn.textContent = '실패'; btn.disabled = false;
@@ -1461,6 +1576,8 @@ function syncURL(){
   if(!booted) return;
   let h = '';
   if(PAGE === 'notices') h = '#notices';
+  else if(PAGE === 'app' && !LINE)                    // 노선 고르기 화면 (여러 노선 지역)
+    h = `#/${encodeURIComponent(CURRENT_REGION)}`;
   else if(PAGE === 'app' && ROUTE)
     h = `#/${encodeURIComponent(CURRENT_REGION)}/${encodeURIComponent(LINE)}/${ROUTE.dir}`
         + (SIDE === 'stops' ? '/stops' : '');
@@ -1471,9 +1588,11 @@ function parseHash(){
   const h = decodeURI(location.hash || '');
   if(h === '#notices') return {page:'notices'};
   const m = h.match(/^#\/([^/]+)\/([^/]*)\/(up|down)(\/stops)?$/);
-  if(!m) return null;
-  return {page:'app', region:decodeURIComponent(m[1]), line:decodeURIComponent(m[2]),
-          dir:m[3], side:m[4] ? 'stops' : 'routes'};
+  if(m) return {page:'app', region:decodeURIComponent(m[1]), line:decodeURIComponent(m[2]),
+                dir:m[3], side:m[4] ? 'stops' : 'routes'};
+  const one = h.match(/^#\/([^/]+)$/);              // 지역만 (노선 고르기 화면)
+  if(one) return {page:'app', region:decodeURIComponent(one[1]), line:'', dir:'up', side:'routes'};
+  return null;
 }
 
 function setPage(p){
@@ -1626,7 +1745,7 @@ function connect(){
   const c=$('conn');
   ws.onopen=()=>{c.textContent='● 실시간';c.className='conn ok';};
   ws.onclose=()=>{c.textContent='● 연결 끊김';c.className='conn bad';setTimeout(connect,1000);};
-  ws.onmessage=e=>{ if(ROUTE) apply((JSON.parse(e.data).buses)||[]); };
+  ws.onmessage=e=>{ const bs=(JSON.parse(e.data).buses)||[]; lastBuses=bs; if(ROUTE) apply(bs); };
 }
 async function init(){
   try{ const rs = await (await fetch('/api/regions?t='+Date.now())).json();

@@ -223,7 +223,8 @@ async def route(key: str, region: str = ""):
 
 @app.get("/api/stops")
 async def stops_list(region: str = ""):
-    """Every unique stop (merged across directions) for the name editor."""
+    """Every unique stop (merged across directions) for the name editor, with the
+    list of routes serving each stop so the editor can scope a rename to one line."""
     rk = valid_region(region or DEFAULT_REGION)
     out, seen = [], {}
     for f in sorted(region_dir(rk).glob("route_*.json")):
@@ -231,17 +232,41 @@ async def stops_list(region: str = ""):
             r = json.loads(f.read_text(encoding="utf-8"))
         except Exception:
             continue
-        direction = r.get("dir")
+        no, direction, rkey = r.get("no", ""), r.get("dir"), r.get("key", "")
         for s in r["stops"]:
             sid = str(s["id"])
+            serve = {"key": rkey, "no": no, "dir": direction, "kname": s.get("kname", "")}
             if sid in seen:
                 if direction not in seen[sid]["dirs"]:
                     seen[sid]["dirs"].append(direction)
+                seen[sid]["serves"].append(serve)
                 continue
             seen[sid] = {"id": sid, "name": s.get("name", ""),
-                         "kname": s.get("kname", ""), "dirs": [direction]}
+                         "kname": s.get("kname", ""), "dirs": [direction], "serves": [serve]}
             out.append(seen[sid])
     return out
+
+
+@app.get("/api/stopinfo/{sid}")
+async def stop_info(sid: str, region: str = ""):
+    """Which lines/directions pass through a stop — for the map click popup."""
+    rk = valid_region(region or DEFAULT_REGION)
+    sid = re.sub(r"[^0-9]", "", sid)
+    name, lines = "", []
+    for f in sorted(region_dir(rk).glob("route_*.json")):
+        try:
+            r = json.loads(f.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        hit = next((s for s in r["stops"] if str(s["id"]) == sid), None)
+        if not hit:
+            continue
+        name = name or hit.get("kname") or hit.get("name", "")
+        lines.append({"key": r.get("key", ""), "no": r.get("no", ""), "dir": r.get("dir"),
+                      "to": r.get("to", ""), "kname": hit.get("kname", "")})
+    if not lines:
+        return JSONResponse({"error": "not found"}, status_code=404)
+    return {"id": sid, "name": name, "lines": lines}
 
 
 _GEO_CACHE: dict[str, tuple[tuple, dict]] = {}      # 한 지역의 geo.json은 수 MB까지 간다
@@ -317,6 +342,8 @@ class KnameEdit(BaseModel):
     region: str = ""
     id: str
     kname: str
+    line: str = ""        # 비우면 지역 전체, 채우면 그 노선에서만
+    dir: str = ""         # line과 함께 쓰면 그 방향에서만
 
 
 class StopPos(BaseModel):
@@ -538,11 +565,23 @@ async def edit_kname(e: KnameEdit):
     rk = valid_region(e.region or DEFAULT_REGION)
     kname = e.kname.strip()
     sid = re.sub(r"[^0-9]", "", e.id)
-    if not sid or not kname:
+    if not sid:
         return JSONResponse({"error": "bad request"}, status_code=400)
     ov_path = region_dir(rk) / "kname_overrides.json"
     ov = json.loads(ov_path.read_text(encoding="utf-8")) if ov_path.exists() else {}
-    ov[sid] = kname
+    # line이 오면 그 노선에서만 쓰는 이름. dir까지 오면 그 방향만, 없으면 상·하행 모두.
+    # line이 없으면 지역 전체("id").
+    if e.line.strip():
+        line = e.line.strip()
+        dirs = [e.dir] if e.dir in ("up", "down") else ["up", "down"]
+        keys = [f"{line}|{d}|{sid}" for d in dirs]
+    else:
+        keys = [sid]
+    for key in keys:
+        if not kname:                      # 빈 값 = 이 범위의 편집을 지우고 기본값으로
+            ov.pop(key, None)
+        else:
+            ov[key] = kname
     ov_path.write_text(json.dumps(ov, ensure_ascii=False, indent=2), encoding="utf-8")
     ok, msg = _rebuild_region(rk)
     if not ok:

@@ -168,9 +168,12 @@ def build_region(key: str, log=print):
     NAMES = load_terms(log)                 # 노선도/시간표 도구와 같은 용어사전
     learned = {}                            # BIS에서 손으로 고친 이름 -> 대조표에 돌려준다
 
-    def kname_for(st):
+    def kname_for(st, line=None, direction=None):
         sid, en = str(st["index"]), st["name"]
-        if sid in OV:                                        # BIS에서 직접 고친 이름이 최우선
+        rkey = f"{line}|{direction}|{sid}"                   # 이 노선에서만 쓰는 이름
+        if rkey in OV:                                       # 노선별 편집이 최우선
+            return OV[rkey]
+        if sid in OV:                                        # 지역 전체에 적용한 이름
             if en and OV[sid] != NAMES.get(en):
                 learned[en] = OV[sid]
             return OV[sid]
@@ -196,7 +199,8 @@ def build_region(key: str, log=print):
                                          "_extra": True})
 
     def mkroute(trip, line, rkey, direction, first, last):
-        stops = [{"id": str(st["index"]), "name": st["name"], "kname": kname_for(st),
+        stops = [{"id": str(st["index"]), "name": st["name"],
+                  "kname": kname_for(st, line, direction),
                   "kachel": st.get("busstop", ""), "dist": round(st.get("dist", 0.0), 1),
                   **({"added": True} if st.get("_extra") else {})}
                  for st in trip["stations"]]
