@@ -282,17 +282,19 @@
   }
   #mappop{position:fixed;z-index:60;background:#fff;border:1px solid #dde3ec;border-radius:10px;
     box-shadow:0 4px 18px #0b214433;padding:10px 12px;font-size:13px;min-width:150px;max-width:230px;}
+  #mappop.wide{max-width:none;width:360px;}      /* 여러 노선 목록은 가로로 넓게 */
   #mappop .pt{font-weight:800;margin-bottom:6px;}
   #mappop .pl{display:flex;justify-content:space-between;gap:10px;padding:3px 0;color:#3b465c;}
   #mappop .pl b{color:#0f8a4f;} #mappop .pl.far b{color:#c26a12;}
   #mappop .scode2{font-size:11.5px;color:#9aa3b2;margin:-4px 0 6px;}
   #mappop .sllist{max-height:280px;overflow-y:auto;margin:0 -12px -6px;}
-  #mappop .slrow{padding:8px 12px;border-top:1px solid #eef0f4;cursor:pointer;}
+  #mappop .slrow{display:flex;align-items:center;gap:10px;padding:9px 12px;
+    border-top:1px solid #eef0f4;cursor:pointer;}
   #mappop .slrow:hover{background:#f5f8ff;}
-  #mappop .sltop{display:flex;align-items:center;gap:6px;}
-  #mappop .slno{font-size:15px;font-weight:800;color:#2f6bff;}
-  #mappop .sldir{font-size:12px;color:#54607a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  #mappop .sleta{font-size:12px;color:#3b465c;margin-top:2px;}
+  #mappop .slL{display:flex;align-items:center;gap:6px;min-width:0;flex:1;}
+  #mappop .slno{font-size:15px;font-weight:800;color:#2f6bff;flex:none;}
+  #mappop .sldir{font-size:12.5px;color:#54607a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  #mappop .sleta{flex:none;text-align:right;font-size:12px;color:#3b465c;white-space:nowrap;}
   #mappop .sleta b{color:#0f8a4f;} #mappop .sleta.far b{color:#c26a12;}
   #mappop .sleta .muted,#mappop .sldir .muted{color:#9aa3b2;}
   #mappop .hit{color:#0f8a4f;}
@@ -868,16 +870,18 @@ async function showStopPopup(i, ev){
     const rows = await Promise.all(info.lines.map(async L=>{
       let e = null; try{ e = etaAt(await getRoute(L.key), sid); }catch(_){}
       return `<div class="slrow" data-no="${esc(L.no)}" data-dir="${L.dir}">
-        <div class="sltop"><span class="badge">일반</span><span class="slno">${esc(L.no)}</span>
+        <div class="slL"><span class="badge">일반</span><span class="slno">${esc(L.no)}</span>
           <span class="sldir">${esc(L.to)} 방면</span></div>
         <div class="sleta ${e&&e.n>0?'far':''}">${etaText(e)}</div></div>`;
     }));
+    pop.classList.add('wide');
     pop.innerHTML = `<span class="px">✕</span><div class="pt">${nm}</div>
       <div class="scode2">${sid}</div><div class="sllist">${rows.join('')}</div>`;
     pop.querySelectorAll('.slrow').forEach(r=>r.onclick=()=>{
       pop.hidden=true; DIR=r.dataset.dir; selectLine(r.dataset.no);
     });
   } else {
+    pop.classList.remove('wide');
     const s = lastEta[i];
     const body = !s ? '<div class="pl">접근 중인 버스 없음</div>'
       : `<div class="pl ${s.n>0?'far':''}">${etaText(s)}</div>`;
@@ -890,7 +894,7 @@ async function showStopPopup(i, ev){
 // bus tap -> running-bus info (route / driver / next stop), like the 김제 BIS card
 function showBusPopup(id, ev){
   const b = busData.get(id); if(!b) return;
-  const pop = $('mappop');
+  const pop = $('mappop'); pop.classList.remove('wide');
   const line = b.line || '—', nick = b.nick || b.id;
   // OMSI가 주는 nextName은 맵 원본(로마자)이라, 화면에 쓰는 정류소 한글이름으로 바꿔 보여준다
   const nextSt = b.schedValid && ROUTE ? ROUTE.stops.find(s=>String(s.id)===String(b.nextIdCode)) : null;
