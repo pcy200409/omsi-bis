@@ -1,0 +1,76 @@
+{
+  "key": "911B",
+  "no": "911",
+  "type": "일반",
+  "dir": "down",
+  "from": "청진여객터미널GRT",
+  "to": "신청원역GRT",
+  "length": 11730.5,
+  "first": "03:00",
+  "last": "00:30",
+  "stops": [
+    {
+      "id": "491614",
+      "name": "Cheongjin Passenger Terminal GRT G1",
+      "kname": "청진여객터미널GRT",
+      "kachel": "119",
+      "dist": 56.7
+    },
+    {
+      "id": "491760",
+      "name": "CHFEZ GRT G1",
+      "kname": "청진경제자유무역 GRT",
+      "kachel": "81",
+      "dist": 388.7
+    },
+    {
+      "id": "491934",
+      "name": "Namsanjeong Station GRT G1",
+      "kname": "남산정역GRT",
+      "kachel": "80",
+      "dist": 886.8
+    },
+    {
+      "id": "512892",
+      "name": "Cheongjin Station GRT G1",
+      "kname": "청진역GRT",
+      "kachel": "73",
+      "dist": 1484.8
+    },
+    {
+      "id": "512889",
+      "name": "Namchon Village G1",
+      "kname": "남촌마을",
+      "kachel": "317",
+      "dist": 2444.3
+    },
+    {
+      "id": "512886",
+      "name": "Daegyo Station G1",
+      "kname": "대교역",
+      "kachel": "61",
+      "dist": 2931.3
+    },
+    {
+      "id": "512924",
+      "name": "Myeongbeop Hyundai Outlet GRT R2",
+      "kname": "명법현대아울렛GRT",
+      "kachel": "387",
+      "dist": 7706.7
+    },
+    {
+      "id": "512925",
+      "name": "Wolpyeong JCT G1 911",
+      "kname": "월평교차로",
+      "kachel": "376",
+      "dist": 9377.4
+    },
+    {
+      "id": "512882",
+      "name": "Sincheongwon Station GRT End",
+      "kname": "신청원역GRT",
+      "kachel": "410",
+      "dist": 11730.5
+    }
+  ]
+}

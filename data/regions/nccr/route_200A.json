@@ -1,0 +1,209 @@
+{
+  "key": "200A",
+  "no": "200",
+  "type": "일반",
+  "dir": "up",
+  "from": "선남초등학교",
+  "to": "청진역",
+  "length": 14734.9,
+  "first": "04:40",
+  "last": "00:30",
+  "stops": [
+    {
+      "id": "507792",
+      "name": "Seonnam Elementary School Start",
+      "kname": "선남초등학교",
+      "kachel": "280",
+      "dist": 395.1
+    },
+    {
+      "id": "515516",
+      "name": "Seonnam-dong E Mart G2 200",
+      "kname": "선남동이마트",
+      "kachel": "280",
+      "dist": 615.7
+    },
+    {
+      "id": "492665",
+      "name": "Namchang Entrance G2",
+      "kname": "남창입구",
+      "kachel": "252",
+      "dist": 1362.4
+    },
+    {
+      "id": "515519",
+      "name": "Geumsan G2",
+      "kname": "금산",
+      "kachel": "219",
+      "dist": 1887.7
+    },
+    {
+      "id": "502362",
+      "name": "Geumsan Church G2",
+      "kname": "금산교회",
+      "kachel": "113",
+      "dist": 2275.8
+    },
+    {
+      "id": "515522",
+      "name": "Bunsung High School G2 200",
+      "kname": "분숭고등학교",
+      "kachel": "111",
+      "dist": 2538.3
+    },
+    {
+      "id": "495083",
+      "name": "Buksan APT G2",
+      "kname": "북산아파트",
+      "kachel": "110",
+      "dist": 2812.7
+    },
+    {
+      "id": "495089",
+      "name": "Geumsan Sinjugong APT G2",
+      "kname": "금산신주공아파트",
+      "kachel": "112",
+      "dist": 3059.8
+    },
+    {
+      "id": "495091",
+      "name": "Saebyeok Market G2",
+      "kname": "새벽시장",
+      "kachel": "156",
+      "dist": 3377.6
+    },
+    {
+      "id": "504760",
+      "name": "Bukbu Stadium G2",
+      "kname": "북부스타디움",
+      "kachel": "181",
+      "dist": 3717.9
+    },
+    {
+      "id": "504801",
+      "name": "Daeju Park G2",
+      "kname": "대주공원",
+      "kachel": "180",
+      "dist": 3954.9
+    },
+    {
+      "id": "504808",
+      "name": "Sindonga APT G1",
+      "kname": "신동아아파트",
+      "kachel": "158",
+      "dist": 4213.3
+    },
+    {
+      "id": "492755",
+      "name": "Sindonga Market G2",
+      "kname": "신동아시장",
+      "kachel": "177",
+      "dist": 4500.0
+    },
+    {
+      "id": "491323",
+      "name": "Haeam maeul COmplex11 G2",
+      "kname": "해암마을단지",
+      "kachel": "176",
+      "dist": 4918.5
+    },
+    {
+      "id": "491186",
+      "name": "Danggam Station G2",
+      "kname": "당감역",
+      "kachel": "175",
+      "dist": 5663.3
+    },
+    {
+      "id": "491181",
+      "name": "Yongdang CGV G2",
+      "kname": "용당CGV",
+      "kachel": "171",
+      "dist": 6321.1
+    },
+    {
+      "id": "490811",
+      "name": "Cheongsan Namdo Office Station1",
+      "kname": "청산남도청역",
+      "kachel": "196",
+      "dist": 6918.7
+    },
+    {
+      "id": "490830",
+      "name": "Yangji maeul Complex 7",
+      "kname": "양지마을단지",
+      "kachel": "193",
+      "dist": 7351.7
+    },
+    {
+      "id": "495271",
+      "name": "Cheongjin Cityhall1",
+      "kname": "청진시청",
+      "kachel": "161",
+      "dist": 8322.7
+    },
+    {
+      "id": "449707",
+      "name": "CH Univ Hospital M3",
+      "kname": "청진대학교병원",
+      "kachel": "6",
+      "dist": 9099.8
+    },
+    {
+      "id": "449678",
+      "name": "Seohan Market M2",
+      "kname": "서한시장",
+      "kachel": "1",
+      "dist": 9457.1
+    },
+    {
+      "id": "508204",
+      "name": "Daegyo-dong G2",
+      "kname": "대교동",
+      "kachel": "49",
+      "dist": 11121.9
+    },
+    {
+      "id": "468726",
+      "name": "Yeonsan Hill G2",
+      "kname": "연산고개",
+      "kachel": "54",
+      "dist": 11485.7
+    },
+    {
+      "id": "468719",
+      "name": "Hwangnyeong Byeoksan Apt G2",
+      "kname": "황녕벽산아파트",
+      "kachel": "54",
+      "dist": 11765.2
+    },
+    {
+      "id": "508465",
+      "name": "Yeonsan Back Hil G2",
+      "kname": "연산뒷고개",
+      "kachel": "68",
+      "dist": 13171.2
+    },
+    {
+      "id": "508467",
+      "name": "Namsan Stadium G2",
+      "kname": "남산경기장",
+      "kachel": "79",
+      "dist": 13981.6
+    },
+    {
+      "id": "515530",
+      "name": "Namsanjeong Station Transfer Stop G2 200",
+      "kname": "남산정역환승센터",
+      "kachel": "80",
+      "dist": 14239.5
+    },
+    {
+      "id": "515537",
+      "name": "Cheongjin Stn 200 End",
+      "kname": "청진역",
+      "kachel": "73",
+      "dist": 14734.9
+    }
+  ]
+}

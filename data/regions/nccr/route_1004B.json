@@ -1,0 +1,83 @@
+{
+  "key": "1004B",
+  "no": "1004",
+  "type": "일반",
+  "dir": "down",
+  "from": "동서대학교로터리",
+  "to": "청진국제여객터미널",
+  "length": 11964.1,
+  "first": "00:30",
+  "last": "23:30",
+  "stops": [
+    {
+      "id": "490010",
+      "name": "Dongseo University Rotary",
+      "kname": "동서대학교로터리",
+      "kachel": "90",
+      "dist": 76.3
+    },
+    {
+      "id": "490009",
+      "name": "Dongseo University G1",
+      "kname": "동서대학교",
+      "kachel": "89",
+      "dist": 388.2
+    },
+    {
+      "id": "507845",
+      "name": "Cheongsan Namdo Office Station 1004A",
+      "kname": "청산남도청역",
+      "kachel": "196",
+      "dist": 2456.5
+    },
+    {
+      "id": "490830",
+      "name": "Yangji maeul Complex 7",
+      "kname": "양지마을단지",
+      "kachel": "193",
+      "dist": 2890.5
+    },
+    {
+      "id": "495271",
+      "name": "Cheongjin Cityhall1",
+      "kname": "청진시청",
+      "kachel": "161",
+      "dist": 3861.5
+    },
+    {
+      "id": "449707",
+      "name": "CH Univ Hospital M3",
+      "kname": "청진대학교병원",
+      "kachel": "6",
+      "dist": 4638.6
+    },
+    {
+      "id": "449678",
+      "name": "Seohan Market M2",
+      "kname": "서한시장",
+      "kachel": "1",
+      "dist": 4995.9
+    },
+    {
+      "id": "441318",
+      "name": "Cheongjin Stn 1A 1004",
+      "kname": "청진역",
+      "kachel": "73",
+      "dist": 9521.7
+    },
+    {
+      "id": "507812",
+      "name": "Mora Homeplus 1004",
+      "kname": "모라홈플러스=",
+      "kachel": "83",
+      "dist": 10905.6
+    },
+    {
+      "id": "507806",
+      "name": "Cheongjin International Passenger Terminal1",
+      "kname": "청진국제여객터미널",
+      "kachel": "119",
+      "dist": 11964.1
+    }
+  ]
+}

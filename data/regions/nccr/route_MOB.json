@@ -1,0 +1,265 @@
+{
+  "key": "MOB",
+  "no": "MO",
+  "type": "일반",
+  "dir": "down",
+  "from": "명법차고지",
+  "to": "명법차고지",
+  "length": 23415.2,
+  "first": "05:30",
+  "last": "23:00",
+  "stops": [
+    {
+      "id": "498489",
+      "name": "Myeongbeop Garage Start",
+      "kname": "명법차고지",
+      "kachel": "381",
+      "dist": 137.7
+    },
+    {
+      "id": "497564",
+      "name": "Gadong Mauel G2",
+      "kname": "가동마을",
+      "kachel": "373",
+      "dist": 829.5
+    },
+    {
+      "id": "515942",
+      "name": "Myeongbeop MDC G2",
+      "kname": "명법데이터센터",
+      "kachel": "482",
+      "dist": 1900.2
+    },
+    {
+      "id": "515936",
+      "name": "Electronic Charge Stn G2 MO",
+      "kname": "명법전기충전소",
+      "kachel": "483",
+      "dist": 2587.1
+    },
+    {
+      "id": "515934",
+      "name": "Yerim Maeul G1",
+      "kname": "예림마을",
+      "kachel": "482",
+      "dist": 2975.3
+    },
+    {
+      "id": "515930",
+      "name": "Hallim Lits Vill G1",
+      "kname": "할림리츠빌",
+      "kachel": "365",
+      "dist": 3233.7
+    },
+    {
+      "id": "515922",
+      "name": "Dalsan Maeul G1",
+      "kname": "달산마을",
+      "kachel": "367",
+      "dist": 3513.6
+    },
+    {
+      "id": "515918",
+      "name": "Maeil Market G2",
+      "kname": "매일시장",
+      "kachel": "364",
+      "dist": 3814.0
+    },
+    {
+      "id": "515946",
+      "name": "Dongil Sweet Complex3 Main Gate G1",
+      "kname": "동일스위트3단지정문",
+      "kachel": "368",
+      "dist": 4171.2
+    },
+    {
+      "id": "508149",
+      "name": "Myeongbeop Police Stn G1 1011",
+      "kname": "명법경찰서",
+      "kachel": "368",
+      "dist": 4746.1
+    },
+    {
+      "id": "508153",
+      "name": "Myeongbeop Museum G1 1011",
+      "kname": "명법박물관",
+      "kachel": "376",
+      "dist": 4949.4
+    },
+    {
+      "id": "508059",
+      "name": "Wolpyeong JCT G2",
+      "kname": "월평교차로",
+      "kachel": "376",
+      "dist": 5124.4
+    },
+    {
+      "id": "507937",
+      "name": "Myeongbeop Hyundai Outlet 2",
+      "kname": "명법현대아울렛",
+      "kachel": "387",
+      "dist": 6129.1
+    },
+    {
+      "id": "508260",
+      "name": "Solbit Park G2",
+      "kname": "솔빋공원",
+      "kachel": "357",
+      "dist": 6550.9
+    },
+    {
+      "id": "508262",
+      "name": "Myeongbeop Public Bus Stn G2",
+      "kname": "명법터미널",
+      "kachel": "358",
+      "dist": 6812.3
+    },
+    {
+      "id": "451193",
+      "name": "CHW Lamp festival G1",
+      "kname": "청야월등불축제광장",
+      "kachel": "18",
+      "dist": 7935.8
+    },
+    {
+      "id": "508200",
+      "name": "Cheongyawol-myeon Office G1 82",
+      "kname": "청야월면사무소",
+      "kachel": "19",
+      "dist": 8397.3
+    },
+    {
+      "id": "451199",
+      "name": "Cheongyawol NH G2",
+      "kname": "청야월농협",
+      "kachel": "19",
+      "dist": 8610.8
+    },
+    {
+      "id": "451213",
+      "name": "Cheongwon Seonha G1",
+      "kname": "청원선하",
+      "kachel": "16",
+      "dist": 8722.8
+    },
+    {
+      "id": "451211",
+      "name": "Jibok maeul G1",
+      "kname": "지복마을",
+      "kachel": "30",
+      "dist": 9342.4
+    },
+    {
+      "id": "451209",
+      "name": "Jibok maeul Ent",
+      "kname": "지복마을입구",
+      "kachel": "34",
+      "dist": 9536.7
+    },
+    {
+      "id": "451208",
+      "name": "Hanam maeul G1",
+      "kname": "하남마을",
+      "kachel": "36",
+      "dist": 10203.7
+    },
+    {
+      "id": "513763",
+      "name": "Cheongwon Stn G1",
+      "kname": "청원역",
+      "kachel": "35",
+      "dist": 10641.9
+    },
+    {
+      "id": "515951",
+      "name": "Hilton Hotel G2",
+      "kname": "힐튼호텔",
+      "kachel": "247",
+      "dist": 13305.9
+    },
+    {
+      "id": "510216",
+      "name": "Jukhyang Park G1",
+      "kname": "죽향공원",
+      "kachel": "385",
+      "dist": 14161.5
+    },
+    {
+      "id": "515185",
+      "name": "Sincheongwon Stn G4 MO",
+      "kname": "신청원역",
+      "kachel": "412",
+      "dist": 15954.0
+    },
+    {
+      "id": "510215",
+      "name": "Jukhyang Park G2",
+      "kname": "죽향공원",
+      "kachel": "385",
+      "dist": 18303.9
+    },
+    {
+      "id": "508057",
+      "name": "Wolpyeong JCT 1011",
+      "kname": "월평교차로",
+      "kachel": "376",
+      "dist": 19028.0
+    },
+    {
+      "id": "508061",
+      "name": "Myeongbeop Museum 1011",
+      "kname": "명법박물관",
+      "kachel": "376",
+      "dist": 19374.2
+    },
+    {
+      "id": "508624",
+      "name": "Hwanam Market G1 21",
+      "kname": "화남시장",
+      "kachel": "376",
+      "dist": 19735.1
+    },
+    {
+      "id": "507527",
+      "name": "Mojeon Reservoir G2",
+      "kname": "모전저수지",
+      "kachel": "383",
+      "dist": 20105.8
+    },
+    {
+      "id": "508625",
+      "name": "Gangbyeon Maeul G2 21",
+      "kname": "강변마을",
+      "kachel": "371",
+      "dist": 20358.3
+    },
+    {
+      "id": "497619",
+      "name": "Hansin Huplus G2 1011",
+      "kname": "한신휴플러스",
+      "kachel": "367",
+      "dist": 20939.3
+    },
+    {
+      "id": "507958",
+      "name": "Judong JCT G2 21",
+      "kname": "주동교차로",
+      "kachel": "366",
+      "dist": 21329.8
+    },
+    {
+      "id": "497565",
+      "name": "Gadong Mauel G1",
+      "kname": "가동마을",
+      "kachel": "373",
+      "dist": 22161.9
+    },
+    {
+      "id": "498490",
+      "name": "Myeongbeop Garage End",
+      "kname": "명법차고지",
+      "kachel": "381",
+      "dist": 23415.2
+    }
+  ]
+}

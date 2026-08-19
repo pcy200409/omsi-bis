@@ -1,0 +1,153 @@
+{
+  "key": "221B",
+  "no": "221",
+  "type": "일반",
+  "dir": "down",
+  "from": "두산위브더제니스",
+  "to": "동대동",
+  "length": 20927.5,
+  "first": "06:00",
+  "last": "21:25",
+  "stops": [
+    {
+      "id": "492625",
+      "name": "Doosan Weve The Zenith G2 Start",
+      "kname": "두산위브더제니스",
+      "kachel": "278",
+      "dist": 2600.9
+    },
+    {
+      "id": "492409",
+      "name": "Geunsam Public Garage G2",
+      "kname": "금산공영차고지",
+      "kachel": "288",
+      "dist": 3277.8
+    },
+    {
+      "id": "492400",
+      "name": "Geumsan Neospo1",
+      "kname": "금산네오스포",
+      "kachel": "292",
+      "dist": 4499.5
+    },
+    {
+      "id": "492388",
+      "name": "Geumho APT G2",
+      "kname": "금호아파트",
+      "kachel": "293",
+      "dist": 5118.5
+    },
+    {
+      "id": "492295",
+      "name": "Cheongjin Nambu Gas Corporation",
+      "kname": "청진남부가스공사",
+      "kachel": "392",
+      "dist": 5544.0
+    },
+    {
+      "id": "492381",
+      "name": "Gaegeum APT G2",
+      "kname": "개금아파트",
+      "kachel": "182",
+      "dist": 6796.4
+    },
+    {
+      "id": "495090",
+      "name": "Geumsan Sinjugong APT G1",
+      "kname": "금산신주공아파트",
+      "kachel": "112",
+      "dist": 7622.5
+    },
+    {
+      "id": "502329",
+      "name": "Geumsan 3-dong Community Center G2",
+      "kname": "금산3동행정복지센터",
+      "kachel": "106",
+      "dist": 7823.3
+    },
+    {
+      "id": "502330",
+      "name": "Geumsan 2-dong Daegu Bank G2",
+      "kname": "금산2동.대구은행",
+      "kachel": "106",
+      "dist": 8022.4
+    },
+    {
+      "id": "508295",
+      "name": "Cheongwon Ent G2",
+      "kname": "청원입구",
+      "kachel": "36",
+      "dist": 11112.2
+    },
+    {
+      "id": "451200",
+      "name": "CHW Garage G2",
+      "kname": "청야월차고지",
+      "kachel": "19",
+      "dist": 14158.1
+    },
+    {
+      "id": "507827",
+      "name": "Seohan Market M3",
+      "kname": "서한시장",
+      "kachel": "1",
+      "dist": 13714.4
+    },
+    {
+      "id": "508204",
+      "name": "Daegyo-dong G2",
+      "kname": "대교동",
+      "kachel": "49",
+      "dist": 15380.3
+    },
+    {
+      "id": "468719",
+      "name": "Hwangnyeong Byeoksan Apt G2",
+      "kname": "황녕벽산아파트",
+      "kachel": "54",
+      "dist": 16023.5
+    },
+    {
+      "id": "441314",
+      "name": "Cheongjin Stn 221 B",
+      "kname": "청진역",
+      "kachel": "79",
+      "dist": 18772.9
+    },
+    {
+      "id": "485987",
+      "name": "Mora Saemaeul Geumgo G2",
+      "kname": "모라새마을금고",
+      "kachel": "80",
+      "dist": 19253.0
+    },
+    {
+      "id": "507812",
+      "name": "Mora Homeplus 1004",
+      "kname": "모라홈플러스=",
+      "kachel": "83",
+      "dist": 19806.8
+    },
+    {
+      "id": "485780",
+      "name": "Harbor G2",
+      "kname": "항만",
+      "kachel": "137",
+      "dist": 20308.4
+    },
+    {
+      "id": "495000",
+      "name": "Dongdae Hanyang APT G2 333",
+      "kname": "동대한양아파트",
+      "kachel": "119",
+      "dist": 20694.4
+    },
+    {
+      "id": "508472",
+      "name": "Dongdae-dong G2 8",
+      "kname": "동대동",
+      "kachel": "82",
+      "dist": 20927.5
+    }
+  ]
+}

@@ -1,0 +1,699 @@
+{
+  "key": "8A",
+  "no": "8",
+  "type": "일반",
+  "dir": "up",
+  "from": "청진공영차고지",
+  "to": "동대동",
+  "length": 42424.1,
+  "first": "05:00",
+  "last": "22:00",
+  "stops": [
+    {
+      "id": "449301",
+      "name": "Cheongjin Public Garage Start",
+      "kname": "청진공영차고지",
+      "kachel": "42",
+      "dist": 122.6
+    },
+    {
+      "id": "450653",
+      "name": "Cheongjin Nonggyeong University G1",
+      "kname": "청진농경대학교",
+      "kachel": "41",
+      "dist": 405.7
+    },
+    {
+      "id": "449689",
+      "name": "Pabal-dong G1",
+      "kname": "파발동",
+      "kachel": "9",
+      "dist": 732.2
+    },
+    {
+      "id": "508203",
+      "name": "Seohan Market G2 100",
+      "kname": "서한시장",
+      "kachel": "1",
+      "dist": 1162.6
+    },
+    {
+      "id": "507879",
+      "name": "CH Univ Hospital M2",
+      "kname": "청진대학교병원",
+      "kachel": "6",
+      "dist": 1702.7
+    },
+    {
+      "id": "495268",
+      "name": "Cheongjin Cityhall",
+      "kname": "청진시청",
+      "kachel": "161",
+      "dist": 2392.9
+    },
+    {
+      "id": "449918",
+      "name": "CH Maidan G1",
+      "kname": "금관도서관",
+      "kachel": "197",
+      "dist": 2877.4
+    },
+    {
+      "id": "449920",
+      "name": "Geumgwan Library G1",
+      "kname": "금관도서관",
+      "kachel": "197",
+      "dist": 3186.3
+    },
+    {
+      "id": "493710",
+      "name": "Hyojeong-dong G1",
+      "kname": "효정동",
+      "kachel": "190",
+      "dist": 3396.7
+    },
+    {
+      "id": "490827",
+      "name": "Airport Sageori G1",
+      "kname": "공항사거리",
+      "kachel": "193",
+      "dist": 4047.8
+    },
+    {
+      "id": "490823",
+      "name": "Cheongsan Namdo Office G1",
+      "kname": "청산남도청",
+      "kachel": "196",
+      "dist": 4260.2
+    },
+    {
+      "id": "491184",
+      "name": "Yongdang CGV G1",
+      "kname": "용당CGV",
+      "kachel": "171",
+      "dist": 5204.9
+    },
+    {
+      "id": "491185",
+      "name": "Danggam Station G1",
+      "kname": "당감역",
+      "kachel": "175",
+      "dist": 5885.0
+    },
+    {
+      "id": "491320",
+      "name": "Haeam maeul Complex11 G1",
+      "kname": "해암마을11단지",
+      "kachel": "176",
+      "dist": 6031.5
+    },
+    {
+      "id": "502542",
+      "name": "Sindonga Market G1",
+      "kname": "신동아시장",
+      "kachel": "158",
+      "dist": 6884.3
+    },
+    {
+      "id": "495117",
+      "name": "Danggam Emart Town G1",
+      "kname": "당감이마트타운",
+      "kachel": "157",
+      "dist": 7123.2
+    },
+    {
+      "id": "495115",
+      "name": "Gaegeum Telephone Stn G1",
+      "kname": "개금전화국",
+      "kachel": "156",
+      "dist": 7678.6
+    },
+    {
+      "id": "508278",
+      "name": "Gaegeum APT G1",
+      "kname": "개금아파트",
+      "kachel": "156",
+      "dist": 8096.5
+    },
+    {
+      "id": "492383",
+      "name": "Mandarin G1",
+      "kname": "만다린",
+      "kachel": "182",
+      "dist": 8738.0
+    },
+    {
+      "id": "503771",
+      "name": "Geumho APT G1 520",
+      "kname": "금호아파트",
+      "kachel": "294",
+      "dist": 8980.1
+    },
+    {
+      "id": "492399",
+      "name": "Geumsan Neospo",
+      "kname": "금산네오스포",
+      "kachel": "292",
+      "dist": 9240.8
+    },
+    {
+      "id": "492401",
+      "name": "Geumsan POSCO",
+      "kname": "금산포스코",
+      "kachel": "289",
+      "dist": 9705.6
+    },
+    {
+      "id": "508433",
+      "name": "Geumsan POSCO Main Gate G2",
+      "kname": "금산포스코정문",
+      "kachel": "289",
+      "dist": 10004.9
+    },
+    {
+      "id": "508437",
+      "name": "Geumsan The Sharp G1",
+      "kname": "금산더샵",
+      "kachel": "114",
+      "dist": 10310.0
+    },
+    {
+      "id": "505295",
+      "name": "Choseondae G1",
+      "kname": "초선대",
+      "kachel": "250",
+      "dist": 10875.3
+    },
+    {
+      "id": "505291",
+      "name": "Gwangnam Baekjo Villa G1",
+      "kname": "광남백조빌라",
+      "kachel": "250",
+      "dist": 10874.6
+    },
+    {
+      "id": "505271",
+      "name": "Namchang-dong G2",
+      "kname": "남창동",
+      "kachel": "254",
+      "dist": 11193.8
+    },
+    {
+      "id": "505266",
+      "name": "Namchang Sageori G2",
+      "kname": "남창사거리",
+      "kachel": "254",
+      "dist": 11439.0
+    },
+    {
+      "id": "493574",
+      "name": "Seonnam-dong E Mart G1",
+      "kname": "선남동이마트",
+      "kachel": "280",
+      "dist": 12594.5
+    },
+    {
+      "id": "508439",
+      "name": "Seohee Starhill G1 8",
+      "kname": "서희스타힐스",
+      "kachel": "283",
+      "dist": 13112.6
+    },
+    {
+      "id": "507898",
+      "name": "Seonbuk dong 8",
+      "kname": "선북동",
+      "kachel": "283",
+      "dist": 13425.0
+    },
+    {
+      "id": "508440",
+      "name": "Seonbuk Suhyup G2 8",
+      "kname": "선북수협",
+      "kachel": "280",
+      "dist": 13564.2
+    },
+    {
+      "id": "493575",
+      "name": "Seonnam-dong E Mart G2",
+      "kname": "선남동이마트",
+      "kachel": "280",
+      "dist": 13780.4
+    },
+    {
+      "id": "492665",
+      "name": "Namchang Entrance G2",
+      "kname": "남창입구",
+      "kachel": "252",
+      "dist": 14521.1
+    },
+    {
+      "id": "505267",
+      "name": "Namchang Sageori G1",
+      "kname": "남창사거리",
+      "kachel": "254",
+      "dist": 14804.7
+    },
+    {
+      "id": "505290",
+      "name": "Gwangnam Baekjo Villa G2",
+      "kname": "광남백조빌라",
+      "kachel": "250",
+      "dist": 15283.1
+    },
+    {
+      "id": "505294",
+      "name": "Choseondae G2",
+      "kname": "초선대",
+      "kachel": "250",
+      "dist": 15399.2
+    },
+    {
+      "id": "508441",
+      "name": "Geumsan The Sharp G2",
+      "kname": "금산더샵",
+      "kachel": "111",
+      "dist": 16136.1
+    },
+    {
+      "id": "508446",
+      "name": "Geumsan POSCO Main Gate G1",
+      "kname": "금산포스코정문",
+      "kachel": "289",
+      "dist": 16284.0
+    },
+    {
+      "id": "508447",
+      "name": "Geumsan POSCO1 G2 8",
+      "kname": "금산포스코",
+      "kachel": "289",
+      "dist": 16465.3
+    },
+    {
+      "id": "492400",
+      "name": "Geumsan Neospo1",
+      "kname": "금산네오스포",
+      "kachel": "292",
+      "dist": 16912.5
+    },
+    {
+      "id": "508346",
+      "name": "Geumho APT G2 520",
+      "kname": "금호아파트",
+      "kachel": "293",
+      "dist": 17530.4
+    },
+    {
+      "id": "492382",
+      "name": "Mandarin G2",
+      "kname": "만다린",
+      "kachel": "182",
+      "dist": 17986.2
+    },
+    {
+      "id": "508347",
+      "name": "Gaegeum APT G2 520",
+      "kname": "개금아파트",
+      "kachel": "182",
+      "dist": 18213.0
+    },
+    {
+      "id": "495112",
+      "name": "Gaegeum Telephone Stn",
+      "kname": "개금전화국",
+      "kachel": "156",
+      "dist": 18667.0
+    },
+    {
+      "id": "495116",
+      "name": "Danggam Emart Town G2",
+      "kname": "당감이마트타운",
+      "kachel": "157",
+      "dist": 19059.6
+    },
+    {
+      "id": "492755",
+      "name": "Sindonga Market G2",
+      "kname": "신동아시장",
+      "kachel": "177",
+      "dist": 19751.4
+    },
+    {
+      "id": "491323",
+      "name": "Haeam maeul COmplex11 G2",
+      "kname": "해암마을단지",
+      "kachel": "176",
+      "dist": 20169.8
+    },
+    {
+      "id": "491186",
+      "name": "Danggam Station G2",
+      "kname": "당감역",
+      "kachel": "175",
+      "dist": 20914.6
+    },
+    {
+      "id": "491181",
+      "name": "Yongdang CGV G2",
+      "kname": "용당CGV",
+      "kachel": "171",
+      "dist": 21572.4
+    },
+    {
+      "id": "490825",
+      "name": "Cheongsan Namdo Office G2",
+      "kname": "청산남도청",
+      "kachel": "196",
+      "dist": 22574.9
+    },
+    {
+      "id": "495264",
+      "name": "Docheong New Town Yangji maeul G2",
+      "kname": "도청신도시.양지마을",
+      "kachel": "193",
+      "dist": 23210.7
+    },
+    {
+      "id": "493709",
+      "name": "Hyojeong-dong G2",
+      "kname": "효정동",
+      "kachel": "190",
+      "dist": 23455.9
+    },
+    {
+      "id": "508194",
+      "name": "Geumgwan-dong E Mart G2",
+      "kname": "금관이마트",
+      "kachel": "189",
+      "dist": 24129.1
+    },
+    {
+      "id": "508196",
+      "name": "Lotte Department Store G2",
+      "kname": "롯데백화점",
+      "kachel": "160",
+      "dist": 24492.0
+    },
+    {
+      "id": "507880",
+      "name": "CH Univ Hospital M3",
+      "kname": "청진대학교병원",
+      "kachel": "6",
+      "dist": 25407.6
+    },
+    {
+      "id": "507827",
+      "name": "Seohan Market M3",
+      "kname": "서한시장",
+      "kachel": "1",
+      "dist": 25764.9
+    },
+    {
+      "id": "508204",
+      "name": "Daegyo-dong G2",
+      "kname": "대교동",
+      "kachel": "49",
+      "dist": 27430.7
+    },
+    {
+      "id": "508172",
+      "name": "Daegyo-dong G1 2029",
+      "kname": "대교동",
+      "kachel": "49",
+      "dist": 27682.2
+    },
+    {
+      "id": "468233",
+      "name": "Gangbyeon-ro G1",
+      "kname": "강변로",
+      "kachel": "44",
+      "dist": 28184.1
+    },
+    {
+      "id": "466765",
+      "name": "Daegyo Station",
+      "kname": "대교역",
+      "kachel": "57",
+      "dist": 29004.6
+    },
+    {
+      "id": "496192",
+      "name": "Daegyo Elementary School G3",
+      "kname": "대교초등학교",
+      "kachel": "57",
+      "dist": 29242.2
+    },
+    {
+      "id": "493060",
+      "name": "Daegyo LH APT G1",
+      "kname": "대교LH아파트",
+      "kachel": "125",
+      "dist": 29850.6
+    },
+    {
+      "id": "508233",
+      "name": "Midopa G1",
+      "kname": "미도파",
+      "kachel": "125",
+      "dist": 30120.4
+    },
+    {
+      "id": "493033",
+      "name": "Cheongjin Post Office G2",
+      "kname": "청진우체국",
+      "kachel": "62",
+      "dist": 30521.7
+    },
+    {
+      "id": "508224",
+      "name": "Daegyo Prugio G2",
+      "kname": "대교푸르지오",
+      "kachel": "62",
+      "dist": 30829.1
+    },
+    {
+      "id": "467319",
+      "name": "Daegyo-dong E Mart G3",
+      "kname": "대교동이마트",
+      "kachel": "52",
+      "dist": 31140.1
+    },
+    {
+      "id": "468122",
+      "name": "Daegyo Jugong Apt G1",
+      "kname": "대교주공아파트",
+      "kachel": "50",
+      "dist": 31371.7
+    },
+    {
+      "id": "451605",
+      "name": "Court G2",
+      "kname": "법원",
+      "kachel": "50",
+      "dist": 31642.0
+    },
+    {
+      "id": "442583",
+      "name": "Suyeong Police Stn G3",
+      "kname": "수영경찰서",
+      "kachel": "51",
+      "dist": 31955.0
+    },
+    {
+      "id": "467341",
+      "name": "CH NH Bank G2",
+      "kname": "청진농협",
+      "kachel": "55",
+      "dist": 32285.5
+    },
+    {
+      "id": "467339",
+      "name": "Dorong G2",
+      "kname": "도롱",
+      "kachel": "124",
+      "dist": 32525.5
+    },
+    {
+      "id": "495290",
+      "name": "Yeongsan High school G2",
+      "kname": "영산고등학교",
+      "kachel": "129",
+      "dist": 32831.9
+    },
+    {
+      "id": "470125",
+      "name": "Yeongsan Hillstate  Intersection G2",
+      "kname": "영산힐스테이트교차로",
+      "kachel": "133",
+      "dist": 33306.8
+    },
+    {
+      "id": "508456",
+      "name": "Yeongsan Intersection M3",
+      "kname": "영산교차로",
+      "kachel": "134",
+      "dist": 33698.6
+    },
+    {
+      "id": "469682",
+      "name": "The Chamber of Commerce and Industry G2",
+      "kname": "상공회의소",
+      "kachel": "134",
+      "dist": 34053.8
+    },
+    {
+      "id": "468129",
+      "name": "CH Juangang Market G2",
+      "kname": "청진중앙시장",
+      "kachel": "151",
+      "dist": 34281.0
+    },
+    {
+      "id": "468144",
+      "name": "Yeongsan Terminal 8",
+      "kname": "영산터미널",
+      "kachel": "309",
+      "dist": 34628.2
+    },
+    {
+      "id": "468130",
+      "name": "CH Juangang Market G1",
+      "kname": "중앙시장",
+      "kachel": "151",
+      "dist": 34979.5
+    },
+    {
+      "id": "469683",
+      "name": "The Chamber of Commerce and Industry G1",
+      "kname": "상공회의소",
+      "kachel": "134",
+      "dist": 35326.0
+    },
+    {
+      "id": "468207",
+      "name": "Yeongsan Intersection M1",
+      "kname": "영산교차로",
+      "kachel": "134",
+      "dist": 35677.8
+    },
+    {
+      "id": "468204",
+      "name": "Yeongsan Hillstate  Intersection G1",
+      "kname": "영산힐스테이트교차로",
+      "kachel": "133",
+      "dist": 35866.4
+    },
+    {
+      "id": "495291",
+      "name": "Yeongsan High school G1",
+      "kname": "영산고등학교",
+      "kachel": "129",
+      "dist": 36177.5
+    },
+    {
+      "id": "467337",
+      "name": "Darimit G1",
+      "kname": "다리믿",
+      "kachel": "124",
+      "dist": 36497.3
+    },
+    {
+      "id": "467340",
+      "name": "Geoje market G1",
+      "kname": "거제시장",
+      "kachel": "55",
+      "dist": 36746.8
+    },
+    {
+      "id": "467342",
+      "name": "CH NH Bank G1",
+      "kname": "청진농협",
+      "kachel": "55",
+      "dist": 36831.8
+    },
+    {
+      "id": "467328",
+      "name": "Geoje-ri G1",
+      "kname": "거제리",
+      "kachel": "55",
+      "dist": 37017.4
+    },
+    {
+      "id": "467325",
+      "name": "Daegyo Jugong Back Gate G1",
+      "kname": "대교주공후문",
+      "kachel": "53",
+      "dist": 37248.0
+    },
+    {
+      "id": "508349",
+      "name": "Daegyo-dong E Mart G1 520",
+      "kname": "대교동이마트",
+      "kachel": "52",
+      "dist": 37423.5
+    },
+    {
+      "id": "468726",
+      "name": "Yeonsan Hill G2",
+      "kname": "연산고개",
+      "kachel": "54",
+      "dist": 37737.6
+    },
+    {
+      "id": "468719",
+      "name": "Hwangnyeong Byeoksan Apt G2",
+      "kname": "황녕벽산아파트",
+      "kachel": "54",
+      "dist": 38017.1
+    },
+    {
+      "id": "508465",
+      "name": "Yeonsan Back Hil G2",
+      "kname": "연산뒷고개",
+      "kachel": "68",
+      "dist": 39423.2
+    },
+    {
+      "id": "508467",
+      "name": "Namsan Stadium G2",
+      "kname": "남산경기장",
+      "kachel": "79",
+      "dist": 39978.2
+    },
+    {
+      "id": "486968",
+      "name": "Namsanjeong Station Transfer Stop G3",
+      "kname": "남산정역환승센터",
+      "kachel": "80",
+      "dist": 40123.8
+    },
+    {
+      "id": "508471",
+      "name": "Cheongjin Stn 8",
+      "kname": "청진역",
+      "kachel": "73",
+      "dist": 40682.1
+    },
+    {
+      "id": "508175",
+      "name": "Namsanjeong Station Transfer Stop G3 333",
+      "kname": "남산정역환승센터",
+      "kachel": "80",
+      "dist": 41387.6
+    },
+    {
+      "id": "495000",
+      "name": "Dongdae Hanyang APT G2 333",
+      "kname": "동대한양아파트",
+      "kachel": "119",
+      "dist": 42204.6
+    },
+    {
+      "id": "508472",
+      "name": "Dongdae-dong G2 8",
+      "kname": "동대동",
+      "kachel": "82",
+      "dist": 42424.1
+    }
+  ]
+}

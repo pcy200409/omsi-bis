@@ -1,0 +1,76 @@
+{
+  "key": "914A",
+  "no": "914",
+  "type": "일반",
+  "dir": "up",
+  "from": "북구고용센터",
+  "to": "신청원역GRT",
+  "length": 8156.0,
+  "first": "05:00",
+  "last": "22:35",
+  "stops": [
+    {
+      "id": "493578",
+      "name": "Bukgu Employment Branch",
+      "kname": "북구고용센터",
+      "kachel": "280",
+      "dist": 571.4
+    },
+    {
+      "id": "514729",
+      "name": "Seonnam Public Garage G2",
+      "kname": "선남공영차고지",
+      "kachel": "282",
+      "dist": 846.1
+    },
+    {
+      "id": "516439",
+      "name": "Seonnam Station GRT G1",
+      "kname": "선남역GRT",
+      "kachel": "445",
+      "dist": 1971.0
+    },
+    {
+      "id": "516445",
+      "name": "Geumjeong Mountain G2",
+      "kname": "금정산",
+      "kachel": "430",
+      "dist": 3142.7
+    },
+    {
+      "id": "516454",
+      "name": "Anchang Lake G2",
+      "kname": "안창호수",
+      "kachel": "476",
+      "dist": 4107.2
+    },
+    {
+      "id": "516465",
+      "name": "Jukhyang Park G2 914",
+      "kname": "죽향공원",
+      "kachel": "385",
+      "dist": 5636.2
+    },
+    {
+      "id": "516472",
+      "name": "Wolpyeong Transfer Center 914",
+      "kname": "월평환승센터",
+      "kachel": "384",
+      "dist": 6372.1
+    },
+    {
+      "id": "510216",
+      "name": "Jukhyang Park G1",
+      "kname": "죽향공원",
+      "kachel": "385",
+      "dist": 6824.3
+    },
+    {
+      "id": "512882",
+      "name": "Sincheongwon Station GRT End",
+      "kname": "신청원역GRT",
+      "kachel": "410",
+      "dist": 8156.0
+    }
+  ]
+}

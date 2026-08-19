@@ -1,0 +1,188 @@
+{
+  "key": "97-1A",
+  "no": "97-1",
+  "type": "일반",
+  "dir": "up",
+  "from": "장유터미널",
+  "to": "신청원역R",
+  "length": 28436.5,
+  "first": "06:00",
+  "last": "21:10",
+  "stops": [
+    {
+      "id": "512938",
+      "name": "Jangyu Terminal 97-1 Start",
+      "kname": "장유터미널",
+      "kachel": "423",
+      "dist": 73.9
+    },
+    {
+      "id": "570",
+      "name": "Jangyu Public Gym G1",
+      "kname": "장유체육관",
+      "kachel": "423",
+      "dist": 357.4
+    },
+    {
+      "id": "512947",
+      "name": "Haesongdae T G2 97-1",
+      "kname": "해송대환승센터",
+      "kachel": "340",
+      "dist": 3409.0
+    },
+    {
+      "id": "494801",
+      "name": "Gochang Entrance G2",
+      "kname": "고창입구",
+      "kachel": "333",
+      "dist": 4116.7
+    },
+    {
+      "id": "502500",
+      "name": "Gochang Samgeori G2",
+      "kname": "고창삼거리",
+      "kachel": "327",
+      "dist": 4473.5
+    },
+    {
+      "id": "485732",
+      "name": "Mora Beach Entrance G2 1",
+      "kname": "모라해수욕장입구",
+      "kachel": "266",
+      "dist": 7010.7
+    },
+    {
+      "id": "513145",
+      "name": "Dongdae-dong G2 97-1",
+      "kname": "동대동",
+      "kachel": "82",
+      "dist": 8157.1
+    },
+    {
+      "id": "512970",
+      "name": "Sujeong IC Junction G1",
+      "kname": "수정IC교차로",
+      "kachel": "135",
+      "dist": 8983.5
+    },
+    {
+      "id": "512989",
+      "name": "Yeongsan Terminal 97-1",
+      "kname": "영산터미널",
+      "kachel": "309",
+      "dist": 10371.3
+    },
+    {
+      "id": "468207",
+      "name": "Yeongsan Intersection M1",
+      "kname": "영산교차로",
+      "kachel": "134",
+      "dist": 11354.5
+    },
+    {
+      "id": "493386",
+      "name": "Hansan Jugong APT G1",
+      "kname": "한산주공아파트",
+      "kachel": "131",
+      "dist": 13342.0
+    },
+    {
+      "id": "494525",
+      "name": "Bridge Ent G1",
+      "kname": "대교입구",
+      "kachel": "203",
+      "dist": 14246.2
+    },
+    {
+      "id": "494425",
+      "name": "Gangbyeon New Town G1",
+      "kname": "강변신도시",
+      "kachel": "9",
+      "dist": 15108.7
+    },
+    {
+      "id": "513062",
+      "name": "Cheongjin Nonggyeong UnivG2 97-1",
+      "kname": "청진농경대학교",
+      "kachel": "41",
+      "dist": 15590.1
+    },
+    {
+      "id": "508298",
+      "name": "IKEA 220",
+      "kname": "이케아",
+      "kachel": "523",
+      "dist": 18587.3
+    },
+    {
+      "id": "2985",
+      "name": "Daedong-myeon Office G1",
+      "kname": "대동면사무소",
+      "kachel": "538",
+      "dist": 19637.9
+    },
+    {
+      "id": "495423",
+      "name": "Daedong Terminal G1",
+      "kname": "대동터미널",
+      "kachel": "549",
+      "dist": 20135.9
+    },
+    {
+      "id": "513130",
+      "name": "Myeongbeop Garage G1 97-1",
+      "kname": "명법차고지",
+      "kachel": "381",
+      "dist": 23698.3
+    },
+    {
+      "id": "507956",
+      "name": "Hansin Huplus G1 1011",
+      "kname": "한신휴플러스",
+      "kachel": "367",
+      "dist": 25113.4
+    },
+    {
+      "id": "497646",
+      "name": "Myeongbeop Home Plus G1 1011",
+      "kname": "명법홈플러스",
+      "kachel": "367",
+      "dist": 25261.4
+    },
+    {
+      "id": "508148",
+      "name": "Myeongbeop Yangwoo Naeanae G1 1011",
+      "kname": "명법영우내안에",
+      "kachel": "370",
+      "dist": 25547.3
+    },
+    {
+      "id": "508149",
+      "name": "Myeongbeop Police Stn G1 1011",
+      "kname": "명법경찰서",
+      "kachel": "368",
+      "dist": 25738.8
+    },
+    {
+      "id": "508153",
+      "name": "Myeongbeop Museum G1 1011",
+      "kname": "명법박물관",
+      "kachel": "376",
+      "dist": 25942.2
+    },
+    {
+      "id": "512925",
+      "name": "Wolpyeong JCT G1 911",
+      "kname": "월평교차로",
+      "kachel": "376",
+      "dist": 26115.2
+    },
+    {
+      "id": "513150",
+      "name": "Sincheongwon Station R end",
+      "kname": "신청원역R",
+      "kachel": "412",
+      "dist": 28436.5
+    }
+  ]
+}

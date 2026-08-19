@@ -1,0 +1,202 @@
+{
+  "key": "41B",
+  "no": "41",
+  "type": "일반",
+  "dir": "down",
+  "from": "상록아파트",
+  "to": "문산역41",
+  "length": 15981.6,
+  "first": "05:00",
+  "last": "23:30",
+  "stops": [
+    {
+      "id": "43291",
+      "name": "Sangrok Apt",
+      "kname": "상록아파트",
+      "kachel": "366",
+      "dist": 10.7
+    },
+    {
+      "id": "43317",
+      "name": "Susong Bando Bora Apt",
+      "kname": "수송반도보라아파트",
+      "kachel": "365",
+      "dist": 299.2
+    },
+    {
+      "id": "43599",
+      "name": "CGV Munsan3-41",
+      "kname": "CGV Munsan3-41",
+      "kachel": "313",
+      "dist": 934.6
+    },
+    {
+      "id": "42610",
+      "name": "KCC Switzen",
+      "kname": "KCC Switzen",
+      "kachel": "312",
+      "dist": 1305.2
+    },
+    {
+      "id": "43600",
+      "name": "Doosan We've-41",
+      "kname": "두산We've41",
+      "kachel": "310",
+      "dist": 1637.3
+    },
+    {
+      "id": "15878",
+      "name": "Munsan Nat'l Univ Hospital1",
+      "kname": "문산Nat'l대학교병원",
+      "kachel": "305",
+      "dist": 2897.9
+    },
+    {
+      "id": "15641",
+      "name": "Ohseong Market1",
+      "kname": "Ohseong시장",
+      "kachel": "302",
+      "dist": 3427.4
+    },
+    {
+      "id": "15551",
+      "name": "Weedeok Intersection1",
+      "kname": "웨에덕교차로",
+      "kachel": "300",
+      "dist": 3998.9
+    },
+    {
+      "id": "38202",
+      "name": "Susong Rodeo-41,98",
+      "kname": "수송로더41,98",
+      "kachel": "375",
+      "dist": 4399.1
+    },
+    {
+      "id": "30081",
+      "name": "Susong Park1",
+      "kname": "수송공원",
+      "kachel": "394",
+      "dist": 5227.8
+    },
+    {
+      "id": "30069",
+      "name": "Samhak Vila1",
+      "kname": "삼학Vila",
+      "kachel": "392",
+      "dist": 5629.3
+    },
+    {
+      "id": "29659",
+      "name": "Myeongsung Elementary School1",
+      "kname": "명숭초등학교",
+      "kachel": "390",
+      "dist": 6063.1
+    },
+    {
+      "id": "29500",
+      "name": "Shinil APT1",
+      "kname": "시닐아파트",
+      "kachel": "388",
+      "dist": 6716.5
+    },
+    {
+      "id": "29254",
+      "name": "Samhak highschool1",
+      "kname": "삼학highschool",
+      "kachel": "381",
+      "dist": 7833.9
+    },
+    {
+      "id": "28758",
+      "name": "Chunil Metal1",
+      "kname": "추닐메탈",
+      "kachel": "295",
+      "dist": 8503.5
+    },
+    {
+      "id": "15024",
+      "name": "Yuseong Engineering1",
+      "kname": "유성엥이네에링",
+      "kachel": "294",
+      "dist": 9093.8
+    },
+    {
+      "id": "14987",
+      "name": "Gyeong Ahm Rotary1",
+      "kname": "경Ahm로터리",
+      "kachel": "292",
+      "dist": 9532.3
+    },
+    {
+      "id": "14690",
+      "name": "Munsan Intercity Bus Terminal1",
+      "kname": "문산Intercity버스터미널",
+      "kachel": "288",
+      "dist": 9883.7
+    },
+    {
+      "id": "38213",
+      "name": "V Tour Hotel1-41,53,98, 99",
+      "kname": "V Tour Hotel1-41,53,98, 99",
+      "kachel": "288",
+      "dist": 10097.6
+    },
+    {
+      "id": "38214",
+      "name": "Digitalplaza1-41, 99",
+      "kname": "Digitalplaza1-41, 99",
+      "kachel": "331",
+      "dist": 10469.0
+    },
+    {
+      "id": "28611",
+      "name": "Munsan Police Station1",
+      "kname": "문산경찰서",
+      "kachel": "332",
+      "dist": 11038.6
+    },
+    {
+      "id": "38206",
+      "name": "Munsan Express Bus Terminal1-41,98",
+      "kname": "문산ExpressBusTerminal141,98",
+      "kachel": "398",
+      "dist": 11475.9
+    },
+    {
+      "id": "28601",
+      "name": "Sky Castle1",
+      "kname": "Sky캐슬",
+      "kachel": "477",
+      "dist": 12499.9
+    },
+    {
+      "id": "28584",
+      "name": "Jangmi Elementary School1",
+      "kname": "장미초등학교",
+      "kachel": "478",
+      "dist": 12937.7
+    },
+    {
+      "id": "28567",
+      "name": "Jeokbo Highschool",
+      "kname": "적보Highschool",
+      "kachel": "481",
+      "dist": 13407.2
+    },
+    {
+      "id": "28555",
+      "name": "Byeoksan APT, Parkvill1",
+      "kname": "벽산APT,Parkvill",
+      "kachel": "501",
+      "dist": 14128.2
+    },
+    {
+      "id": "27385",
+      "name": "Munsan Station-41",
+      "kname": "문산역41",
+      "kachel": "515",
+      "dist": 15981.6
+    }
+  ]
+}

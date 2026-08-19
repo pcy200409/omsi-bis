@@ -1,0 +1,62 @@
+{
+  "key": "GamjiA",
+  "no": "Gamji",
+  "type": "일반",
+  "dir": "up",
+  "from": "문산Intercity",
+  "to": "감지Arr",
+  "length": 20736.6,
+  "first": "06:20",
+  "last": "22:30",
+  "stops": [
+    {
+      "id": "37259",
+      "name": "Munsan Intercity",
+      "kname": "문산Intercity",
+      "kachel": "288",
+      "dist": 63.7
+    },
+    {
+      "id": "37287",
+      "name": "Lotte Cinema2",
+      "kname": "롯데Cinema",
+      "kachel": "277",
+      "dist": 1908.7
+    },
+    {
+      "id": "37295",
+      "name": "Miryong 3 Geori",
+      "kname": "미룡3거리",
+      "kachel": "270",
+      "dist": 2403.6
+    },
+    {
+      "id": "38187",
+      "name": "Anrak-Intercity-801",
+      "kname": "안락Intercity801",
+      "kachel": "14",
+      "dist": 9705.1
+    },
+    {
+      "id": "38060",
+      "name": "Hari",
+      "kname": "하리",
+      "kachel": "642",
+      "dist": 13876.3
+    },
+    {
+      "id": "40111",
+      "name": "Gamji Beach",
+      "kname": "감지해수욕장",
+      "kachel": "684",
+      "dist": 19802.0
+    },
+    {
+      "id": "39174",
+      "name": "Gamji-Arr",
+      "kname": "감지Arr",
+      "kachel": "694",
+      "dist": 20736.6
+    }
+  ]
+}

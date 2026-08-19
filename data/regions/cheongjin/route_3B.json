@@ -1,0 +1,125 @@
+{
+  "key": "3B",
+  "no": "3",
+  "type": "일반",
+  "dir": "down",
+  "from": "연풍",
+  "to": "안락터미널3",
+  "length": 13964.9,
+  "first": "06:20",
+  "last": "19:46",
+  "stops": [
+    {
+      "id": "33226",
+      "name": "Yeonpung",
+      "kname": "연풍",
+      "kachel": "627",
+      "dist": 6.7
+    },
+    {
+      "id": "33153",
+      "name": "Yeonpung Ipgu1",
+      "kname": "연풍입구",
+      "kachel": "619",
+      "dist": 1137.5
+    },
+    {
+      "id": "32710",
+      "name": "Nampa1",
+      "kname": "남파",
+      "kachel": "607",
+      "dist": 3663.6
+    },
+    {
+      "id": "32331",
+      "name": "Taesung Garden1",
+      "kname": "태숭Garden",
+      "kachel": "147",
+      "dist": 4743.6
+    },
+    {
+      "id": "32252",
+      "name": "Sambo1",
+      "kname": "삼보",
+      "kachel": "598",
+      "dist": 6406.8
+    },
+    {
+      "id": "32165",
+      "name": "Munsung3",
+      "kname": "문숭",
+      "kachel": "47",
+      "dist": 7417.3
+    },
+    {
+      "id": "32089",
+      "name": "Byeongjin Gas Station1",
+      "kname": "병진주유소",
+      "kachel": "49",
+      "dist": 8493.9
+    },
+    {
+      "id": "32048",
+      "name": "Oh Tae Sik Farm1",
+      "kname": "Oh태식Farm",
+      "kachel": "53",
+      "dist": 9721.4
+    },
+    {
+      "id": "32028",
+      "name": "Hoam1",
+      "kname": "호암",
+      "kachel": "563",
+      "dist": 10456.6
+    },
+    {
+      "id": "31697",
+      "name": "Salmi Intersection1",
+      "kname": "살미교차로",
+      "kachel": "562",
+      "dist": 11265.1
+    },
+    {
+      "id": "31682",
+      "name": "Salmi1",
+      "kname": "살미",
+      "kachel": "568",
+      "dist": 11662.1
+    },
+    {
+      "id": "31674",
+      "name": "Anrak Iaan1",
+      "kname": "안락이아안",
+      "kachel": "30",
+      "dist": 12676.4
+    },
+    {
+      "id": "7778",
+      "name": "AnrakGun Office1",
+      "kname": "안락군사무소",
+      "kachel": "25",
+      "dist": 13270.6
+    },
+    {
+      "id": "7768",
+      "name": "Anrak Library1",
+      "kname": "안락도서관",
+      "kachel": "24",
+      "dist": 13399.0
+    },
+    {
+      "id": "7774",
+      "name": "Anrak Gas Station1",
+      "kname": "안락주유소",
+      "kachel": "24",
+      "dist": 13692.7
+    },
+    {
+      "id": "35466",
+      "name": "Anrak Terminal-3",
+      "kname": "안락터미널3",
+      "kachel": "14",
+      "dist": 13964.9
+    }
+  ]
+}

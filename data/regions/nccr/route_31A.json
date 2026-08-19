@@ -1,0 +1,202 @@
+{
+  "key": "31A",
+  "no": "31",
+  "type": "일반",
+  "dir": "up",
+  "from": "청진공영차고지",
+  "to": "아이스퀘어",
+  "length": 10716.7,
+  "first": "06:30",
+  "last": "21:50",
+  "stops": [
+    {
+      "id": "449301",
+      "name": "Cheongjin Public Garage Start",
+      "kname": "청진공영차고지",
+      "kachel": "42",
+      "dist": 122.6
+    },
+    {
+      "id": "450653",
+      "name": "Cheongjin Nonggyeong University G1",
+      "kname": "청진농경대학교",
+      "kachel": "41",
+      "dist": 405.7
+    },
+    {
+      "id": "449689",
+      "name": "Pabal-dong G1",
+      "kname": "파발동",
+      "kachel": "9",
+      "dist": 732.2
+    },
+    {
+      "id": "508203",
+      "name": "Seohan Market G2 100",
+      "kname": "서한시장",
+      "kachel": "1",
+      "dist": 1162.6
+    },
+    {
+      "id": "507879",
+      "name": "CH Univ Hospital M2",
+      "kname": "청진대학교병원",
+      "kachel": "6",
+      "dist": 1702.7
+    },
+    {
+      "id": "449681",
+      "name": "CH Univ Hospital G2",
+      "kname": "청진대학교병원",
+      "kachel": "7",
+      "dist": 1869.8
+    },
+    {
+      "id": "508243",
+      "name": "Seohan Market M3 31",
+      "kname": "서한시장",
+      "kachel": "1",
+      "dist": 2384.2
+    },
+    {
+      "id": "508204",
+      "name": "Daegyo-dong G2",
+      "kname": "대교동",
+      "kachel": "49",
+      "dist": 4002.1
+    },
+    {
+      "id": "508222",
+      "name": "Daegyo Prugio G1",
+      "kname": "대교푸르지오",
+      "kachel": "62",
+      "dist": 4383.7
+    },
+    {
+      "id": "493032",
+      "name": "Cheongjin Post Office G1",
+      "kname": "청진우체국",
+      "kachel": "62",
+      "dist": 4597.3
+    },
+    {
+      "id": "508228",
+      "name": "Midopa G2",
+      "kname": "미도파",
+      "kachel": "125",
+      "dist": 4810.1
+    },
+    {
+      "id": "493059",
+      "name": "Daegyo LH APT G2",
+      "kname": "대교LH아파트",
+      "kachel": "125",
+      "dist": 4966.9
+    },
+    {
+      "id": "496193",
+      "name": "Daegyo Elementary School G2",
+      "kname": "대교초등학교",
+      "kachel": "57",
+      "dist": 5393.9
+    },
+    {
+      "id": "466765",
+      "name": "Daegyo Station",
+      "kname": "대교역",
+      "kachel": "57",
+      "dist": 6071.0
+    },
+    {
+      "id": "468232",
+      "name": "Gangbyeon-ro G2",
+      "kname": "강변로",
+      "kachel": "44",
+      "dist": 7493.4
+    },
+    {
+      "id": "451608",
+      "name": "Court Entrance",
+      "kname": "법원입구",
+      "kachel": "50",
+      "dist": 7922.2
+    },
+    {
+      "id": "508115",
+      "name": "Daegyo-dong G3 1011",
+      "kname": "대교동",
+      "kachel": "49",
+      "dist": 8103.9
+    },
+    {
+      "id": "467318",
+      "name": "Daegyo-dong E Mart G2",
+      "kname": "대교동이마트",
+      "kachel": "52",
+      "dist": 8294.4
+    },
+    {
+      "id": "467324",
+      "name": "Daegyo Jugong Back Gate G2",
+      "kname": "대교주공후문",
+      "kachel": "53",
+      "dist": 8432.3
+    },
+    {
+      "id": "467329",
+      "name": "Geoje-ri G2",
+      "kname": "거제리",
+      "kachel": "55",
+      "dist": 8750.0
+    },
+    {
+      "id": "442587",
+      "name": "Geoje Stn G2",
+      "kname": "거제역",
+      "kachel": "55",
+      "dist": 8984.6
+    },
+    {
+      "id": "467332",
+      "name": "Suyeong-gu Community Center G2",
+      "kname": "수영구주민센터",
+      "kachel": "128",
+      "dist": 9238.6
+    },
+    {
+      "id": "467337",
+      "name": "Darimit G1",
+      "kname": "다리믿",
+      "kachel": "124",
+      "dist": 9492.4
+    },
+    {
+      "id": "467340",
+      "name": "Geoje market G1",
+      "kname": "거제시장",
+      "kachel": "55",
+      "dist": 9741.8
+    },
+    {
+      "id": "508244",
+      "name": "Geoje Stn G2 31",
+      "kname": "거제역",
+      "kachel": "55",
+      "dist": 10170.1
+    },
+    {
+      "id": "468117",
+      "name": "Hanguk Apt G1",
+      "kname": "한국아파트",
+      "kachel": "126",
+      "dist": 10313.1
+    },
+    {
+      "id": "442074",
+      "name": "I Square G4",
+      "kname": "아이스퀘어",
+      "kachel": "51",
+      "dist": 10716.7
+    }
+  ]
+}

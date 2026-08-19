@@ -1,0 +1,209 @@
+{
+  "key": "98B",
+  "no": "98",
+  "type": "일반",
+  "dir": "down",
+  "from": "양촌면사무소98",
+  "to": "문산역98",
+  "length": 18163.5,
+  "first": "04:50",
+  "last": "23:35",
+  "stops": [
+    {
+      "id": "35193",
+      "name": "Yangchon Myeon Office-98",
+      "kname": "양촌면사무소98",
+      "kachel": "629",
+      "dist": 23.9
+    },
+    {
+      "id": "35200",
+      "name": "Yangchon Housing Complex-98",
+      "kname": "양촌호우싱Complex98",
+      "kachel": "592",
+      "dist": 311.2
+    },
+    {
+      "id": "38197",
+      "name": "Vehicle Registration Office1",
+      "kname": "VehicleRegistration사무소",
+      "kachel": "579",
+      "dist": 2159.7
+    },
+    {
+      "id": "35011",
+      "name": "Prugio1",
+      "kname": "푸르지오",
+      "kachel": "303",
+      "dist": 3288.0
+    },
+    {
+      "id": "15641",
+      "name": "Ohseong Market1",
+      "kname": "Ohseong시장",
+      "kachel": "302",
+      "dist": 4163.7
+    },
+    {
+      "id": "15551",
+      "name": "Weedeok Intersection1",
+      "kname": "웨에덕교차로",
+      "kachel": "300",
+      "dist": 4735.2
+    },
+    {
+      "id": "21533",
+      "name": "Susong Rodeo",
+      "kname": "수송로더",
+      "kachel": "375",
+      "dist": 5136.6
+    },
+    {
+      "id": "30081",
+      "name": "Susong Park1",
+      "kname": "수송공원",
+      "kachel": "394",
+      "dist": 5964.1
+    },
+    {
+      "id": "30069",
+      "name": "Samhak Vila1",
+      "kname": "삼학Vila",
+      "kachel": "392",
+      "dist": 6365.6
+    },
+    {
+      "id": "29659",
+      "name": "Myeongsung Elementary School1",
+      "kname": "명숭초등학교",
+      "kachel": "390",
+      "dist": 6799.4
+    },
+    {
+      "id": "38207",
+      "name": "Shinil APT1-98",
+      "kname": "시닐APT198",
+      "kachel": "388",
+      "dist": 7451.7
+    },
+    {
+      "id": "28645",
+      "name": "Digitalplaza",
+      "kname": "Digitalplaza",
+      "kachel": "331",
+      "dist": 8530.2
+    },
+    {
+      "id": "14681",
+      "name": "V Tour Hotel",
+      "kname": "VTour호텔",
+      "kachel": "288",
+      "dist": 9017.5
+    },
+    {
+      "id": "38212",
+      "name": "Munsan Intercity Bus Terminal-98",
+      "kname": "문산Intercity버스터미널98",
+      "kachel": "288",
+      "dist": 9270.4
+    },
+    {
+      "id": "25213",
+      "name": "Cheongsol Yakguk1",
+      "kname": "청솔약국",
+      "kachel": "289",
+      "dist": 10026.6
+    },
+    {
+      "id": "25205",
+      "name": "Used car sell&export complex1",
+      "kname": "Used car sell&export complex1",
+      "kachel": "272",
+      "dist": 10770.6
+    },
+    {
+      "id": "38221",
+      "name": "Simyang Coperation1-98",
+      "kname": "시먕Coperation198",
+      "kachel": "269",
+      "dist": 11086.4
+    },
+    {
+      "id": "35527",
+      "name": "Hanheung-Dong1",
+      "kname": "한흥동",
+      "kachel": "268",
+      "dist": 11571.8
+    },
+    {
+      "id": "35511",
+      "name": "Miryong-Dong1",
+      "kname": "미룡동",
+      "kachel": "271",
+      "dist": 11970.2
+    },
+    {
+      "id": "35480",
+      "name": "Lotte Cinema1",
+      "kname": "롯데Cinema",
+      "kachel": "277",
+      "dist": 12323.4
+    },
+    {
+      "id": "23804",
+      "name": "Dooryong-Dong1",
+      "kname": "도오룡동",
+      "kachel": "327",
+      "dist": 12674.5
+    },
+    {
+      "id": "23791",
+      "name": "Munsan Cityhall",
+      "kname": "문산시청",
+      "kachel": "328",
+      "dist": 13169.1
+    },
+    {
+      "id": "38206",
+      "name": "Munsan Express Bus Terminal1-41,98",
+      "kname": "문산ExpressBusTerminal141,98",
+      "kachel": "398",
+      "dist": 13714.9
+    },
+    {
+      "id": "28601",
+      "name": "Sky Castle1",
+      "kname": "Sky캐슬",
+      "kachel": "477",
+      "dist": 14684.6
+    },
+    {
+      "id": "28584",
+      "name": "Jangmi Elementary School1",
+      "kname": "장미초등학교",
+      "kachel": "478",
+      "dist": 15122.3
+    },
+    {
+      "id": "28567",
+      "name": "Jeokbo Highschool",
+      "kname": "적보Highschool",
+      "kachel": "481",
+      "dist": 15591.9
+    },
+    {
+      "id": "28555",
+      "name": "Byeoksan APT, Parkvill1",
+      "kname": "벽산APT,Parkvill",
+      "kachel": "501",
+      "dist": 16312.8
+    },
+    {
+      "id": "35468",
+      "name": "Munsan Station-98",
+      "kname": "문산역98",
+      "kachel": "515",
+      "dist": 18163.5
+    }
+  ]
+}

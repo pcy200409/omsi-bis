@@ -1,0 +1,188 @@
+{
+  "key": "100B",
+  "no": "100",
+  "type": "일반",
+  "dir": "down",
+  "from": "영산터미널",
+  "to": "청진공영차고지",
+  "length": 10916.4,
+  "first": "05:30",
+  "last": "22:45",
+  "stops": [
+    {
+      "id": "468184",
+      "name": "Yeongsan Terminal Start",
+      "kname": "영산터미널",
+      "kachel": "309",
+      "dist": 279.5
+    },
+    {
+      "id": "468130",
+      "name": "CH Juangang Market G1",
+      "kname": "중앙시장",
+      "kachel": "151",
+      "dist": 597.9
+    },
+    {
+      "id": "469683",
+      "name": "The Chamber of Commerce and Industry G1",
+      "kname": "상공회의소",
+      "kachel": "134",
+      "dist": 944.3
+    },
+    {
+      "id": "468207",
+      "name": "Yeongsan Intersection M1",
+      "kname": "영산교차로",
+      "kachel": "134",
+      "dist": 1296.1
+    },
+    {
+      "id": "468204",
+      "name": "Yeongsan Hillstate  Intersection G1",
+      "kname": "영산힐스테이트교차로",
+      "kachel": "133",
+      "dist": 1484.7
+    },
+    {
+      "id": "495291",
+      "name": "Yeongsan High school G1",
+      "kname": "영산고등학교",
+      "kachel": "129",
+      "dist": 1795.9
+    },
+    {
+      "id": "467333",
+      "name": "Suyeong-gu Community Center G1",
+      "kname": "수영구주민센터",
+      "kachel": "128",
+      "dist": 2155.0
+    },
+    {
+      "id": "442590",
+      "name": "Geoje Stn G1",
+      "kname": "거제역",
+      "kachel": "55",
+      "dist": 2327.8
+    },
+    {
+      "id": "442073",
+      "name": "I Square G5 2029",
+      "kname": "아이스퀘어",
+      "kachel": "51",
+      "dist": 2907.9
+    },
+    {
+      "id": "451579",
+      "name": "Court Back Gate G1",
+      "kname": "법원후문",
+      "kachel": "43",
+      "dist": 3354.1
+    },
+    {
+      "id": "468233",
+      "name": "Gangbyeon-ro G1",
+      "kname": "강변로",
+      "kachel": "44",
+      "dist": 3805.9
+    },
+    {
+      "id": "466765",
+      "name": "Daegyo Station",
+      "kname": "대교역",
+      "kachel": "57",
+      "dist": 4626.4
+    },
+    {
+      "id": "496192",
+      "name": "Daegyo Elementary School G3",
+      "kname": "대교초등학교",
+      "kachel": "57",
+      "dist": 4864.1
+    },
+    {
+      "id": "493060",
+      "name": "Daegyo LH APT G1",
+      "kname": "대교LH아파트",
+      "kachel": "125",
+      "dist": 5530.4
+    },
+    {
+      "id": "508233",
+      "name": "Midopa G1",
+      "kname": "미도파",
+      "kachel": "125",
+      "dist": 5697.2
+    },
+    {
+      "id": "493033",
+      "name": "Cheongjin Post Office G2",
+      "kname": "청진우체국",
+      "kachel": "62",
+      "dist": 6098.6
+    },
+    {
+      "id": "508224",
+      "name": "Daegyo Prugio G2",
+      "kname": "대교푸르지오",
+      "kachel": "62",
+      "dist": 6405.9
+    },
+    {
+      "id": "451601",
+      "name": "Daegyo-dong G1S1",
+      "kname": "대교동",
+      "kachel": "49",
+      "dist": 6813.2
+    },
+    {
+      "id": "508240",
+      "name": "Seohan Market To Garage",
+      "kname": "서한시장",
+      "kachel": "1",
+      "dist": 8564.8
+    },
+    {
+      "id": "508241",
+      "name": "CH Univ Hospital To Garage",
+      "kname": "청진대학교병원",
+      "kachel": "6",
+      "dist": 8925.5
+    },
+    {
+      "id": "508197",
+      "name": "CH Univ Hospital G2 82",
+      "kname": "청진대학교병원",
+      "kachel": "7",
+      "dist": 9085.7
+    },
+    {
+      "id": "508242",
+      "name": "Seohan Market M3 To Garage",
+      "kname": "서한시장",
+      "kachel": "1",
+      "dist": 9609.0
+    },
+    {
+      "id": "449687",
+      "name": "Pabal-dong G3",
+      "kname": "파발동",
+      "kachel": "9",
+      "dist": 10097.0
+    },
+    {
+      "id": "450652",
+      "name": "Cheongjin Nonggyeong University G2",
+      "kname": "청진농경대학교",
+      "kachel": "41",
+      "dist": 10413.3
+    },
+    {
+      "id": "449302",
+      "name": "Cheongjin Public Garage End",
+      "kname": "청진공영차고지",
+      "kachel": "42",
+      "dist": 10916.4
+    }
+  ]
+}

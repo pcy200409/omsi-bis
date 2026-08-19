@@ -1,0 +1,139 @@
+{
+  "key": "99B",
+  "no": "99",
+  "type": "일반",
+  "dir": "down",
+  "from": "문산공항",
+  "to": "삼학동99",
+  "length": 10977.5,
+  "first": "06:00",
+  "last": "21:00",
+  "stops": [
+    {
+      "id": "46592",
+      "name": "Munsan Airport",
+      "kname": "문산공항",
+      "kachel": "777",
+      "dist": 35.6
+    },
+    {
+      "id": "46596",
+      "name": "USAF 77th Fighter Wings, ROKAF 98th Squadron",
+      "kname": "USAF 77th Fighter Wings, ROKAF 98th Squadron",
+      "kachel": "775",
+      "dist": 190.7
+    },
+    {
+      "id": "46036",
+      "name": "Hotel Eagles1",
+      "kname": "호텔Eagles",
+      "kachel": "752",
+      "dist": 1082.7
+    },
+    {
+      "id": "45263",
+      "name": "Agricultural Industrial Complex Entrance1",
+      "kname": "AgriculturalIndustrialComplex입구",
+      "kachel": "727",
+      "dist": 3468.7
+    },
+    {
+      "id": "23701",
+      "name": "Taecho Nonghyeup",
+      "kname": "태초농혜웁",
+      "kachel": "404",
+      "dist": 4417.1
+    },
+    {
+      "id": "23711",
+      "name": "Mohyeon Highschool",
+      "kname": "모현Highschool",
+      "kachel": "403",
+      "dist": 4902.0
+    },
+    {
+      "id": "23725",
+      "name": "Giseong Apt",
+      "kname": "기성아파트",
+      "kachel": "402",
+      "dist": 5268.1
+    },
+    {
+      "id": "23736",
+      "name": "Hongil Apt",
+      "kname": "홍일아파트",
+      "kachel": "400",
+      "dist": 5855.6
+    },
+    {
+      "id": "23747",
+      "name": "Mahyeon Sangga",
+      "kname": "마현상가",
+      "kachel": "399",
+      "dist": 6116.7
+    },
+    {
+      "id": "38205",
+      "name": "Munsan Express Bus Terminal-41,99",
+      "kname": "문산Express버스터미널41,99",
+      "kachel": "398",
+      "dist": 6883.5
+    },
+    {
+      "id": "28612",
+      "name": "Munsan Police Station",
+      "kname": "문산경찰서",
+      "kachel": "332",
+      "dist": 7547.8
+    },
+    {
+      "id": "28645",
+      "name": "Digitalplaza",
+      "kname": "Digitalplaza",
+      "kachel": "331",
+      "dist": 8021.5
+    },
+    {
+      "id": "14681",
+      "name": "V Tour Hotel",
+      "kname": "VTour호텔",
+      "kachel": "288",
+      "dist": 8508.9
+    },
+    {
+      "id": "14689",
+      "name": "Munsan Intercity Bus Terminal-41,53,92,99",
+      "kname": "문산Intercity버스터미널41,53,92,99",
+      "kachel": "288",
+      "dist": 8762.8
+    },
+    {
+      "id": "14986",
+      "name": "Gyeong Ahm Rotary",
+      "kname": "경Ahm로터리",
+      "kachel": "292",
+      "dist": 9191.7
+    },
+    {
+      "id": "38208",
+      "name": "Yuseong Engineering-41,53,99",
+      "kname": "유성엥이네에링41,53,99",
+      "kachel": "294",
+      "dist": 9619.3
+    },
+    {
+      "id": "46238",
+      "name": "Chunil Metal-67, 99",
+      "kname": "추닐메탈67,",
+      "kachel": "295",
+      "dist": 10512.5
+    },
+    {
+      "id": "46217",
+      "name": "Samhak dong-99",
+      "kname": "삼학동99",
+      "kachel": "382",
+      "dist": 10977.5
+    }
+  ]
+}

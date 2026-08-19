@@ -1,0 +1,216 @@
+{
+  "key": "302B",
+  "no": "302",
+  "type": "일반",
+  "dir": "down",
+  "from": "명법전기충전소",
+  "to": "선남초등학교",
+  "length": 15514.9,
+  "first": "05:00",
+  "last": "23:20",
+  "stops": [
+    {
+      "id": "508265",
+      "name": "Electronic Charge Stn G1 302",
+      "kname": "명법전기충전소",
+      "kachel": "483",
+      "dist": 817.2
+    },
+    {
+      "id": "508266",
+      "name": "Myeongbeop Public Bus Stn G1",
+      "kname": "명법터미널",
+      "kachel": "358",
+      "dist": 1995.2
+    },
+    {
+      "id": "508268",
+      "name": "Solbit Park G1",
+      "kname": "솔빋공원",
+      "kachel": "359",
+      "dist": 2236.6
+    },
+    {
+      "id": "507932",
+      "name": "Myeongbeop Hyundai Outlet 1",
+      "kname": "명법현대아울렛",
+      "kachel": "247",
+      "dist": 3009.5
+    },
+    {
+      "id": "507928",
+      "name": "Cheongwoon Hyundai Villa1",
+      "kname": "청운현대빌라",
+      "kachel": "241",
+      "dist": 4232.5
+    },
+    {
+      "id": "451199",
+      "name": "Cheongyawol NH G2",
+      "kname": "청야월농협",
+      "kachel": "19",
+      "dist": 5043.2
+    },
+    {
+      "id": "451200",
+      "name": "CHW Garage G2",
+      "kname": "청야월차고지",
+      "kachel": "19",
+      "dist": 5169.6
+    },
+    {
+      "id": "451193",
+      "name": "CHW Lamp festival G1",
+      "kname": "청야월등불축제광장",
+      "kachel": "18",
+      "dist": 5693.1
+    },
+    {
+      "id": "451197",
+      "name": "Cheongyawol-myeon Office G1",
+      "kname": "청야월면사무소",
+      "kachel": "19",
+      "dist": 6155.6
+    },
+    {
+      "id": "451202",
+      "name": "Jidong 3-ri G1",
+      "kname": "지동3리",
+      "kachel": "22",
+      "dist": 6458.6
+    },
+    {
+      "id": "451205",
+      "name": "Jidong NH G1",
+      "kname": "지동농협",
+      "kachel": "33",
+      "dist": 7266.8
+    },
+    {
+      "id": "513763",
+      "name": "Cheongwon Stn G1",
+      "kname": "청원역",
+      "kachel": "35",
+      "dist": 7595.0
+    },
+    {
+      "id": "451207",
+      "name": "Hanam maeul G2",
+      "kname": "하남마을",
+      "kachel": "36",
+      "dist": 8109.5
+    },
+    {
+      "id": "502332",
+      "name": "Geumsan 2-dong Daegu Bank G1",
+      "kname": "금산2동.대구은행",
+      "kachel": "106",
+      "dist": 11294.6
+    },
+    {
+      "id": "502333",
+      "name": "Geumsan 3-dong Community Center G1",
+      "kname": "금산3동행정복지센터",
+      "kachel": "106",
+      "dist": 11475.0
+    },
+    {
+      "id": "495084",
+      "name": "Buksan APT G1",
+      "kname": "북산아파트",
+      "kachel": "110",
+      "dist": 11802.2
+    },
+    {
+      "id": "495052",
+      "name": "Bunsung High School G1",
+      "kname": "분성고등학교",
+      "kachel": "111",
+      "dist": 11985.6
+    },
+    {
+      "id": "508270",
+      "name": "Geumsan HomePlus G1",
+      "kname": "금산홈플러스",
+      "kachel": "114",
+      "dist": 12332.0
+    },
+    {
+      "id": "505295",
+      "name": "Choseondae G1",
+      "kname": "초선대",
+      "kachel": "250",
+      "dist": 12967.5
+    },
+    {
+      "id": "505291",
+      "name": "Gwangnam Baekjo Villa G1",
+      "kname": "광남백조빌라",
+      "kachel": "250",
+      "dist": 12966.8
+    },
+    {
+      "id": "505271",
+      "name": "Namchang-dong G2",
+      "kname": "남창동",
+      "kachel": "254",
+      "dist": 13286.0
+    },
+    {
+      "id": "505272",
+      "name": "Samyong Burak G1",
+      "kname": "삼용부락",
+      "kachel": "254",
+      "dist": 13547.7
+    },
+    {
+      "id": "505278",
+      "name": "Bukgu Students Art Center G1",
+      "kname": "북구학생문화센터",
+      "kachel": "256",
+      "dist": 13827.1
+    },
+    {
+      "id": "505815",
+      "name": "Yurin APT G1",
+      "kname": "유린아파트",
+      "kachel": "259",
+      "dist": 14259.7
+    },
+    {
+      "id": "505004",
+      "name": "Seonbuk Suhyup G1",
+      "kname": "선북수흅",
+      "kachel": "280",
+      "dist": 14632.1
+    },
+    {
+      "id": "507897",
+      "name": "Seonbuk-dong 302",
+      "kname": "선북동",
+      "kachel": "283",
+      "dist": 14802.1
+    },
+    {
+      "id": "493580",
+      "name": "Seohee Starhill G2 1011",
+      "kname": "서희스타힐스",
+      "kachel": "283",
+      "dist": 14884.1
+    },
+    {
+      "id": "493579",
+      "name": "Bukgu Employment Branch1",
+      "kname": "북구고용센터",
+      "kachel": "280",
+      "dist": 15012.3
+    },
+    {
+      "id": "507793",
+      "name": "Seonnam Elementary School End",
+      "kname": "선남초등학교",
+      "kachel": "280",
+      "dist": 15514.9
+    }
+  ]
+}

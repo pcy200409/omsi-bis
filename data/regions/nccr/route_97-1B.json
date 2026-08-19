@@ -1,0 +1,195 @@
+{
+  "key": "97-1B",
+  "no": "97-1",
+  "type": "일반",
+  "dir": "down",
+  "from": "신청원역R",
+  "to": "장유터미널",
+  "length": 28962.7,
+  "first": "06:00",
+  "last": "21:10",
+  "stops": [
+    {
+      "id": "513151",
+      "name": "Sincheongwon Station R Start",
+      "kname": "신청원역R",
+      "kachel": "412",
+      "dist": 217.8
+    },
+    {
+      "id": "512883",
+      "name": "Wolpyeong JCT G2 911",
+      "kname": "월평교차로",
+      "kachel": "376",
+      "dist": 3255.0
+    },
+    {
+      "id": "508061",
+      "name": "Myeongbeop Museum 1011",
+      "kname": "명법박물관",
+      "kachel": "376",
+      "dist": 3602.4
+    },
+    {
+      "id": "508073",
+      "name": "Myeongbeop Police Stn 1011",
+      "kname": "명법경찰서",
+      "kachel": "368",
+      "dist": 3771.5
+    },
+    {
+      "id": "508101",
+      "name": "Myeongbeop Yangwoo Naeanae G2 1011",
+      "kname": "명법영우내안에",
+      "kachel": "370",
+      "dist": 3969.3
+    },
+    {
+      "id": "497645",
+      "name": "Myeongbeop Home Plus G2 1011",
+      "kname": "명법홈플러스",
+      "kachel": "367",
+      "dist": 4235.7
+    },
+    {
+      "id": "507955",
+      "name": "Hansin Huplus",
+      "kname": "한신휴플러스",
+      "kachel": "367",
+      "dist": 4410.0
+    },
+    {
+      "id": "497560",
+      "name": "Judong JCT G2 1011",
+      "kname": "주동교차로",
+      "kachel": "366",
+      "dist": 4708.1
+    },
+    {
+      "id": "513128",
+      "name": "Myeongbeop Garage G2 97-1",
+      "kname": "명법차고지",
+      "kachel": "381",
+      "dist": 6364.9
+    },
+    {
+      "id": "1242",
+      "name": "Daedong Terminal G2",
+      "kname": "대동터미널",
+      "kachel": "549",
+      "dist": 9817.5
+    },
+    {
+      "id": "2984",
+      "name": "Daedong-myeon Office G2",
+      "kname": "대동면사무소",
+      "kachel": "538",
+      "dist": 10266.0
+    },
+    {
+      "id": "513085",
+      "name": "IKEA G1 97-1",
+      "kname": "이케아",
+      "kachel": "523",
+      "dist": 11134.8
+    },
+    {
+      "id": "513064",
+      "name": "Cheongjin Nonggyeong Univ G1 97-1",
+      "kname": "청진농경대학교",
+      "kachel": "41",
+      "dist": 13918.8
+    },
+    {
+      "id": "494421",
+      "name": "Gangbyeon New Town G2",
+      "kname": "강변신도시",
+      "kachel": "9",
+      "dist": 14418.6
+    },
+    {
+      "id": "494526",
+      "name": "Bridge Ent G2",
+      "kname": "대교입구",
+      "kachel": "203",
+      "dist": 15661.5
+    },
+    {
+      "id": "493385",
+      "name": "Hansan Jugong APT G2",
+      "kname": "한산주공아파트",
+      "kachel": "131",
+      "dist": 16588.8
+    },
+    {
+      "id": "508456",
+      "name": "Yeongsan Intersection M3",
+      "kname": "영산교차로",
+      "kachel": "134",
+      "dist": 18615.5
+    },
+    {
+      "id": "512989",
+      "name": "Yeongsan Terminal 97-1",
+      "kname": "영산터미널",
+      "kachel": "309",
+      "dist": 19548.4
+    },
+    {
+      "id": "512975",
+      "name": "Sujeong IC Junction G2",
+      "kname": "수정IC교차로",
+      "kachel": "135",
+      "dist": 20705.3
+    },
+    {
+      "id": "508637",
+      "name": "Dongdae-dong G1",
+      "kname": "동대동",
+      "kachel": "82",
+      "dist": 21510.9
+    },
+    {
+      "id": "485725",
+      "name": "Mora Beach Entrance 220",
+      "kname": "모라해수욕장입구",
+      "kachel": "266",
+      "dist": 22769.3
+    },
+    {
+      "id": "502499",
+      "name": "Gochang Samgeori G1",
+      "kname": "고창삼거리",
+      "kachel": "327",
+      "dist": 24329.6
+    },
+    {
+      "id": "494800",
+      "name": "Gochang Entrance G1",
+      "kname": "고창입구",
+      "kachel": "333",
+      "dist": 24674.6
+    },
+    {
+      "id": "513153",
+      "name": "Haesongdae T G1 97-1",
+      "kname": "해송대환승센터",
+      "kachel": "340",
+      "dist": 25606.9
+    },
+    {
+      "id": "2021",
+      "name": "Jangyu Public Gym G2",
+      "kname": "장유체육관",
+      "kachel": "423",
+      "dist": 28604.3
+    },
+    {
+      "id": "167",
+      "name": "Jangyu Terminal",
+      "kname": "장유터미널",
+      "kachel": "423",
+      "dist": 28962.7
+    }
+  ]
+}

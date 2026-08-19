@@ -1,0 +1,209 @@
+{
+  "key": "200B",
+  "no": "200",
+  "type": "일반",
+  "dir": "down",
+  "from": "청진역",
+  "to": "선남초등학교",
+  "length": 14131.4,
+  "first": "04:40",
+  "last": "00:30",
+  "stops": [
+    {
+      "id": "441312",
+      "name": "Cheongjin Stn 200 Start",
+      "kname": "청진역",
+      "kachel": "73",
+      "dist": 129.7
+    },
+    {
+      "id": "515538",
+      "name": "Namsanjeong Station Transfer Stop G2 200 B",
+      "kname": "남산정역환승센터",
+      "kachel": "80",
+      "dist": 559.8
+    },
+    {
+      "id": "515539",
+      "name": "Namsan Stadium G1 200",
+      "kname": "남산스타디움",
+      "kachel": "79",
+      "dist": 1020.4
+    },
+    {
+      "id": "508480",
+      "name": "Yeonsan Back Hil G1",
+      "kname": "연산뒷고개",
+      "kachel": "68",
+      "dist": 1296.3
+    },
+    {
+      "id": "508481",
+      "name": "Hwangnyeong Tunnel G1",
+      "kname": "황녕터널",
+      "kachel": "68",
+      "dist": 1475.1
+    },
+    {
+      "id": "468718",
+      "name": "Hwangnyeong Byeoksan Apt G1",
+      "kname": "황녕벽산아파트",
+      "kachel": "59",
+      "dist": 2474.2
+    },
+    {
+      "id": "468727",
+      "name": "Yeonsan Hill G1",
+      "kname": "연산고개",
+      "kachel": "54",
+      "dist": 3067.3
+    },
+    {
+      "id": "451601",
+      "name": "Daegyo-dong G1S1",
+      "kname": "대교동",
+      "kachel": "49",
+      "dist": 3629.9
+    },
+    {
+      "id": "507828",
+      "name": "Seohan Market A2",
+      "kname": "서한시장",
+      "kachel": "1",
+      "dist": 5382.5
+    },
+    {
+      "id": "449708",
+      "name": "CH Univ Hospital M1",
+      "kname": "청진대학교병원",
+      "kachel": "6",
+      "dist": 5744.2
+    },
+    {
+      "id": "495268",
+      "name": "Cheongjin Cityhall",
+      "kname": "청진시청",
+      "kachel": "161",
+      "dist": 6433.4
+    },
+    {
+      "id": "507843",
+      "name": "Docheong New Town",
+      "kname": "도청신도시",
+      "kachel": "193",
+      "dist": 7469.3
+    },
+    {
+      "id": "490810",
+      "name": "Cheongsan Namdo Office Station",
+      "kname": "청산남도청역",
+      "kachel": "196",
+      "dist": 7875.9
+    },
+    {
+      "id": "491184",
+      "name": "Yongdang CGV G1",
+      "kname": "용당CGV",
+      "kachel": "171",
+      "dist": 8495.7
+    },
+    {
+      "id": "491185",
+      "name": "Danggam Station G1",
+      "kname": "당감역",
+      "kachel": "175",
+      "dist": 9175.8
+    },
+    {
+      "id": "491320",
+      "name": "Haeam maeul Complex11 G1",
+      "kname": "해암마을11단지",
+      "kachel": "176",
+      "dist": 9322.3
+    },
+    {
+      "id": "504807",
+      "name": "Sindonga APT G2",
+      "kname": "신동아아파트",
+      "kachel": "158",
+      "dist": 10142.9
+    },
+    {
+      "id": "504802",
+      "name": "Daeju Park G1",
+      "kname": "대주공원",
+      "kachel": "180",
+      "dist": 10516.6
+    },
+    {
+      "id": "504761",
+      "name": "Bukbu Stadium G1",
+      "kname": "북부경기장",
+      "kachel": "181",
+      "dist": 10755.6
+    },
+    {
+      "id": "495092",
+      "name": "Saebyeok Market G1",
+      "kname": "새벽시장",
+      "kachel": "156",
+      "dist": 11106.3
+    },
+    {
+      "id": "495090",
+      "name": "Geumsan Sinjugong APT G1",
+      "kname": "금산신주공아파트",
+      "kachel": "112",
+      "dist": 11430.9
+    },
+    {
+      "id": "495084",
+      "name": "Buksan APT G1",
+      "kname": "북산아파트",
+      "kachel": "110",
+      "dist": 11677.5
+    },
+    {
+      "id": "495052",
+      "name": "Bunsung High School G1",
+      "kname": "분성고등학교",
+      "kachel": "111",
+      "dist": 11860.9
+    },
+    {
+      "id": "502361",
+      "name": "Geumsan Church G1",
+      "kname": "금산교회",
+      "kachel": "107",
+      "dist": 12067.2
+    },
+    {
+      "id": "515555",
+      "name": "Geumsan G1",
+      "kname": "금산",
+      "kachel": "219",
+      "dist": 12435.0
+    },
+    {
+      "id": "492681",
+      "name": "Namchang Entrance G1",
+      "kname": "남창입구",
+      "kachel": "252",
+      "dist": 12909.0
+    },
+    {
+      "id": "515556",
+      "name": "Seonnam-dong E Mart G1 200",
+      "kname": "선남동이마트",
+      "kachel": "280",
+      "dist": 13899.9
+    },
+    {
+      "id": "507793",
+      "name": "Seonnam Elementary School End",
+      "kname": "선남초등학교",
+      "kachel": "280",
+      "dist": 14131.4
+    }
+  ]
+}

@@ -1,0 +1,118 @@
+{
+  "key": "82B",
+  "no": "82",
+  "type": "일반",
+  "dir": "down",
+  "from": "금관이마트",
+  "to": "청원선하",
+  "length": 7869.3,
+  "first": "06:30",
+  "last": "21:40",
+  "stops": [
+    {
+      "id": "508193",
+      "name": "Geumgwan-dong E Mart 82",
+      "kname": "금관이마트",
+      "kachel": "189",
+      "dist": 236.6
+    },
+    {
+      "id": "508195",
+      "name": "Lotte Department Store 82",
+      "kname": "롯데백화점",
+      "kachel": "160",
+      "dist": 599.4
+    },
+    {
+      "id": "507880",
+      "name": "CH Univ Hospital M3",
+      "kname": "청진대학교병원",
+      "kachel": "6",
+      "dist": 1463.0
+    },
+    {
+      "id": "449676",
+      "name": "Seohan Market M1",
+      "kname": "서한시장",
+      "kachel": "1",
+      "dist": 1826.7
+    },
+    {
+      "id": "507879",
+      "name": "CH Univ Hospital M2",
+      "kname": "청진대학교병원",
+      "kachel": "6",
+      "dist": 2247.5
+    },
+    {
+      "id": "508197",
+      "name": "CH Univ Hospital G2 82",
+      "kname": "청진대학교병원",
+      "kachel": "7",
+      "dist": 2406.7
+    },
+    {
+      "id": "450869",
+      "name": "Dugok maeul G1",
+      "kname": "두곡마을",
+      "kachel": "0",
+      "dist": 2883.7
+    },
+    {
+      "id": "451193",
+      "name": "CHW Lamp festival G1",
+      "kname": "청야월등불축제광장",
+      "kachel": "18",
+      "dist": 3996.6
+    },
+    {
+      "id": "508200",
+      "name": "Cheongyawol-myeon Office G1 82",
+      "kname": "청야월면사무소",
+      "kachel": "19",
+      "dist": 4458.0
+    },
+    {
+      "id": "451202",
+      "name": "Jidong 3-ri G1",
+      "kname": "지동3리",
+      "kachel": "22",
+      "dist": 4762.1
+    },
+    {
+      "id": "451205",
+      "name": "Jidong NH G1",
+      "kname": "지동농협",
+      "kachel": "33",
+      "dist": 5570.3
+    },
+    {
+      "id": "513763",
+      "name": "Cheongwon Stn G1",
+      "kname": "청원역",
+      "kachel": "35",
+      "dist": 5898.5
+    },
+    {
+      "id": "451207",
+      "name": "Hanam maeul G2",
+      "kname": "하남마을",
+      "kachel": "36",
+      "dist": 6413.0
+    },
+    {
+      "id": "451210",
+      "name": "Jibok maeul G2",
+      "kname": "지복마을",
+      "kachel": "30",
+      "dist": 7175.8
+    },
+    {
+      "id": "451212",
+      "name": "Cheongwon Seonha G2",
+      "kname": "청원선하",
+      "kachel": "16",
+      "dist": 7869.3
+    }
+  ]
+}

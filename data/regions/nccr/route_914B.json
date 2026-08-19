@@ -1,0 +1,55 @@
+{
+  "key": "914B",
+  "no": "914",
+  "type": "일반",
+  "dir": "down",
+  "from": "신청원역GRT",
+  "to": "북구고용센터",
+  "length": 7496.6,
+  "first": "05:00",
+  "last": "22:35",
+  "stops": [
+    {
+      "id": "512881",
+      "name": "Sincheongwon Station GRT Start",
+      "kname": "신청원역GRT",
+      "kachel": "412",
+      "dist": 254.3
+    },
+    {
+      "id": "516455",
+      "name": "Anchang Lake G1",
+      "kname": "안창호수",
+      "kachel": "476",
+      "dist": 3780.5
+    },
+    {
+      "id": "516451",
+      "name": "Geumjeong Mountain G1",
+      "kname": "금정산",
+      "kachel": "430",
+      "dist": 4792.8
+    },
+    {
+      "id": "516438",
+      "name": "Seonnam Station GRT G2",
+      "kname": "선남역GRT",
+      "kachel": "445",
+      "dist": 5846.2
+    },
+    {
+      "id": "514727",
+      "name": "Seonnam Public Garage G1",
+      "kname": "선남공영차고지",
+      "kachel": "282",
+      "dist": 7022.1
+    },
+    {
+      "id": "516514",
+      "name": "Bukgu Employment Branch G2 914 End",
+      "kname": "북구고용센터",
+      "kachel": "280",
+      "dist": 7496.6
+    }
+  ]
+}

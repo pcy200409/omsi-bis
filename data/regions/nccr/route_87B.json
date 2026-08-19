@@ -1,0 +1,146 @@
+{
+  "key": "87B",
+  "no": "87",
+  "type": "일반",
+  "dir": "down",
+  "from": "아이스퀘어",
+  "to": "동대동",
+  "length": 6973.7,
+  "first": "04:50",
+  "last": "23:20",
+  "stops": [
+    {
+      "id": "512934",
+      "name": "I Square G5 87 Start",
+      "kname": "아이스퀘어",
+      "kachel": "51",
+      "dist": 9.0
+    },
+    {
+      "id": "512935",
+      "name": "Suyeong Police Stn G1 87",
+      "kname": "수영경찰서",
+      "kachel": "50",
+      "dist": 434.8
+    },
+    {
+      "id": "452385",
+      "name": "Court G1 130",
+      "kname": "법원",
+      "kachel": "50",
+      "dist": 730.7
+    },
+    {
+      "id": "468120",
+      "name": "Daegyo Jugong Apt G2",
+      "kname": "대교주공아파트",
+      "kachel": "50",
+      "dist": 884.5
+    },
+    {
+      "id": "508349",
+      "name": "Daegyo-dong E Mart G1 520",
+      "kname": "대교동이마트",
+      "kachel": "52",
+      "dist": 1219.7
+    },
+    {
+      "id": "468726",
+      "name": "Yeonsan Hill G2",
+      "kname": "연산고개",
+      "kachel": "54",
+      "dist": 1533.9
+    },
+    {
+      "id": "468719",
+      "name": "Hwangnyeong Byeoksan Apt G2",
+      "kname": "황녕벽산아파트",
+      "kachel": "54",
+      "dist": 1813.4
+    },
+    {
+      "id": "508465",
+      "name": "Yeonsan Back Hil G2",
+      "kname": "연산뒷고개",
+      "kachel": "68",
+      "dist": 3219.4
+    },
+    {
+      "id": "508467",
+      "name": "Namsan Stadium G2",
+      "kname": "남산경기장",
+      "kachel": "79",
+      "dist": 3923.9
+    },
+    {
+      "id": "486967",
+      "name": "Namsanjeong Station Transfer Stop G2",
+      "kname": "남산정역환승센터",
+      "kachel": "80",
+      "dist": 4093.5
+    },
+    {
+      "id": "487896",
+      "name": "Cheongjin Station G1 1",
+      "kname": "청진역",
+      "kachel": "79",
+      "dist": 4615.7
+    },
+    {
+      "id": "460446",
+      "name": "Namsan Samgeori G2",
+      "kname": "남산삼거리",
+      "kachel": "73",
+      "dist": 5089.2
+    },
+    {
+      "id": "460444",
+      "name": "Daesin Healty",
+      "kname": "대신건강",
+      "kachel": "68",
+      "dist": 5314.7
+    },
+    {
+      "id": "460440",
+      "name": "Choryang Fire Station G1",
+      "kname": "초량소방서",
+      "kachel": "68",
+      "dist": 5786.0
+    },
+    {
+      "id": "512936",
+      "name": "Geumsusa G2 87",
+      "kname": "금수사",
+      "kachel": "70",
+      "dist": 6148.1
+    },
+    {
+      "id": "487978",
+      "name": "Sujeong 3-dong G2",
+      "kname": "수정3동",
+      "kachel": "78",
+      "dist": 6343.9
+    },
+    {
+      "id": "503031",
+      "name": "",
+      "kname": "(미등록 정류소입니다.)",
+      "kachel": "78",
+      "dist": 6630.9
+    },
+    {
+      "id": "512937",
+      "name": "Simin APT G2 87",
+      "kname": "시민아파트",
+      "kachel": "117",
+      "dist": 6829.9
+    },
+    {
+      "id": "494991",
+      "name": "Dongdae-dong G1 End",
+      "kname": "동대동",
+      "kachel": "82",
+      "dist": 6973.7
+    }
+  ]
+}

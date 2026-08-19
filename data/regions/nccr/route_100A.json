@@ -1,0 +1,202 @@
+{
+  "key": "100A",
+  "no": "100",
+  "type": "일반",
+  "dir": "up",
+  "from": "청진공영차고지",
+  "to": "영산터미널",
+  "length": 11039.8,
+  "first": "05:30",
+  "last": "22:45",
+  "stops": [
+    {
+      "id": "449301",
+      "name": "Cheongjin Public Garage Start",
+      "kname": "청진공영차고지",
+      "kachel": "42",
+      "dist": 122.6
+    },
+    {
+      "id": "450653",
+      "name": "Cheongjin Nonggyeong University G1",
+      "kname": "청진농경대학교",
+      "kachel": "41",
+      "dist": 405.7
+    },
+    {
+      "id": "449689",
+      "name": "Pabal-dong G1",
+      "kname": "파발동",
+      "kachel": "9",
+      "dist": 732.2
+    },
+    {
+      "id": "508203",
+      "name": "Seohan Market G2 100",
+      "kname": "서한시장",
+      "kachel": "1",
+      "dist": 1162.6
+    },
+    {
+      "id": "507879",
+      "name": "CH Univ Hospital M2",
+      "kname": "청진대학교병원",
+      "kachel": "6",
+      "dist": 1684.2
+    },
+    {
+      "id": "449681",
+      "name": "CH Univ Hospital G2",
+      "kname": "청진대학교병원",
+      "kachel": "7",
+      "dist": 1851.3
+    },
+    {
+      "id": "507827",
+      "name": "Seohan Market M3",
+      "kname": "서한시장",
+      "kachel": "1",
+      "dist": 2321.8
+    },
+    {
+      "id": "508204",
+      "name": "Daegyo-dong G2",
+      "kname": "대교동",
+      "kachel": "49",
+      "dist": 3937.6
+    },
+    {
+      "id": "508222",
+      "name": "Daegyo Prugio G1",
+      "kname": "대교푸르지오",
+      "kachel": "62",
+      "dist": 4319.2
+    },
+    {
+      "id": "493032",
+      "name": "Cheongjin Post Office G1",
+      "kname": "청진우체국",
+      "kachel": "62",
+      "dist": 4532.8
+    },
+    {
+      "id": "508228",
+      "name": "Midopa G2",
+      "kname": "미도파",
+      "kachel": "125",
+      "dist": 4745.6
+    },
+    {
+      "id": "493059",
+      "name": "Daegyo LH APT G2",
+      "kname": "대교LH아파트",
+      "kachel": "125",
+      "dist": 4902.4
+    },
+    {
+      "id": "496193",
+      "name": "Daegyo Elementary School G2",
+      "kname": "대교초등학교",
+      "kachel": "57",
+      "dist": 5329.4
+    },
+    {
+      "id": "466765",
+      "name": "Daegyo Station",
+      "kname": "대교역",
+      "kachel": "57",
+      "dist": 6046.5
+    },
+    {
+      "id": "468232",
+      "name": "Gangbyeon-ro G2",
+      "kname": "강변로",
+      "kachel": "44",
+      "dist": 7429.0
+    },
+    {
+      "id": "468798",
+      "name": "Court Back Gate G2",
+      "kname": "법원후문",
+      "kachel": "43",
+      "dist": 7784.8
+    },
+    {
+      "id": "442071",
+      "name": "I Square G7",
+      "kname": "이광장",
+      "kachel": "51",
+      "dist": 8156.4
+    },
+    {
+      "id": "452275",
+      "name": "Suyeong Ipgu Geoje Stn",
+      "kname": "수영입구거제역",
+      "kachel": "51",
+      "dist": 8517.6
+    },
+    {
+      "id": "442587",
+      "name": "Geoje Stn G2",
+      "kname": "거제역",
+      "kachel": "55",
+      "dist": 8677.4
+    },
+    {
+      "id": "467332",
+      "name": "Suyeong-gu Community Center G2",
+      "kname": "수영구주민센터",
+      "kachel": "128",
+      "dist": 8931.4
+    },
+    {
+      "id": "495290",
+      "name": "Yeongsan High school G2",
+      "kname": "영산고등학교",
+      "kachel": "129",
+      "dist": 9214.0
+    },
+    {
+      "id": "470125",
+      "name": "Yeongsan Hillstate  Intersection G2",
+      "kname": "영산힐스테이트교차로",
+      "kachel": "133",
+      "dist": 9633.9
+    },
+    {
+      "id": "468208",
+      "name": "Yeongsan Intersection M2",
+      "kname": "영산교차로",
+      "kachel": "134",
+      "dist": 10026.8
+    },
+    {
+      "id": "469682",
+      "name": "The Chamber of Commerce and Industry G2",
+      "kname": "상공회의소",
+      "kachel": "134",
+      "dist": 10380.9
+    },
+    {
+      "id": "468129",
+      "name": "CH Juangang Market G2",
+      "kname": "청진중앙시장",
+      "kachel": "151",
+      "dist": 10608.2
+    },
+    {
+      "id": "468143",
+      "name": "Yeongsan Terminal 100",
+      "kname": "영산터미널",
+      "kachel": "309",
+      "dist": 10971.9
+    },
+    {
+      "id": "468151",
+      "name": "Yeongsan Terminal 100 End Point",
+      "kname": "영산터미널",
+      "kachel": "309",
+      "dist": 11039.8
+    }
+  ]
+}

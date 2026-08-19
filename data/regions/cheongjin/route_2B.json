@@ -1,0 +1,97 @@
+{
+  "key": "2B",
+  "no": "2",
+  "type": "일반",
+  "dir": "down",
+  "from": "굴포Public터미널",
+  "to": "안락터미널2",
+  "length": 7712.8,
+  "first": "06:40",
+  "last": "21:20",
+  "stops": [
+    {
+      "id": "10532",
+      "name": "Gulpo Public Terminal1",
+      "kname": "굴포Public터미널",
+      "kachel": "188",
+      "dist": 21.3
+    },
+    {
+      "id": "11145",
+      "name": "Gulpo Rotary1",
+      "kname": "굴포로터리",
+      "kachel": "189",
+      "dist": 274.1
+    },
+    {
+      "id": "11363",
+      "name": "Gulpo Eup Office",
+      "kname": "굴포읍사무소",
+      "kachel": "189",
+      "dist": 486.5
+    },
+    {
+      "id": "10466",
+      "name": "Aston Vila1",
+      "kname": "Aston Vila1",
+      "kachel": "188",
+      "dist": 697.0
+    },
+    {
+      "id": "38192",
+      "name": "Gulpo Middle School1-2-1",
+      "kname": "굴포MiddleSchool121",
+      "kachel": "188",
+      "dist": 929.2
+    },
+    {
+      "id": "10012",
+      "name": "Jingol1",
+      "kname": "징올",
+      "kachel": "177",
+      "dist": 2210.3
+    },
+    {
+      "id": "8782",
+      "name": "Daewee1",
+      "kname": "대웨에",
+      "kachel": "165",
+      "dist": 4003.3
+    },
+    {
+      "id": "8535",
+      "name": "Cheongae1",
+      "kname": "청애",
+      "kachel": "154",
+      "dist": 5484.5
+    },
+    {
+      "id": "7778",
+      "name": "AnrakGun Office1",
+      "kname": "안락군사무소",
+      "kachel": "25",
+      "dist": 7012.8
+    },
+    {
+      "id": "7768",
+      "name": "Anrak Library1",
+      "kname": "안락도서관",
+      "kachel": "24",
+      "dist": 7144.8
+    },
+    {
+      "id": "7774",
+      "name": "Anrak Gas Station1",
+      "kname": "안락주유소",
+      "kachel": "24",
+      "dist": 7438.5
+    },
+    {
+      "id": "20082",
+      "name": "Anrak Terminal-2",
+      "kname": "안락터미널2",
+      "kachel": "14",
+      "dist": 7712.8
+    }
+  ]
+}

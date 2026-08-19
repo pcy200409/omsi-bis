@@ -1,0 +1,132 @@
+{
+  "key": "99A",
+  "no": "99",
+  "type": "일반",
+  "dir": "up",
+  "from": "삼학동",
+  "to": "문산공항",
+  "length": 10094.8,
+  "first": "06:00",
+  "last": "21:00",
+  "stops": [
+    {
+      "id": "46216",
+      "name": "Samhak dong",
+      "kname": "삼학동",
+      "kachel": "382",
+      "dist": 26.3
+    },
+    {
+      "id": "28758",
+      "name": "Chunil Metal1",
+      "kname": "추닐메탈",
+      "kachel": "295",
+      "dist": 219.6
+    },
+    {
+      "id": "15024",
+      "name": "Yuseong Engineering1",
+      "kname": "유성엥이네에링",
+      "kachel": "294",
+      "dist": 788.6
+    },
+    {
+      "id": "14987",
+      "name": "Gyeong Ahm Rotary1",
+      "kname": "경Ahm로터리",
+      "kachel": "292",
+      "dist": 1227.0
+    },
+    {
+      "id": "14690",
+      "name": "Munsan Intercity Bus Terminal1",
+      "kname": "문산Intercity버스터미널",
+      "kachel": "288",
+      "dist": 1578.4
+    },
+    {
+      "id": "38213",
+      "name": "V Tour Hotel1-41,53,98, 99",
+      "kname": "V Tour Hotel1-41,53,98, 99",
+      "kachel": "288",
+      "dist": 1792.3
+    },
+    {
+      "id": "38214",
+      "name": "Digitalplaza1-41, 99",
+      "kname": "Digitalplaza1-41, 99",
+      "kachel": "331",
+      "dist": 2163.7
+    },
+    {
+      "id": "28611",
+      "name": "Munsan Police Station1",
+      "kname": "문산경찰서",
+      "kachel": "332",
+      "dist": 2733.3
+    },
+    {
+      "id": "23767",
+      "name": "Munsan Express Bus Terminal1",
+      "kname": "문산Express버스터미널",
+      "kachel": "398",
+      "dist": 3171.9
+    },
+    {
+      "id": "23748",
+      "name": "Mahyeon Sangga1",
+      "kname": "마현상가",
+      "kachel": "399",
+      "dist": 3494.5
+    },
+    {
+      "id": "23726",
+      "name": "Giseong Apt1",
+      "kname": "기성아파트",
+      "kachel": "401",
+      "dist": 4293.7
+    },
+    {
+      "id": "23712",
+      "name": "Mohyeon Highschool1",
+      "kname": "모현Highschool",
+      "kachel": "403",
+      "dist": 4790.7
+    },
+    {
+      "id": "47053",
+      "name": "Taecho Nonghyeup1-99",
+      "kname": "태초Nonghyeup199",
+      "kachel": "404",
+      "dist": 5212.7
+    },
+    {
+      "id": "45261",
+      "name": "Agricultural Industrial Complex Entrance",
+      "kname": "AgriculturalIndustrialComplex입구",
+      "kachel": "727",
+      "dist": 6345.9
+    },
+    {
+      "id": "46033",
+      "name": "Hotel Eagles",
+      "kname": "호텔Eagles",
+      "kachel": "752",
+      "dist": 8947.6
+    },
+    {
+      "id": "46585",
+      "name": "Cargo Terminal",
+      "kname": "Cargo터미널",
+      "kachel": "777",
+      "dist": 9970.4
+    },
+    {
+      "id": "46592",
+      "name": "Munsan Airport",
+      "kname": "문산공항",
+      "kachel": "777",
+      "dist": 10094.8
+    }
+  ]
+}

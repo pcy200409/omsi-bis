@@ -1,0 +1,132 @@
+{
+  "key": "31B",
+  "no": "31",
+  "type": "일반",
+  "dir": "down",
+  "from": "아이스퀘어",
+  "to": "청진공영차고지",
+  "length": 6569.7,
+  "first": "06:30",
+  "last": "21:50",
+  "stops": [
+    {
+      "id": "508245",
+      "name": "I Square G4 31",
+      "kname": "아이스퀘어",
+      "kachel": "51",
+      "dist": 15.4
+    },
+    {
+      "id": "452275",
+      "name": "Suyeong Ipgu Geoje Stn",
+      "kname": "수영입구거제역",
+      "kachel": "51",
+      "dist": 342.1
+    },
+    {
+      "id": "442587",
+      "name": "Geoje Stn G2",
+      "kname": "거제역",
+      "kachel": "55",
+      "dist": 501.8
+    },
+    {
+      "id": "467332",
+      "name": "Suyeong-gu Community Center G2",
+      "kname": "수영구주민센터",
+      "kachel": "128",
+      "dist": 755.8
+    },
+    {
+      "id": "467337",
+      "name": "Darimit G1",
+      "kname": "다리믿",
+      "kachel": "124",
+      "dist": 1009.6
+    },
+    {
+      "id": "467342",
+      "name": "CH NH Bank G1",
+      "kname": "청진농협",
+      "kachel": "55",
+      "dist": 1344.1
+    },
+    {
+      "id": "453807",
+      "name": "Suyeong Police Stn G1",
+      "kname": "수영경찰서",
+      "kachel": "50",
+      "dist": 1766.4
+    },
+    {
+      "id": "468120",
+      "name": "Daegyo Jugong Apt G2",
+      "kname": "대교주공아파트",
+      "kachel": "50",
+      "dist": 1901.2
+    },
+    {
+      "id": "467320",
+      "name": "Daegyo-dong E Mart G1",
+      "kname": "대교동이마트",
+      "kachel": "52",
+      "dist": 2186.4
+    },
+    {
+      "id": "451601",
+      "name": "Daegyo-dong G1S1",
+      "kname": "대교동",
+      "kachel": "49",
+      "dist": 2446.5
+    },
+    {
+      "id": "508240",
+      "name": "Seohan Market To Garage",
+      "kname": "서한시장",
+      "kachel": "1",
+      "dist": 4198.0
+    },
+    {
+      "id": "508241",
+      "name": "CH Univ Hospital To Garage",
+      "kname": "청진대학교병원",
+      "kachel": "6",
+      "dist": 4558.8
+    },
+    {
+      "id": "508197",
+      "name": "CH Univ Hospital G2 82",
+      "kname": "청진대학교병원",
+      "kachel": "7",
+      "dist": 4719.0
+    },
+    {
+      "id": "508242",
+      "name": "Seohan Market M3 To Garage",
+      "kname": "서한시장",
+      "kachel": "1",
+      "dist": 5242.3
+    },
+    {
+      "id": "449687",
+      "name": "Pabal-dong G3",
+      "kname": "파발동",
+      "kachel": "9",
+      "dist": 5750.3
+    },
+    {
+      "id": "450652",
+      "name": "Cheongjin Nonggyeong University G2",
+      "kname": "청진농경대학교",
+      "kachel": "41",
+      "dist": 6066.6
+    },
+    {
+      "id": "449302",
+      "name": "Cheongjin Public Garage End",
+      "kname": "청진공영차고지",
+      "kachel": "42",
+      "dist": 6569.7
+    }
+  ]
+}

@@ -1,0 +1,286 @@
+{
+  "key": "8-1A",
+  "no": "8-1",
+  "type": "일반",
+  "dir": "up",
+  "from": "모라동차고지",
+  "to": "금관도서관",
+  "length": 16272.3,
+  "first": "05:20",
+  "last": "22:40",
+  "stops": [
+    {
+      "id": "485722",
+      "name": "Mora-dong Garage G1 Start",
+      "kname": "모라동차고지",
+      "kachel": "267",
+      "dist": 69.2
+    },
+    {
+      "id": "508512",
+      "name": "Mora Beach Entrance G2",
+      "kname": "모라해수욕장입구",
+      "kachel": "266",
+      "dist": 231.3
+    },
+    {
+      "id": "515557",
+      "name": "Harbor G2 8-1",
+      "kname": "항만",
+      "kachel": "137",
+      "dist": 751.0
+    },
+    {
+      "id": "486625",
+      "name": "Cheongjin Intll Passenger T2",
+      "kname": "청진국제여객터미널",
+      "kachel": "119",
+      "dist": 1227.7
+    },
+    {
+      "id": "486894",
+      "name": "CHFEZ G1",
+      "kname": "청진경제자유무역",
+      "kachel": "81",
+      "dist": 1749.7
+    },
+    {
+      "id": "486899",
+      "name": "Namsan Junction G2",
+      "kname": "남산교차로",
+      "kachel": "81",
+      "dist": 1824.0
+    },
+    {
+      "id": "488439",
+      "name": "Saneop Ban G2",
+      "kname": "사넙반",
+      "kachel": "77",
+      "dist": 2573.8
+    },
+    {
+      "id": "488166",
+      "name": "Namsan Elementary Middle School G1",
+      "kname": "남산초등학교.남산중학교",
+      "kachel": "82",
+      "dist": 2958.6
+    },
+    {
+      "id": "488167",
+      "name": "Namsan Newtown G1",
+      "kname": "남산신도시",
+      "kachel": "78",
+      "dist": 3158.4
+    },
+    {
+      "id": "468718",
+      "name": "Hwangnyeong Byeoksan Apt G1",
+      "kname": "황녕벽산아파트",
+      "kachel": "59",
+      "dist": 5224.2
+    },
+    {
+      "id": "468727",
+      "name": "Yeonsan Hill G1",
+      "kname": "연산고개",
+      "kachel": "54",
+      "dist": 5419.2
+    },
+    {
+      "id": "508222",
+      "name": "Daegyo Prugio G1",
+      "kname": "대교푸르지오",
+      "kachel": "62",
+      "dist": 6241.5
+    },
+    {
+      "id": "493032",
+      "name": "Cheongjin Post Office G1",
+      "kname": "청진우체국",
+      "kachel": "62",
+      "dist": 6455.1
+    },
+    {
+      "id": "508228",
+      "name": "Midopa G2",
+      "kname": "미도파",
+      "kachel": "125",
+      "dist": 6667.9
+    },
+    {
+      "id": "493059",
+      "name": "Daegyo LH APT G2",
+      "kname": "대교LH아파트",
+      "kachel": "125",
+      "dist": 6824.7
+    },
+    {
+      "id": "496193",
+      "name": "Daegyo Elementary School G2",
+      "kname": "대교초등학교",
+      "kachel": "57",
+      "dist": 7251.7
+    },
+    {
+      "id": "466765",
+      "name": "Daegyo Station",
+      "kname": "대교역",
+      "kachel": "57",
+      "dist": 7990.3
+    },
+    {
+      "id": "468232",
+      "name": "Gangbyeon-ro G2",
+      "kname": "강변로",
+      "kachel": "44",
+      "dist": 9412.8
+    },
+    {
+      "id": "468798",
+      "name": "Court Back Gate G2",
+      "kname": "법원후문",
+      "kachel": "43",
+      "dist": 9768.6
+    },
+    {
+      "id": "442072",
+      "name": "I Square G6",
+      "kname": "이광장",
+      "kachel": "51",
+      "dist": 10145.6
+    },
+    {
+      "id": "468116",
+      "name": "Hanguk Apt G2",
+      "kname": "한국아파트",
+      "kachel": "126",
+      "dist": 10475.1
+    },
+    {
+      "id": "461155",
+      "name": "Geoje Junction G2",
+      "kname": "거제교차로",
+      "kachel": "128",
+      "dist": 10711.6
+    },
+    {
+      "id": "493374",
+      "name": "Gukmin Bank G2",
+      "kname": "국민은행",
+      "kachel": "128",
+      "dist": 10783.9
+    },
+    {
+      "id": "493381",
+      "name": "Gaya Market G1",
+      "kname": "가야시장",
+      "kachel": "131",
+      "dist": 11005.5
+    },
+    {
+      "id": "493383",
+      "name": "Gaya Church G2",
+      "kname": "가야교회",
+      "kachel": "131",
+      "dist": 11136.9
+    },
+    {
+      "id": "493386",
+      "name": "Hansan Jugong APT G1",
+      "kname": "한산주공아파트",
+      "kachel": "131",
+      "dist": 11303.0
+    },
+    {
+      "id": "494525",
+      "name": "Bridge Ent G1",
+      "kname": "대교입구",
+      "kachel": "203",
+      "dist": 12207.3
+    },
+    {
+      "id": "494518",
+      "name": "Hansan-dong G1",
+      "kname": "한산동",
+      "kachel": "303",
+      "dist": 12314.7
+    },
+    {
+      "id": "494515",
+      "name": "Hansan Lotte Castle G1",
+      "kname": "한산롯데캐슬",
+      "kachel": "200",
+      "dist": 12507.9
+    },
+    {
+      "id": "494482",
+      "name": "Pabal Elementry School G2",
+      "kname": "파발초등학교",
+      "kachel": "46",
+      "dist": 12698.0
+    },
+    {
+      "id": "494476",
+      "name": "Pabal Fire Station G1",
+      "kname": "파발소방서",
+      "kachel": "46",
+      "dist": 12872.5
+    },
+    {
+      "id": "494425",
+      "name": "Gangbyeon New Town G1",
+      "kname": "강변신도시",
+      "kachel": "9",
+      "dist": 13069.7
+    },
+    {
+      "id": "515565",
+      "name": "Pabal-dong G1 8-1",
+      "kname": "파발동",
+      "kachel": "8",
+      "dist": 13538.6
+    },
+    {
+      "id": "508495",
+      "name": "Seohan Market G2 1",
+      "kname": "서한시장",
+      "kachel": "1",
+      "dist": 13962.6
+    },
+    {
+      "id": "508241",
+      "name": "CH Univ Hospital To Garage",
+      "kname": "청진대학교병원",
+      "kachel": "6",
+      "dist": 14502.9
+    },
+    {
+      "id": "449722",
+      "name": "Seohan Sangga G1",
+      "kname": "서한상가",
+      "kachel": "6",
+      "dist": 14896.7
+    },
+    {
+      "id": "508483",
+      "name": "Lotte Department Store G1",
+      "kname": "롯데백화점",
+      "kachel": "160",
+      "dist": 15325.0
+    },
+    {
+      "id": "508485",
+      "name": "Geumgwan-dong G1",
+      "kname": "금관동",
+      "kachel": "189",
+      "dist": 15654.7
+    },
+    {
+      "id": "515569",
+      "name": "Geumgwan Library G2 8-1 End",
+      "kname": "금관도서관",
+      "kachel": "197",
+      "dist": 16272.3
+    }
+  ]
+}

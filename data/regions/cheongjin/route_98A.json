@@ -1,0 +1,209 @@
+{
+  "key": "98A",
+  "no": "98",
+  "type": "일반",
+  "dir": "up",
+  "from": "문산역98",
+  "to": "양촌면사무소98",
+  "length": 17723.4,
+  "first": "04:50",
+  "last": "23:35",
+  "stops": [
+    {
+      "id": "35468",
+      "name": "Munsan Station-98",
+      "kname": "문산역98",
+      "kachel": "515",
+      "dist": 761.7
+    },
+    {
+      "id": "28554",
+      "name": "Byeoksan APT, Parkvill",
+      "kname": "벽산APT,Parkvill",
+      "kachel": "501",
+      "dist": 1922.0
+    },
+    {
+      "id": "28566",
+      "name": "Jeokbo Highschool",
+      "kname": "적보Highschool",
+      "kachel": "481",
+      "dist": 2813.6
+    },
+    {
+      "id": "28583",
+      "name": "Jangmi Elementary School",
+      "kname": "장미초등학교",
+      "kachel": "455",
+      "dist": 3153.7
+    },
+    {
+      "id": "28598",
+      "name": "Sky Castle",
+      "kname": "Sky캐슬",
+      "kachel": "477",
+      "dist": 3623.5
+    },
+    {
+      "id": "23766",
+      "name": "Munsan Express Bus Terminal",
+      "kname": "문산Express버스터미널",
+      "kachel": "398",
+      "dist": 4333.6
+    },
+    {
+      "id": "23790",
+      "name": "Munsan Cityhall",
+      "kname": "문산시청",
+      "kachel": "328",
+      "dist": 4809.2
+    },
+    {
+      "id": "38216",
+      "name": "Dooryong-Dong-98",
+      "kname": "도오룡동98",
+      "kachel": "327",
+      "dist": 5291.7
+    },
+    {
+      "id": "35481",
+      "name": "Lotte Cinema",
+      "kname": "롯데Cinema",
+      "kachel": "277",
+      "dist": 5699.2
+    },
+    {
+      "id": "35510",
+      "name": "Miryong-Dong",
+      "kname": "미룡동",
+      "kachel": "271",
+      "dist": 6017.4
+    },
+    {
+      "id": "35524",
+      "name": "Hanheung-Dong",
+      "kname": "한흥동",
+      "kachel": "268",
+      "dist": 6440.2
+    },
+    {
+      "id": "25194",
+      "name": "Simyang Coperation",
+      "kname": "시먕Coperation",
+      "kachel": "269",
+      "dist": 7336.3
+    },
+    {
+      "id": "25204",
+      "name": "Used car sell&export complex",
+      "kname": "Used car sell&export complex",
+      "kachel": "272",
+      "dist": 7723.8
+    },
+    {
+      "id": "38210",
+      "name": "Cheongsol Yakguk-98",
+      "kname": "청솔약국98",
+      "kachel": "289",
+      "dist": 8461.3
+    },
+    {
+      "id": "14690",
+      "name": "Munsan Intercity Bus Terminal1",
+      "kname": "문산Intercity버스터미널",
+      "kachel": "288",
+      "dist": 9560.7
+    },
+    {
+      "id": "38213",
+      "name": "V Tour Hotel1-41,53,98, 99",
+      "kname": "V Tour Hotel1-41,53,98, 99",
+      "kachel": "288",
+      "dist": 9774.6
+    },
+    {
+      "id": "28646",
+      "name": "Digitalplaza1-98",
+      "kname": "Digitalplaza1-98",
+      "kachel": "331",
+      "dist": 10144.7
+    },
+    {
+      "id": "29501",
+      "name": "Shinil APT",
+      "kname": "시닐아파트",
+      "kachel": "388",
+      "dist": 10900.2
+    },
+    {
+      "id": "29658",
+      "name": "Myeongsung Elementary School",
+      "kname": "명숭초등학교",
+      "kachel": "390",
+      "dist": 11697.0
+    },
+    {
+      "id": "30068",
+      "name": "Samhak Vila",
+      "kname": "삼학Vila",
+      "kachel": "392",
+      "dist": 12077.2
+    },
+    {
+      "id": "30080",
+      "name": "Susong Park",
+      "kname": "수송공원",
+      "kachel": "394",
+      "dist": 12535.5
+    },
+    {
+      "id": "21534",
+      "name": "Susong Rodeo1",
+      "kname": "수송로더",
+      "kachel": "375",
+      "dist": 12988.0
+    },
+    {
+      "id": "15550",
+      "name": "Weedeok Intersection",
+      "kname": "웨에덕교차로",
+      "kachel": "300",
+      "dist": 13786.7
+    },
+    {
+      "id": "38199",
+      "name": "Ohseong Market-98",
+      "kname": "Ohseong시장98",
+      "kachel": "302",
+      "dist": 14338.0
+    },
+    {
+      "id": "35010",
+      "name": "Prugio",
+      "kname": "푸르지오",
+      "kachel": "303",
+      "dist": 14889.3
+    },
+    {
+      "id": "35134",
+      "name": "Vehicle Registration Office",
+      "kname": "VehicleRegistration사무소",
+      "kachel": "579",
+      "dist": 15615.8
+    },
+    {
+      "id": "35188",
+      "name": "Yangchon Daewoo, Iaan-98",
+      "kname": "양촌Daewoo,이아안98",
+      "kachel": "589",
+      "dist": 17224.9
+    },
+    {
+      "id": "35193",
+      "name": "Yangchon Myeon Office-98",
+      "kname": "양촌면사무소98",
+      "kachel": "629",
+      "dist": 17723.4
+    }
+  ]
+}

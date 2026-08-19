@@ -1,0 +1,174 @@
+{
+  "key": "38A",
+  "no": "38",
+  "type": "일반",
+  "dir": "up",
+  "from": "대평리",
+  "to": "문산역38",
+  "length": 12424.9,
+  "first": "05:00",
+  "last": "22:10",
+  "stops": [
+    {
+      "id": "44065",
+      "name": "Daepyeong-ri1",
+      "kname": "대평리",
+      "kachel": "719",
+      "dist": 26.4
+    },
+    {
+      "id": "43899",
+      "name": "Daehwa Apt1",
+      "kname": "대화아파트",
+      "kachel": "717",
+      "dist": 599.8
+    },
+    {
+      "id": "26971",
+      "name": "Buwon Apt",
+      "kname": "부원아파트",
+      "kachel": "429",
+      "dist": 1029.6
+    },
+    {
+      "id": "26976",
+      "name": "Pyeonghwa dong",
+      "kname": "평화동",
+      "kachel": "431",
+      "dist": 1431.9
+    },
+    {
+      "id": "26987",
+      "name": "Hanshin Apt",
+      "kname": "한신아파트",
+      "kachel": "429",
+      "dist": 1736.8
+    },
+    {
+      "id": "26959",
+      "name": "Pyeonghwa Intersection",
+      "kname": "평화교차로",
+      "kachel": "429",
+      "dist": 2034.6
+    },
+    {
+      "id": "26938",
+      "name": "Pyeonghwa dong ipgu",
+      "kname": "평화동입구",
+      "kachel": "426",
+      "dist": 2374.8
+    },
+    {
+      "id": "23711",
+      "name": "Mohyeon Highschool",
+      "kname": "모현Highschool",
+      "kachel": "403",
+      "dist": 2590.6
+    },
+    {
+      "id": "23725",
+      "name": "Giseong Apt",
+      "kname": "기성아파트",
+      "kachel": "402",
+      "dist": 2956.6
+    },
+    {
+      "id": "23736",
+      "name": "Hongil Apt",
+      "kname": "홍일아파트",
+      "kachel": "400",
+      "dist": 3544.2
+    },
+    {
+      "id": "23747",
+      "name": "Mahyeon Sangga",
+      "kname": "마현상가",
+      "kachel": "399",
+      "dist": 3805.3
+    },
+    {
+      "id": "23766",
+      "name": "Munsan Express Bus Terminal",
+      "kname": "문산Express버스터미널",
+      "kachel": "398",
+      "dist": 4573.3
+    },
+    {
+      "id": "23790",
+      "name": "Munsan Cityhall",
+      "kname": "문산시청",
+      "kachel": "328",
+      "dist": 5048.9
+    },
+    {
+      "id": "38215",
+      "name": "Dooryong-Dong-23-1,38",
+      "kname": "도오룡동231,38",
+      "kachel": "327",
+      "dist": 5532.5
+    },
+    {
+      "id": "14523",
+      "name": "Munhwa Apt1",
+      "kname": "문화아파트",
+      "kachel": "278",
+      "dist": 5960.8
+    },
+    {
+      "id": "14511",
+      "name": "Jeil Highshool1",
+      "kname": "제일Highshool",
+      "kachel": "276",
+      "dist": 6215.4
+    },
+    {
+      "id": "14501",
+      "name": "Mi-ryong Jugong1",
+      "kname": "미룡주공",
+      "kachel": "273",
+      "dist": 6782.5
+    },
+    {
+      "id": "14489",
+      "name": "Yeongchang Intersection1-38,92",
+      "kname": "영창Intersection138,92",
+      "kachel": "264",
+      "dist": 7125.1
+    },
+    {
+      "id": "14254",
+      "name": "Hanheung Community Policing Center1-38",
+      "kname": "한흥CommunityPolicingCenter138",
+      "kachel": "264",
+      "dist": 7301.7
+    },
+    {
+      "id": "26817",
+      "name": "Mokhaeng",
+      "kname": "목행",
+      "kachel": "464",
+      "dist": 9800.9
+    },
+    {
+      "id": "26830",
+      "name": "Chilgeum Enterance",
+      "kname": "칠금Enterance",
+      "kachel": "473",
+      "dist": 10959.9
+    },
+    {
+      "id": "30631",
+      "name": "Chilgeum1",
+      "kname": "칠금",
+      "kachel": "476",
+      "dist": 11313.5
+    },
+    {
+      "id": "30543",
+      "name": "Munsan Station-38",
+      "kname": "문산역38",
+      "kachel": "515",
+      "dist": 12424.9
+    }
+  ]
+}

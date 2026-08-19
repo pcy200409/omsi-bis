@@ -1,0 +1,125 @@
+{
+  "key": "3A",
+  "no": "3",
+  "type": "일반",
+  "dir": "up",
+  "from": "안락터미널",
+  "to": "연풍",
+  "length": 14202.5,
+  "first": "06:20",
+  "last": "19:46",
+  "stops": [
+    {
+      "id": "2841",
+      "name": "Anrak Terminal",
+      "kname": "안락터미널",
+      "kachel": "14",
+      "dist": 10.0
+    },
+    {
+      "id": "7764",
+      "name": "Anrak Gas Station",
+      "kname": "안락주유소",
+      "kachel": "26",
+      "dist": 295.8
+    },
+    {
+      "id": "7767",
+      "name": "Anrak Library",
+      "kname": "안락도서관",
+      "kachel": "24",
+      "dist": 667.0
+    },
+    {
+      "id": "38174",
+      "name": "AnrakGun Office-3, 4",
+      "kname": "안락군사무소3,",
+      "kachel": "25",
+      "dist": 791.9
+    },
+    {
+      "id": "31673",
+      "name": "Anrak Iaan",
+      "kname": "안락이아안",
+      "kachel": "30",
+      "dist": 1471.4
+    },
+    {
+      "id": "31681",
+      "name": "Salmi",
+      "kname": "살미",
+      "kachel": "568",
+      "dist": 2301.1
+    },
+    {
+      "id": "31696",
+      "name": "Salmi Intersection-3",
+      "kname": "살미교차로3",
+      "kachel": "562",
+      "dist": 2800.8
+    },
+    {
+      "id": "32029",
+      "name": "Hoam",
+      "kname": "호암",
+      "kachel": "563",
+      "dist": 3490.2
+    },
+    {
+      "id": "32047",
+      "name": "Oh Tae Sik Farm",
+      "kname": "Oh태식Farm",
+      "kachel": "53",
+      "dist": 4219.9
+    },
+    {
+      "id": "32088",
+      "name": "Byeongjin Gas Station",
+      "kname": "병진주유소",
+      "kachel": "49",
+      "dist": 5453.1
+    },
+    {
+      "id": "32164",
+      "name": "Munsung2",
+      "kname": "문숭",
+      "kachel": "47",
+      "dist": 6510.1
+    },
+    {
+      "id": "32253",
+      "name": "Sambo",
+      "kname": "삼보",
+      "kachel": "598",
+      "dist": 7540.0
+    },
+    {
+      "id": "32330",
+      "name": "Taesung Garden",
+      "kname": "태숭Garden",
+      "kachel": "147",
+      "dist": 9228.5
+    },
+    {
+      "id": "32709",
+      "name": "Nampa",
+      "kname": "남파",
+      "kachel": "607",
+      "dist": 10290.2
+    },
+    {
+      "id": "33150",
+      "name": "Yeonpung Ipgu",
+      "kname": "연풍입구",
+      "kachel": "619",
+      "dist": 12932.5
+    },
+    {
+      "id": "33226",
+      "name": "Yeonpung",
+      "kname": "연풍",
+      "kachel": "627",
+      "dist": 14202.5
+    }
+  ]
+}

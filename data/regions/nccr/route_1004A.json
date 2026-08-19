@@ -1,0 +1,83 @@
+{
+  "key": "1004A",
+  "no": "1004",
+  "type": "일반",
+  "dir": "up",
+  "from": "청진국제여객터미널",
+  "to": "동서대학교로터리",
+  "length": 12088.2,
+  "first": "00:30",
+  "last": "23:30",
+  "stops": [
+    {
+      "id": "486640",
+      "name": "Cheongjin International Passenger Terminal",
+      "kname": "청진국제여객터미널",
+      "kachel": "119",
+      "dist": 44.3
+    },
+    {
+      "id": "485879",
+      "name": "Mora Homeplus G1",
+      "kname": "모라홈플러스",
+      "kachel": "260",
+      "dist": 972.7
+    },
+    {
+      "id": "441318",
+      "name": "Cheongjin Stn 1A 1004",
+      "kname": "청진역",
+      "kachel": "73",
+      "dist": 1944.3
+    },
+    {
+      "id": "449679",
+      "name": "Seohan Market A1",
+      "kname": "서한시장",
+      "kachel": "1",
+      "dist": 6934.2
+    },
+    {
+      "id": "449708",
+      "name": "CH Univ Hospital M1",
+      "kname": "청진대학교병원",
+      "kachel": "6",
+      "dist": 7294.9
+    },
+    {
+      "id": "495268",
+      "name": "Cheongjin Cityhall",
+      "kname": "청진시청",
+      "kachel": "161",
+      "dist": 7984.1
+    },
+    {
+      "id": "507843",
+      "name": "Docheong New Town",
+      "kname": "도청신도시",
+      "kachel": "193",
+      "dist": 9020.0
+    },
+    {
+      "id": "507844",
+      "name": "Cheongsan Namdo Office Station 1004",
+      "kname": "청산남도청역",
+      "kachel": "196",
+      "dist": 9425.6
+    },
+    {
+      "id": "490008",
+      "name": "Dongseo University G2",
+      "kname": "동서대학교",
+      "kachel": "89",
+      "dist": 11847.8
+    },
+    {
+      "id": "507866",
+      "name": "Dongseo University Rotary End",
+      "kname": "동서대학교로터리",
+      "kachel": "90",
+      "dist": 12088.2
+    }
+  ]
+}

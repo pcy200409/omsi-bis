@@ -1,0 +1,251 @@
+{
+  "key": "127B",
+  "no": "127",
+  "type": "일반",
+  "dir": "down",
+  "from": "청진대학교병원",
+  "to": "모라해수욕장입구",
+  "length": 13496.4,
+  "first": "04:50",
+  "last": "23:15",
+  "stops": [
+    {
+      "id": "508197",
+      "name": "CH Univ Hospital G2 82",
+      "kname": "청진대학교병원",
+      "kachel": "7",
+      "dist": 23.8
+    },
+    {
+      "id": "508648",
+      "name": "Seohan Market M3 127",
+      "kname": "서한시장",
+      "kachel": "1",
+      "dist": 499.0
+    },
+    {
+      "id": "508649",
+      "name": "Daegyo-dong G2 127",
+      "kname": "대교동",
+      "kachel": "49",
+      "dist": 2166.9
+    },
+    {
+      "id": "508222",
+      "name": "Daegyo Prugio G1",
+      "kname": "대교푸르지오",
+      "kachel": "62",
+      "dist": 2549.5
+    },
+    {
+      "id": "493032",
+      "name": "Cheongjin Post Office G1",
+      "kname": "청진우체국",
+      "kachel": "62",
+      "dist": 2763.1
+    },
+    {
+      "id": "508228",
+      "name": "Midopa G2",
+      "kname": "미도파",
+      "kachel": "125",
+      "dist": 2975.9
+    },
+    {
+      "id": "493059",
+      "name": "Daegyo LH APT G2",
+      "kname": "대교LH아파트",
+      "kachel": "125",
+      "dist": 3132.7
+    },
+    {
+      "id": "496193",
+      "name": "Daegyo Elementary School G2",
+      "kname": "대교초등학교",
+      "kachel": "57",
+      "dist": 3559.7
+    },
+    {
+      "id": "466765",
+      "name": "Daegyo Station",
+      "kname": "대교역",
+      "kachel": "57",
+      "dist": 4298.4
+    },
+    {
+      "id": "468232",
+      "name": "Gangbyeon-ro G2",
+      "kname": "강변로",
+      "kachel": "44",
+      "dist": 5720.8
+    },
+    {
+      "id": "468798",
+      "name": "Court Back Gate G2",
+      "kname": "법원후문",
+      "kachel": "43",
+      "dist": 6076.6
+    },
+    {
+      "id": "442072",
+      "name": "I Square G6",
+      "kname": "이광장",
+      "kachel": "51",
+      "dist": 6453.6
+    },
+    {
+      "id": "452275",
+      "name": "Suyeong Ipgu Geoje Stn",
+      "kname": "수영입구거제역",
+      "kachel": "51",
+      "dist": 6813.4
+    },
+    {
+      "id": "467341",
+      "name": "CH NH Bank G2",
+      "kname": "청진농협",
+      "kachel": "55",
+      "dist": 7004.5
+    },
+    {
+      "id": "508632",
+      "name": "Waseok G2",
+      "kname": "와석",
+      "kachel": "124",
+      "dist": 7283.2
+    },
+    {
+      "id": "467984",
+      "name": "Yeongsan-dong G2",
+      "kname": "영산동",
+      "kachel": "132",
+      "dist": 7583.1
+    },
+    {
+      "id": "508456",
+      "name": "Yeongsan Intersection M3",
+      "kname": "영산교차로",
+      "kachel": "134",
+      "dist": 8021.7
+    },
+    {
+      "id": "469682",
+      "name": "The Chamber of Commerce and Industry G2",
+      "kname": "상공회의소",
+      "kachel": "134",
+      "dist": 8376.9
+    },
+    {
+      "id": "508611",
+      "name": "Daeje Hanyak G2",
+      "kname": "대제한약",
+      "kachel": "76",
+      "dist": 8702.7
+    },
+    {
+      "id": "503234",
+      "name": "Beomcheon Stn G2",
+      "kname": "범천역",
+      "kachel": "75",
+      "dist": 8944.2
+    },
+    {
+      "id": "494044",
+      "name": "Areumbil APT G2",
+      "kname": "아름빌아파트",
+      "kachel": "75",
+      "dist": 9172.6
+    },
+    {
+      "id": "503204",
+      "name": "Beomcheon NH G1",
+      "kname": "범천농협",
+      "kachel": "135",
+      "dist": 9384.9
+    },
+    {
+      "id": "487978",
+      "name": "Sujeong 3-dong G2",
+      "kname": "수정3동",
+      "kachel": "78",
+      "dist": 9699.1
+    },
+    {
+      "id": "503064",
+      "name": "Geumsusa G1",
+      "kname": "금수사",
+      "kachel": "70",
+      "dist": 9888.6
+    },
+    {
+      "id": "460439",
+      "name": "Choryang Fire Station G2",
+      "kname": "초량소방서",
+      "kachel": "68",
+      "dist": 10246.4
+    },
+    {
+      "id": "460441",
+      "name": "Dongil Park Mansion G1",
+      "kname": "동일공원만시온",
+      "kachel": "68",
+      "dist": 10482.8
+    },
+    {
+      "id": "460445",
+      "name": "Daesin Healty G1",
+      "kname": "대신건강",
+      "kachel": "73",
+      "dist": 10775.0
+    },
+    {
+      "id": "508185",
+      "name": "Namsan Samgeori G1 127",
+      "kname": "남산삼거리",
+      "kachel": "73",
+      "dist": 11011.7
+    },
+    {
+      "id": "508187",
+      "name": "Cheongjin Stn 1B 127",
+      "kname": "청진역",
+      "kachel": "73",
+      "dist": 11590.8
+    },
+    {
+      "id": "486968",
+      "name": "Namsanjeong Station Transfer Stop G3",
+      "kname": "남산정역환승센터",
+      "kachel": "80",
+      "dist": 11981.2
+    },
+    {
+      "id": "494033",
+      "name": "Cheongjin Station N G1",
+      "kname": "청진역",
+      "kachel": "79",
+      "dist": 12276.1
+    },
+    {
+      "id": "485987",
+      "name": "Mora Saemaeul Geumgo G2",
+      "kname": "모라새마을금고",
+      "kachel": "80",
+      "dist": 12363.4
+    },
+    {
+      "id": "485877",
+      "name": "Mora Homeplus G2",
+      "kname": "모라홈플러스",
+      "kachel": "83",
+      "dist": 12918.2
+    },
+    {
+      "id": "508307",
+      "name": "Mora Beach Entrance G1",
+      "kname": "모라해수욕장입구",
+      "kachel": "266",
+      "dist": 13496.4
+    }
+  ]
+}

@@ -1,0 +1,265 @@
+{
+  "key": "21A",
+  "no": "21",
+  "type": "일반",
+  "dir": "up",
+  "from": "동대동",
+  "to": "명법차고지",
+  "length": 15391.8,
+  "first": "05:20",
+  "last": "22:51",
+  "stops": [
+    {
+      "id": "508604",
+      "name": "Dongdae-dong G2 Start",
+      "kname": "동대동",
+      "kachel": "82",
+      "dist": 39.7
+    },
+    {
+      "id": "508605",
+      "name": "Simin APT G1 21",
+      "kname": "시민아파트",
+      "kachel": "117",
+      "dist": 212.8
+    },
+    {
+      "id": "503032",
+      "name": "Sujeong Hill",
+      "kname": "수정언덕",
+      "kachel": "78",
+      "dist": 288.6
+    },
+    {
+      "id": "487979",
+      "name": "Sujeong 3-dong G1",
+      "kname": "수정3동",
+      "kachel": "78",
+      "dist": 558.7
+    },
+    {
+      "id": "503064",
+      "name": "Geumsusa G1",
+      "kname": "금수사",
+      "kachel": "70",
+      "dist": 841.7
+    },
+    {
+      "id": "503199",
+      "name": "Beomcheon NH G2",
+      "kname": "범천농협",
+      "kachel": "135",
+      "dist": 993.1
+    },
+    {
+      "id": "494045",
+      "name": "Areumbil APT G1",
+      "kname": "아름빌아파트",
+      "kachel": "75",
+      "dist": 1112.0
+    },
+    {
+      "id": "503235",
+      "name": "Beomcheon Stn G1",
+      "kname": "범천역",
+      "kachel": "75",
+      "dist": 1265.1
+    },
+    {
+      "id": "508606",
+      "name": "Daeje Hanyak G1",
+      "kname": "대제한약",
+      "kachel": "76",
+      "dist": 1600.2
+    },
+    {
+      "id": "469683",
+      "name": "The Chamber of Commerce and Industry G1",
+      "kname": "상공회의소",
+      "kachel": "134",
+      "dist": 1809.0
+    },
+    {
+      "id": "468245",
+      "name": "Yeongsan Intersection G1",
+      "kname": "영산교차로",
+      "kachel": "134",
+      "dist": 2134.5
+    },
+    {
+      "id": "467985",
+      "name": "Yeongsan-dong G1",
+      "kname": "영산동",
+      "kachel": "132",
+      "dist": 2271.5
+    },
+    {
+      "id": "508617",
+      "name": "Waseok G1",
+      "kname": "와석",
+      "kachel": "124",
+      "dist": 2704.9
+    },
+    {
+      "id": "467340",
+      "name": "Geoje market G1",
+      "kname": "거제시장",
+      "kachel": "55",
+      "dist": 2918.6
+    },
+    {
+      "id": "453807",
+      "name": "Suyeong Police Stn G1",
+      "kname": "수영경찰서",
+      "kachel": "50",
+      "dist": 3430.9
+    },
+    {
+      "id": "468120",
+      "name": "Daegyo Jugong Apt G2",
+      "kname": "대교주공아파트",
+      "kachel": "50",
+      "dist": 3565.7
+    },
+    {
+      "id": "508349",
+      "name": "Daegyo-dong E Mart G1 520",
+      "kname": "대교동이마트",
+      "kachel": "52",
+      "dist": 3852.4
+    },
+    {
+      "id": "451601",
+      "name": "Daegyo-dong G1S1",
+      "kname": "대교동",
+      "kachel": "49",
+      "dist": 4111.1
+    },
+    {
+      "id": "507828",
+      "name": "Seohan Market A2",
+      "kname": "서한시장",
+      "kachel": "1",
+      "dist": 5863.7
+    },
+    {
+      "id": "508241",
+      "name": "CH Univ Hospital To Garage",
+      "kname": "청진대학교병원",
+      "kachel": "6",
+      "dist": 6223.3
+    },
+    {
+      "id": "508531",
+      "name": "CH Univ Hospital G2 1",
+      "kname": "청진대학교병원",
+      "kachel": "7",
+      "dist": 6390.3
+    },
+    {
+      "id": "450869",
+      "name": "Dugok maeul G1",
+      "kname": "두곡마을",
+      "kachel": "0",
+      "dist": 6884.1
+    },
+    {
+      "id": "451193",
+      "name": "CHW Lamp festival G1",
+      "kname": "청야월등불축제광장",
+      "kachel": "18",
+      "dist": 7957.5
+    },
+    {
+      "id": "451197",
+      "name": "Cheongyawol-myeon Office G1",
+      "kname": "청야월면사무소",
+      "kachel": "19",
+      "dist": 8420.0
+    },
+    {
+      "id": "507927",
+      "name": "Cheongwoon Hyundai Villa",
+      "kname": "청운현대빌라",
+      "kachel": "241",
+      "dist": 9141.8
+    },
+    {
+      "id": "508257",
+      "name": "Gomnaejae G1",
+      "kname": "곰내재",
+      "kachel": "245",
+      "dist": 9761.9
+    },
+    {
+      "id": "508258",
+      "name": "Myeongbeop Hyundai Outlet G2 302",
+      "kname": "명법현대아울렛",
+      "kachel": "387",
+      "dist": 10089.9
+    },
+    {
+      "id": "508620",
+      "name": "Esay the One Complex1 G2",
+      "kname": "(미등록 정류소입니다.)",
+      "kachel": "363",
+      "dist": 10798.5
+    },
+    {
+      "id": "507946",
+      "name": "Mojeon Station",
+      "kname": "모전역",
+      "kachel": "376",
+      "dist": 11092.0
+    },
+    {
+      "id": "508624",
+      "name": "Hwanam Market G1 21",
+      "kname": "화남시장",
+      "kachel": "376",
+      "dist": 11605.5
+    },
+    {
+      "id": "507527",
+      "name": "Mojeon Reservoir G2",
+      "kname": "모전저수지",
+      "kachel": "383",
+      "dist": 11976.2
+    },
+    {
+      "id": "508625",
+      "name": "Gangbyeon Maeul G2 21",
+      "kname": "강변마을",
+      "kachel": "371",
+      "dist": 12228.7
+    },
+    {
+      "id": "507955",
+      "name": "Hansin Huplus",
+      "kname": "한신휴플러스",
+      "kachel": "367",
+      "dist": 12914.9
+    },
+    {
+      "id": "507958",
+      "name": "Judong JCT G2 21",
+      "kname": "주동교차로",
+      "kachel": "366",
+      "dist": 13306.3
+    },
+    {
+      "id": "497565",
+      "name": "Gadong Mauel G1",
+      "kname": "가동마을",
+      "kachel": "373",
+      "dist": 14138.5
+    },
+    {
+      "id": "498490",
+      "name": "Myeongbeop Garage End",
+      "kname": "명법차고지",
+      "kachel": "381",
+      "dist": 15391.8
+    }
+  ]
+}

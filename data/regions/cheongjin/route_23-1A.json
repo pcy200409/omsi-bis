@@ -1,0 +1,293 @@
+{
+  "key": "23-1A",
+  "no": "23-1",
+  "type": "일반",
+  "dir": "up",
+  "from": "문산Nat'l대학교",
+  "to": "Airbus-23-1",
+  "length": 20150.4,
+  "first": "05:11",
+  "last": "22:14",
+  "stops": [
+    {
+      "id": "17607",
+      "name": "Munsan Nat'l Univ1",
+      "kname": "문산Nat'l대학교",
+      "kachel": "323",
+      "dist": 501.0
+    },
+    {
+      "id": "17155",
+      "name": "Paegang Maeul1",
+      "kname": "패강매울",
+      "kachel": "321",
+      "dist": 1162.6
+    },
+    {
+      "id": "16916",
+      "name": "Agricurtural Wholesale Market1",
+      "kname": "AgricurturalWholesale시장",
+      "kachel": "319",
+      "dist": 1762.5
+    },
+    {
+      "id": "16926",
+      "name": "Flower Market1",
+      "kname": "Flower시장",
+      "kachel": "317",
+      "dist": 2174.5
+    },
+    {
+      "id": "16400",
+      "name": "Daesung Middle School1",
+      "kname": "대숭중학교",
+      "kachel": "314",
+      "dist": 3188.8
+    },
+    {
+      "id": "21292",
+      "name": "CGV Munsan2",
+      "kname": "CGV문산",
+      "kachel": "313",
+      "dist": 3610.6
+    },
+    {
+      "id": "20901",
+      "name": "Hyundai APT, Bando APT",
+      "kname": "현대APT,반도아파트",
+      "kachel": "365",
+      "dist": 4032.7
+    },
+    {
+      "id": "21075",
+      "name": "Changsin Elementry School",
+      "kname": "창신초등학교",
+      "kachel": "366",
+      "dist": 4504.6
+    },
+    {
+      "id": "21188",
+      "name": "Lynn APT",
+      "kname": "Lynn아파트",
+      "kachel": "307",
+      "dist": 4837.7
+    },
+    {
+      "id": "21282",
+      "name": "Homeplus3",
+      "kname": "홈플러스",
+      "kachel": "305",
+      "dist": 5242.2
+    },
+    {
+      "id": "15878",
+      "name": "Munsan Nat'l Univ Hospital1",
+      "kname": "문산Nat'l대학교병원",
+      "kachel": "305",
+      "dist": 5632.1
+    },
+    {
+      "id": "15641",
+      "name": "Ohseong Market1",
+      "kname": "Ohseong시장",
+      "kachel": "302",
+      "dist": 6161.6
+    },
+    {
+      "id": "15551",
+      "name": "Weedeok Intersection1",
+      "kname": "웨에덕교차로",
+      "kachel": "300",
+      "dist": 6733.0
+    },
+    {
+      "id": "21533",
+      "name": "Susong Rodeo",
+      "kname": "수송로더",
+      "kachel": "375",
+      "dist": 7134.5
+    },
+    {
+      "id": "22459",
+      "name": "Susong-dong Community Center",
+      "kname": "수송동주민센터",
+      "kachel": "395",
+      "dist": 7409.5
+    },
+    {
+      "id": "21929",
+      "name": "Migwang Green Town",
+      "kname": "미광GreenTown",
+      "kachel": "405",
+      "dist": 7778.3
+    },
+    {
+      "id": "23693",
+      "name": "Taecho Maeul",
+      "kname": "태초매울",
+      "kachel": "408",
+      "dist": 8474.0
+    },
+    {
+      "id": "38203",
+      "name": "Taecho Nonghyeup-23-1",
+      "kname": "태초농혜웁231",
+      "kachel": "404",
+      "dist": 9066.5
+    },
+    {
+      "id": "24095",
+      "name": "Iaan APT",
+      "kname": "이아안아파트",
+      "kachel": "403",
+      "dist": 9960.5
+    },
+    {
+      "id": "24109",
+      "name": "Dongwoo richvill",
+      "kname": "동워오richvill",
+      "kachel": "413",
+      "dist": 10265.1
+    },
+    {
+      "id": "24238",
+      "name": "Mohyeon Jugong",
+      "kname": "모현주공",
+      "kachel": "414",
+      "dist": 10663.7
+    },
+    {
+      "id": "24321",
+      "name": "Mohyeon-Dong Community Center",
+      "kname": "모현동주민센터",
+      "kachel": "422",
+      "dist": 11010.2
+    },
+    {
+      "id": "24622",
+      "name": "Prugio, Daesung APT",
+      "kname": "Prugio,대숭아파트",
+      "kachel": "420",
+      "dist": 11746.8
+    },
+    {
+      "id": "23747",
+      "name": "Mahyeon Sangga",
+      "kname": "마현상가",
+      "kachel": "399",
+      "dist": 12770.7
+    },
+    {
+      "id": "23766",
+      "name": "Munsan Express Bus Terminal",
+      "kname": "문산Express버스터미널",
+      "kachel": "398",
+      "dist": 13538.7
+    },
+    {
+      "id": "23790",
+      "name": "Munsan Cityhall",
+      "kname": "문산시청",
+      "kachel": "328",
+      "dist": 14014.3
+    },
+    {
+      "id": "38215",
+      "name": "Dooryong-Dong-23-1,38",
+      "kname": "도오룡동231,38",
+      "kachel": "327",
+      "dist": 14498.0
+    },
+    {
+      "id": "14523",
+      "name": "Munhwa Apt1",
+      "kname": "문화아파트",
+      "kachel": "278",
+      "dist": 14926.2
+    },
+    {
+      "id": "14511",
+      "name": "Jeil Highshool1",
+      "kname": "제일Highshool",
+      "kachel": "276",
+      "dist": 15180.8
+    },
+    {
+      "id": "14501",
+      "name": "Mi-ryong Jugong1",
+      "kname": "미룡주공",
+      "kachel": "273",
+      "dist": 15747.9
+    },
+    {
+      "id": "38219",
+      "name": "Yeongchang Intersection1-23-1",
+      "kname": "영창Intersection1231",
+      "kachel": "264",
+      "dist": 16091.8
+    },
+    {
+      "id": "25178",
+      "name": "Daewoo APT",
+      "kname": "대워오아파트",
+      "kachel": "260",
+      "dist": 16222.0
+    },
+    {
+      "id": "25194",
+      "name": "Simyang Coperation",
+      "kname": "시먕Coperation",
+      "kachel": "269",
+      "dist": 16735.2
+    },
+    {
+      "id": "25204",
+      "name": "Used car sell&export complex",
+      "kname": "Used car sell&export complex",
+      "kachel": "272",
+      "dist": 17122.7
+    },
+    {
+      "id": "25212",
+      "name": "Cheongsol Yakguk",
+      "kname": "청솔약국",
+      "kachel": "289",
+      "dist": 17861.4
+    },
+    {
+      "id": "23819",
+      "name": "Honam Industry",
+      "kname": "호남Industry",
+      "kachel": "292",
+      "dist": 18500.2
+    },
+    {
+      "id": "23987",
+      "name": "ENSTA TECH",
+      "kname": "ENSTA TECH",
+      "kachel": "349",
+      "dist": 19046.3
+    },
+    {
+      "id": "23993",
+      "name": "Lycee",
+      "kname": "Lycee",
+      "kachel": "350",
+      "dist": 19332.4
+    },
+    {
+      "id": "24000",
+      "name": "Wangheung Trans2",
+      "kname": "왕흥Trans",
+      "kachel": "353",
+      "dist": 19658.1
+    },
+    {
+      "id": "25218",
+      "name": "Airbus-23-1",
+      "kname": "Airbus-23-1",
+      "kachel": "353",
+      "dist": 20150.4
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "key": "AL1B",
+  "no": "AL1",
+  "type": "일반",
+  "dir": "down",
+  "from": "장유터미널",
+  "to": "청산공항출발층",
+  "length": 15970.4,
+  "first": "",
+  "last": "",
+  "stops": [
+    {
+      "id": "168",
+      "name": "Jangyu Terminal Start",
+      "kname": "장유터미널",
+      "kachel": "423",
+      "dist": 14.0
+    },
+    {
+      "id": "494805",
+      "name": "Haesongdae Station Transfer Bay1",
+      "kname": "해송대역환승센터",
+      "kachel": "340",
+      "dist": 3141.5
+    },
+    {
+      "id": "507803",
+      "name": "Sujeong IC1",
+      "kname": "수정IC",
+      "kachel": "148",
+      "dist": 7624.1
+    },
+    {
+      "id": "507805",
+      "name": "No Stop4",
+      "kname": "(가상정류장)",
+      "kachel": "212",
+      "dist": 15397.6
+    },
+    {
+      "id": "503710",
+      "name": "Cheongsan Airport Departure Gate",
+      "kname": "청산공항출발층",
+      "kachel": "298",
+      "dist": 15970.4
+    }
+  ]
+}

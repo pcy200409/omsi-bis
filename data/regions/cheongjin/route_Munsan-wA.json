@@ -1,0 +1,83 @@
+{
+  "key": "Munsan-wA",
+  "no": "Munsan-w",
+  "type": "일반",
+  "dir": "up",
+  "from": "삼주Intercity뎁",
+  "to": "문산Intercity",
+  "length": 39669.9,
+  "first": "",
+  "last": "",
+  "stops": [
+    {
+      "id": "51227",
+      "name": "Samju-Intercity Dep",
+      "kname": "삼주Intercity뎁",
+      "kachel": "921",
+      "dist": 24.9
+    },
+    {
+      "id": "52118",
+      "name": "Hankyeong1-Intercity",
+      "kname": "Hankyeong1-Intercity",
+      "kachel": "130",
+      "dist": 4100.5
+    },
+    {
+      "id": "48888",
+      "name": "Solchan1-Intercity",
+      "kname": "Solchan1-Intercity",
+      "kachel": "870",
+      "dist": 7248.6
+    },
+    {
+      "id": "49066",
+      "name": "Hansan1-Intercity",
+      "kname": "Hansan1-Intercity",
+      "kachel": "811",
+      "dist": 13502.0
+    },
+    {
+      "id": "53521",
+      "name": "Hari1-803",
+      "kname": "Hari1-803",
+      "kachel": "642",
+      "dist": 18194.4
+    },
+    {
+      "id": "52888",
+      "name": "Gulpo-Intercity1-803",
+      "kname": "굴포Intercity1803",
+      "kachel": "188",
+      "dist": 22111.3
+    },
+    {
+      "id": "52885",
+      "name": "Anrak-Intercity1-803",
+      "kname": "안락Intercity1803",
+      "kachel": "14",
+      "dist": 26488.0
+    },
+    {
+      "id": "52870",
+      "name": "Yangchon",
+      "kname": "양촌",
+      "kachel": "630",
+      "dist": 32055.0
+    },
+    {
+      "id": "52864",
+      "name": "Susong-dong1",
+      "kname": "수송동",
+      "kachel": "301",
+      "dist": 34936.9
+    },
+    {
+      "id": "37263",
+      "name": "Munsan Intercity1",
+      "kname": "문산Intercity",
+      "kachel": "288",
+      "dist": 39669.9
+    }
+  ]
+}

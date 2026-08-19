@@ -12,5 +12,180 @@
         }
       }
     ]
+  },
+  {
+    "key": "nccr",
+    "name": "청진특별자치시",
+    "map": "NCCR(2.0.5)",
+    "lines": [
+      {
+        "line": "1",
+        "trips": {
+          "up": "1 A",
+          "down": "1 B"
+        }
+      },
+      {
+        "line": "8",
+        "trips": {
+          "up": "8 A",
+          "down": "8 B"
+        }
+      },
+      {
+        "line": "8-1",
+        "trips": {
+          "up": "8-1 A",
+          "down": "8-1 B"
+        }
+      },
+      {
+        "line": "21",
+        "trips": {
+          "up": "21 A",
+          "down": "21 B"
+        }
+      },
+      {
+        "line": "31",
+        "trips": {
+          "up": "31 A",
+          "down": "31 B"
+        }
+      },
+      {
+        "line": "82",
+        "trips": {
+          "up": "82 A",
+          "down": "82 B"
+        }
+      },
+      {
+        "line": "87",
+        "trips": {
+          "up": "87 A",
+          "down": "87 B"
+        }
+      },
+      {
+        "line": "97-1",
+        "trips": {
+          "up": "97-1 A",
+          "down": "97-1 B"
+        }
+      },
+      {
+        "line": "100",
+        "trips": {
+          "up": "100 A",
+          "down": "100 B"
+        }
+      },
+      {
+        "line": "127",
+        "trips": {
+          "up": "127 A",
+          "down": "127 C"
+        }
+      },
+      {
+        "line": "200",
+        "trips": {
+          "up": "200 A",
+          "down": "200 B"
+        }
+      },
+      {
+        "line": "220",
+        "trips": {
+          "up": "220 A",
+          "down": "220 B"
+        }
+      },
+      {
+        "line": "221",
+        "trips": {
+          "up": "221 A",
+          "down": "221 B"
+        }
+      },
+      {
+        "line": "302",
+        "trips": {
+          "up": "302 A",
+          "down": "302 B"
+        }
+      },
+      {
+        "line": "333",
+        "trips": {
+          "up": "333",
+          "down": ""
+        }
+      },
+      {
+        "line": "520",
+        "trips": {
+          "up": "520 A",
+          "down": "520 B"
+        }
+      },
+      {
+        "line": "911",
+        "trips": {
+          "up": "911 A",
+          "down": "911 B"
+        }
+      },
+      {
+        "line": "914",
+        "trips": {
+          "up": "914 A",
+          "down": "914 B"
+        }
+      },
+      {
+        "line": "1004",
+        "trips": {
+          "up": "1004 A",
+          "down": "1004 B"
+        }
+      },
+      {
+        "line": "1005",
+        "trips": {
+          "up": "1005 A",
+          "down": "1005 B"
+        }
+      },
+      {
+        "line": "1011",
+        "trips": {
+          "up": "1011 A",
+          "down": "1011 B"
+        }
+      },
+      {
+        "line": "2029",
+        "trips": {
+          "up": "2029 A",
+          "down": "2029 B"
+        }
+      },
+      {
+        "line": "AL1",
+        "trips": {
+          "up": "AL1 A",
+          "down": "AL1 B"
+        }
+      },
+      {
+        "line": "MO",
+        "trips": {
+          "up": "MO A",
+          "down": "MO B"
+        }
+      }
+    ]
   }
 ]

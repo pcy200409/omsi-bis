@@ -1,0 +1,97 @@
+{
+  "key": "1B",
+  "no": "1",
+  "type": "일반",
+  "dir": "down",
+  "from": "안락터미널",
+  "to": "고산",
+  "length": 14023.2,
+  "first": "06:10",
+  "last": "21:40",
+  "stops": [
+    {
+      "id": "2841",
+      "name": "Anrak Terminal",
+      "kname": "안락터미널",
+      "kachel": "14",
+      "dist": 10.0
+    },
+    {
+      "id": "2860",
+      "name": "Haneul Undertaker",
+      "kname": "하늘Undertaker",
+      "kachel": "13",
+      "dist": 195.2
+    },
+    {
+      "id": "2868",
+      "name": "Anrak Market",
+      "kname": "안락시장",
+      "kachel": "9",
+      "dist": 398.4
+    },
+    {
+      "id": "2876",
+      "name": "Munsung",
+      "kname": "문숭",
+      "kachel": "45",
+      "dist": 3192.9
+    },
+    {
+      "id": "2878",
+      "name": "Daebo-1",
+      "kname": "대보1",
+      "kachel": "61",
+      "dist": 4390.4
+    },
+    {
+      "id": "2880",
+      "name": "Migok",
+      "kname": "미곡",
+      "kachel": "72",
+      "dist": 5822.4
+    },
+    {
+      "id": "4317",
+      "name": "Suyang",
+      "kname": "수양",
+      "kachel": "98",
+      "dist": 7486.3
+    },
+    {
+      "id": "4665",
+      "name": "Bongwo",
+      "kname": "봉워",
+      "kachel": "104",
+      "dist": 8873.9
+    },
+    {
+      "id": "4674",
+      "name": "Cheongsan",
+      "kname": "청산",
+      "kachel": "109",
+      "dist": 9422.6
+    },
+    {
+      "id": "4959",
+      "name": "Sahaejeomchon",
+      "kname": "사해점촌",
+      "kachel": "121",
+      "dist": 10440.5
+    },
+    {
+      "id": "5433",
+      "name": "Hankyeong-myeon office",
+      "kname": "한켱면사무소",
+      "kachel": "131",
+      "dist": 11869.4
+    },
+    {
+      "id": "5753",
+      "name": "Gosan",
+      "kname": "고산",
+      "kachel": "137",
+      "dist": 14023.2
+    }
+  ]
+}

@@ -1,0 +1,202 @@
+{
+  "key": "53B",
+  "no": "53",
+  "type": "일반",
+  "dir": "down",
+  "from": "태봉부락",
+  "to": "문산Nat'l대학교53",
+  "length": 13977.0,
+  "first": "05:05",
+  "last": "23:25",
+  "stops": [
+    {
+      "id": "43567",
+      "name": "Taebong Burak",
+      "kname": "태봉부락",
+      "kachel": "439",
+      "dist": 20.5
+    },
+    {
+      "id": "43565",
+      "name": "Burak Ipgu1",
+      "kname": "부락입구",
+      "kachel": "449",
+      "dist": 480.9
+    },
+    {
+      "id": "43525",
+      "name": "E Mart Traders",
+      "kname": "이마트Traders",
+      "kachel": "444",
+      "dist": 1451.4
+    },
+    {
+      "id": "43509",
+      "name": "Miryong Parkvil1",
+      "kname": "미룡Parkvil",
+      "kachel": "276",
+      "dist": 1767.8
+    },
+    {
+      "id": "43494",
+      "name": "Hanna Town1",
+      "kname": "한나Town",
+      "kachel": "330",
+      "dist": 2458.8
+    },
+    {
+      "id": "43477",
+      "name": "City Council1",
+      "kname": "City Council1",
+      "kachel": "332",
+      "dist": 2929.3
+    },
+    {
+      "id": "28645",
+      "name": "Digitalplaza",
+      "kname": "Digitalplaza",
+      "kachel": "331",
+      "dist": 3399.5
+    },
+    {
+      "id": "14681",
+      "name": "V Tour Hotel",
+      "kname": "VTour호텔",
+      "kachel": "288",
+      "dist": 3886.8
+    },
+    {
+      "id": "14689",
+      "name": "Munsan Intercity Bus Terminal-41,53,92,99",
+      "kname": "문산Intercity버스터미널41,53,92,99",
+      "kachel": "288",
+      "dist": 4140.8
+    },
+    {
+      "id": "14986",
+      "name": "Gyeong Ahm Rotary",
+      "kname": "경Ahm로터리",
+      "kachel": "292",
+      "dist": 4569.7
+    },
+    {
+      "id": "38208",
+      "name": "Yuseong Engineering-41,53,99",
+      "kname": "유성엥이네에링41,53,99",
+      "kachel": "294",
+      "dist": 4997.3
+    },
+    {
+      "id": "43590",
+      "name": "Chunil Metal-53",
+      "kname": "추닐메탈53",
+      "kachel": "295",
+      "dist": 5889.2
+    },
+    {
+      "id": "43461",
+      "name": "Samik Apt1",
+      "kname": "사믹아파트",
+      "kachel": "384",
+      "dist": 6284.2
+    },
+    {
+      "id": "43446",
+      "name": "Donglim Mansion",
+      "kname": "동림만시온",
+      "kachel": "385",
+      "dist": 6687.6
+    },
+    {
+      "id": "43433",
+      "name": "JB Industry1",
+      "kname": "JB Industry1",
+      "kachel": "387",
+      "dist": 6999.4
+    },
+    {
+      "id": "43589",
+      "name": "Susong Library-53",
+      "kname": "수송도서관53",
+      "kachel": "375",
+      "dist": 7594.9
+    },
+    {
+      "id": "43395",
+      "name": "Halla Apt1",
+      "kname": "할라아파트",
+      "kachel": "412",
+      "dist": 8493.4
+    },
+    {
+      "id": "43383",
+      "name": "Dongshin Apt1",
+      "kname": "동신아파트",
+      "kachel": "372",
+      "dist": 8787.0
+    },
+    {
+      "id": "43426",
+      "name": "Eileen's Garden1",
+      "kname": "Eileen's Garden1",
+      "kachel": "307",
+      "dist": 9096.3
+    },
+    {
+      "id": "43577",
+      "name": "Homeplus3-53",
+      "kname": "Homeplus3-53",
+      "kachel": "305",
+      "dist": 9366.6
+    },
+    {
+      "id": "42626",
+      "name": "Doosan We've1",
+      "kname": "두산We've",
+      "kachel": "310",
+      "dist": 10077.2
+    },
+    {
+      "id": "42611",
+      "name": "KCC Switzen1",
+      "kname": "KCC Switzen1",
+      "kachel": "312",
+      "dist": 10636.0
+    },
+    {
+      "id": "16399",
+      "name": "Daesung Middle School",
+      "kname": "대숭중학교",
+      "kachel": "314",
+      "dist": 11358.4
+    },
+    {
+      "id": "16924",
+      "name": "Flower Market",
+      "kname": "Flower시장",
+      "kachel": "317",
+      "dist": 12086.3
+    },
+    {
+      "id": "16910",
+      "name": "Agricurtural Wholesale Market",
+      "kname": "AgricurturalWholesale시장",
+      "kachel": "318",
+      "dist": 12344.6
+    },
+    {
+      "id": "17154",
+      "name": "Paegang Maeul",
+      "kname": "패강매울",
+      "kachel": "321",
+      "dist": 13014.1
+    },
+    {
+      "id": "43575",
+      "name": "Munsan Nat'l Univ-53",
+      "kname": "문산Nat'l대학교53",
+      "kachel": "323",
+      "dist": 13977.0
+    }
+  ]
+}

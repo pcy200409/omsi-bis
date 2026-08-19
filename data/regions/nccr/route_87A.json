@@ -1,0 +1,153 @@
+{
+  "key": "87A",
+  "no": "87",
+  "type": "일반",
+  "dir": "up",
+  "from": "동대동",
+  "to": "아이스퀘어",
+  "length": 6056.3,
+  "first": "04:50",
+  "last": "23:20",
+  "stops": [
+    {
+      "id": "508604",
+      "name": "Dongdae-dong G2 Start",
+      "kname": "동대동",
+      "kachel": "82",
+      "dist": 39.7
+    },
+    {
+      "id": "508605",
+      "name": "Simin APT G1 21",
+      "kname": "시민아파트",
+      "kachel": "117",
+      "dist": 212.8
+    },
+    {
+      "id": "503032",
+      "name": "Sujeong Hill",
+      "kname": "수정언덕",
+      "kachel": "78",
+      "dist": 288.6
+    },
+    {
+      "id": "487979",
+      "name": "Sujeong 3-dong G1",
+      "kname": "수정3동",
+      "kachel": "78",
+      "dist": 558.7
+    },
+    {
+      "id": "512928",
+      "name": "Geumsusa G1 86",
+      "kname": "금수사",
+      "kachel": "70",
+      "dist": 841.1
+    },
+    {
+      "id": "460439",
+      "name": "Choryang Fire Station G2",
+      "kname": "초량소방서",
+      "kachel": "68",
+      "dist": 1200.0
+    },
+    {
+      "id": "460441",
+      "name": "Dongil Park Mansion G1",
+      "kname": "동일공원만시온",
+      "kachel": "68",
+      "dist": 1436.5
+    },
+    {
+      "id": "460445",
+      "name": "Daesin Healty G1",
+      "kname": "대신건강",
+      "kachel": "73",
+      "dist": 1728.6
+    },
+    {
+      "id": "508185",
+      "name": "Namsan Samgeori G1 127",
+      "kname": "남산삼거리",
+      "kachel": "73",
+      "dist": 1965.4
+    },
+    {
+      "id": "460448",
+      "name": "Cheongjin Station G2",
+      "kname": "청진역",
+      "kachel": "79",
+      "dist": 2078.8
+    },
+    {
+      "id": "508476",
+      "name": "Namsan Stadium G1",
+      "kname": "남산경기장",
+      "kachel": "79",
+      "dist": 2426.2
+    },
+    {
+      "id": "508480",
+      "name": "Yeonsan Back Hil G1",
+      "kname": "연산뒷고개",
+      "kachel": "68",
+      "dist": 2701.0
+    },
+    {
+      "id": "508481",
+      "name": "Hwangnyeong Tunnel G1",
+      "kname": "황녕터널",
+      "kachel": "68",
+      "dist": 2879.8
+    },
+    {
+      "id": "468718",
+      "name": "Hwangnyeong Byeoksan Apt G1",
+      "kname": "황녕벽산아파트",
+      "kachel": "59",
+      "dist": 4250.2
+    },
+    {
+      "id": "468727",
+      "name": "Yeonsan Hill G1",
+      "kname": "연산고개",
+      "kachel": "54",
+      "dist": 4472.0
+    },
+    {
+      "id": "467319",
+      "name": "Daegyo-dong E Mart G3",
+      "kname": "대교동이마트",
+      "kachel": "52",
+      "dist": 5067.6
+    },
+    {
+      "id": "468122",
+      "name": "Daegyo Jugong Apt G1",
+      "kname": "대교주공아파트",
+      "kachel": "50",
+      "dist": 5301.0
+    },
+    {
+      "id": "512930",
+      "name": "Court G1 87",
+      "kname": "법원",
+      "kachel": "50",
+      "dist": 5630.6
+    },
+    {
+      "id": "453804",
+      "name": "Suyeong Police Stn G2",
+      "kname": "수영경찰서",
+      "kachel": "51",
+      "dist": 5830.9
+    },
+    {
+      "id": "512933",
+      "name": "I Square G5 87 End",
+      "kname": "아이스퀘어",
+      "kachel": "51",
+      "dist": 6056.3
+    }
+  ]
+}

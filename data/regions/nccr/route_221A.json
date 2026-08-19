@@ -1,0 +1,153 @@
+{
+  "key": "221A",
+  "no": "221",
+  "type": "일반",
+  "dir": "up",
+  "from": "동대동",
+  "to": "두산위브더제니스",
+  "length": 18242.2,
+  "first": "06:00",
+  "last": "21:25",
+  "stops": [
+    {
+      "id": "494989",
+      "name": "Dongdae-dong G1 Start",
+      "kname": "동대동",
+      "kachel": "119",
+      "dist": 30.2
+    },
+    {
+      "id": "508474",
+      "name": "Dongdae Hanyang APT G1 8",
+      "kname": "동대한양아파트",
+      "kachel": "119",
+      "dist": 244.5
+    },
+    {
+      "id": "485781",
+      "name": "Harbor G1",
+      "kname": "항만",
+      "kachel": "137",
+      "dist": 652.6
+    },
+    {
+      "id": "485879",
+      "name": "Mora Homeplus G1",
+      "kname": "모라홈플러스",
+      "kachel": "260",
+      "dist": 1260.4
+    },
+    {
+      "id": "485986",
+      "name": "Mora Saemaeul Geumgo G1",
+      "kname": "모라새마을금고",
+      "kachel": "115",
+      "dist": 1663.1
+    },
+    {
+      "id": "515600",
+      "name": "Cheongjin Stn 221",
+      "kname": "청진역",
+      "kachel": "73",
+      "dist": 2229.5
+    },
+    {
+      "id": "468718",
+      "name": "Hwangnyeong Byeoksan Apt G1",
+      "kname": "황녕벽산아파트",
+      "kachel": "59",
+      "dist": 4801.0
+    },
+    {
+      "id": "451601",
+      "name": "Daegyo-dong G1S1",
+      "kname": "대교동",
+      "kachel": "49",
+      "dist": 5556.7
+    },
+    {
+      "id": "508495",
+      "name": "Seohan Market G2 1",
+      "kname": "서한시장",
+      "kachel": "1",
+      "dist": 7231.4
+    },
+    {
+      "id": "515605",
+      "name": "CHW Garage G1 221",
+      "kname": "청야월차고지",
+      "kachel": "19",
+      "dist": 10706.4
+    },
+    {
+      "id": "508277",
+      "name": "Cheongwon Ent G1",
+      "kname": "청원입구",
+      "kachel": "36",
+      "dist": 9953.8
+    },
+    {
+      "id": "502341",
+      "name": "Geumsan 1-dong Sungmo Hospital G1",
+      "kname": "금산1동.성모병원",
+      "kachel": "106",
+      "dist": 13017.1
+    },
+    {
+      "id": "502353",
+      "name": "Geumsan Chukhyeop G1",
+      "kname": "금산축협",
+      "kachel": "107",
+      "dist": 13404.2
+    },
+    {
+      "id": "495083",
+      "name": "Buksan APT G2",
+      "kname": "북산아파트",
+      "kachel": "110",
+      "dist": 13862.0
+    },
+    {
+      "id": "495089",
+      "name": "Geumsan Sinjugong APT G2",
+      "kname": "금산신주공아파트",
+      "kachel": "112",
+      "dist": 14163.6
+    },
+    {
+      "id": "502322",
+      "name": "Gaegeum APT G1 220221",
+      "kname": "개금아파트",
+      "kachel": "156",
+      "dist": 14657.1
+    },
+    {
+      "id": "492390",
+      "name": "Geumho APT G1",
+      "kname": "금호아파트",
+      "kachel": "293",
+      "dist": 15361.4
+    },
+    {
+      "id": "492399",
+      "name": "Geumsan Neospo",
+      "kname": "금산네오스포",
+      "kachel": "292",
+      "dist": 15585.2
+    },
+    {
+      "id": "492408",
+      "name": "Geunsam Public Garage To Garage",
+      "kname": "금산공영차고지",
+      "kachel": "286",
+      "dist": 17863.7
+    },
+    {
+      "id": "492624",
+      "name": "Doosan Weve The Zenith To Garage",
+      "kname": "두산위브더제니스",
+      "kachel": "278",
+      "dist": 18242.2
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "key": "SamjuB",
+  "no": "Samju",
+  "type": "일반",
+  "dir": "down",
+  "from": "문산Intercity",
+  "to": "삼주IntercityArr",
+  "length": 28355.1,
+  "first": "06:00",
+  "last": "23:30",
+  "stops": [
+    {
+      "id": "37259",
+      "name": "Munsan Intercity",
+      "kname": "문산Intercity",
+      "kachel": "288",
+      "dist": 63.7
+    },
+    {
+      "id": "37287",
+      "name": "Lotte Cinema2",
+      "kname": "롯데Cinema",
+      "kachel": "277",
+      "dist": 1918.7
+    },
+    {
+      "id": "37295",
+      "name": "Miryong 3 Geori",
+      "kname": "미룡3거리",
+      "kachel": "270",
+      "dist": 2413.6
+    },
+    {
+      "id": "37347",
+      "name": "Gulpo-Intercity-800",
+      "kname": "굴포Intercity800",
+      "kachel": "188",
+      "dist": 7639.2
+    },
+    {
+      "id": "38184",
+      "name": "Anrak-Intercity-800-1",
+      "kname": "안락Intercity8001",
+      "kachel": "14",
+      "dist": 12013.7
+    },
+    {
+      "id": "51223",
+      "name": "Samju-Intercity Arr",
+      "kname": "삼주IntercityArr",
+      "kachel": "921",
+      "dist": 28355.1
+    }
+  ]
+}

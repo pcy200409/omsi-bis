@@ -1,0 +1,55 @@
+{
+  "key": "2029B",
+  "no": "2029",
+  "type": "일반",
+  "dir": "down",
+  "from": "청산공항",
+  "to": "해송대환승센터",
+  "length": 18591.1,
+  "first": "05:00",
+  "last": "22:00",
+  "stops": [
+    {
+      "id": "503714",
+      "name": "Cheongsan Airport",
+      "kname": "청산공항",
+      "kachel": "297",
+      "dist": 1507.3
+    },
+    {
+      "id": "442400",
+      "name": "I Square G1 2029",
+      "kname": "아이스퀘어",
+      "kachel": "51",
+      "dist": 9957.4
+    },
+    {
+      "id": "451600",
+      "name": "Daegyo-dong G2 2029",
+      "kname": "대교동",
+      "kachel": "49",
+      "dist": 10693.2
+    },
+    {
+      "id": "488168",
+      "name": "Namsan Newtown G2 2029",
+      "kname": "남산신도시",
+      "kachel": "78",
+      "dist": 13472.9
+    },
+    {
+      "id": "487803",
+      "name": "Mora Homeplus G3 2029",
+      "kname": "모라홈플러스",
+      "kachel": "260",
+      "dist": 15021.5
+    },
+    {
+      "id": "508174",
+      "name": "Haesongdae T G1 2029",
+      "kname": "해송대환승센터",
+      "kachel": "340",
+      "dist": 18591.1
+    }
+  ]
+}

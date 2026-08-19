@@ -1,0 +1,69 @@
+{
+  "key": "5A",
+  "no": "5",
+  "type": "일반",
+  "dir": "up",
+  "from": "안락터미널",
+  "to": "석장5",
+  "length": 14781.1,
+  "first": "06:40",
+  "last": "20:45",
+  "stops": [
+    {
+      "id": "2841",
+      "name": "Anrak Terminal",
+      "kname": "안락터미널",
+      "kachel": "14",
+      "dist": 10.0
+    },
+    {
+      "id": "2860",
+      "name": "Haneul Undertaker",
+      "kname": "하늘Undertaker",
+      "kachel": "13",
+      "dist": 195.2
+    },
+    {
+      "id": "40291",
+      "name": "Anrak Market-5",
+      "kname": "안락시장5",
+      "kachel": "9",
+      "dist": 397.0
+    },
+    {
+      "id": "40194",
+      "name": "Biin",
+      "kname": "비인",
+      "kachel": "651",
+      "dist": 4061.2
+    },
+    {
+      "id": "40205",
+      "name": "Sunghyun 2 ri",
+      "kname": "숭휸2리",
+      "kachel": "699",
+      "dist": 5710.0
+    },
+    {
+      "id": "40213",
+      "name": "Sunghyun 1 ri",
+      "kname": "숭휸1리",
+      "kachel": "231",
+      "dist": 6424.9
+    },
+    {
+      "id": "40226",
+      "name": "Donghaksan Spa",
+      "kname": "동학산Spa",
+      "kachel": "0",
+      "dist": 10983.5
+    },
+    {
+      "id": "40249",
+      "name": "Seokjang-5",
+      "kname": "석장5",
+      "kachel": "54",
+      "dist": 14781.1
+    }
+  ]
+}

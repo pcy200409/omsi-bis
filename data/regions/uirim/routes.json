@@ -1,0 +1,16 @@
+[
+  {
+    "key": "1A",
+    "no": "1",
+    "dir": "up",
+    "label": "1 상행 · Southern차고지→Nothern차고지",
+    "stops": 22
+  },
+  {
+    "key": "1B",
+    "no": "1",
+    "dir": "down",
+    "label": "1 하행 · Northern차고지→Southern차고지",
+    "stops": 23
+  }
+]

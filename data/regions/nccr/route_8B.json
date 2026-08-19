@@ -1,0 +1,167 @@
+{
+  "key": "8B",
+  "no": "8",
+  "type": "일반",
+  "dir": "down",
+  "from": "동대동",
+  "to": "청진공영차고지",
+  "length": 12267.2,
+  "first": "05:00",
+  "last": "22:00",
+  "stops": [
+    {
+      "id": "494989",
+      "name": "Dongdae-dong G1 Start",
+      "kname": "동대동",
+      "kachel": "119",
+      "dist": 30.2
+    },
+    {
+      "id": "508474",
+      "name": "Dongdae Hanyang APT G1 8",
+      "kname": "동대한양아파트",
+      "kachel": "119",
+      "dist": 244.5
+    },
+    {
+      "id": "486969",
+      "name": "Namsanjeong Station Transfer Stop G1 8",
+      "kname": "남산정역환승센터",
+      "kachel": "80",
+      "dist": 1017.7
+    },
+    {
+      "id": "508471",
+      "name": "Cheongjin Stn 8",
+      "kname": "청진역",
+      "kachel": "73",
+      "dist": 1617.6
+    },
+    {
+      "id": "508476",
+      "name": "Namsan Stadium G1",
+      "kname": "남산경기장",
+      "kachel": "79",
+      "dist": 2604.2
+    },
+    {
+      "id": "508480",
+      "name": "Yeonsan Back Hil G1",
+      "kname": "연산뒷고개",
+      "kachel": "68",
+      "dist": 2879.0
+    },
+    {
+      "id": "508481",
+      "name": "Hwangnyeong Tunnel G1",
+      "kname": "황녕터널",
+      "kachel": "68",
+      "dist": 3057.8
+    },
+    {
+      "id": "468718",
+      "name": "Hwangnyeong Byeoksan Apt G1",
+      "kname": "황녕벽산아파트",
+      "kachel": "59",
+      "dist": 2970.5
+    },
+    {
+      "id": "468727",
+      "name": "Yeonsan Hill G1",
+      "kname": "연산고개",
+      "kachel": "54",
+      "dist": 4649.9
+    },
+    {
+      "id": "508350",
+      "name": "Daegyo-dong G1 520",
+      "kname": "대교동",
+      "kachel": "49",
+      "dist": 5207.0
+    },
+    {
+      "id": "507828",
+      "name": "Seohan Market A2",
+      "kname": "서한시장",
+      "kachel": "1",
+      "dist": 6965.1
+    },
+    {
+      "id": "507879",
+      "name": "CH Univ Hospital M2",
+      "kname": "청진대학교병원",
+      "kachel": "6",
+      "dist": 7325.8
+    },
+    {
+      "id": "449722",
+      "name": "Seohan Sangga G1",
+      "kname": "서한상가",
+      "kachel": "6",
+      "dist": 7758.6
+    },
+    {
+      "id": "508483",
+      "name": "Lotte Department Store G1",
+      "kname": "롯데백화점",
+      "kachel": "160",
+      "dist": 8136.8
+    },
+    {
+      "id": "508485",
+      "name": "Geumgwan-dong G1",
+      "kname": "금관동",
+      "kachel": "189",
+      "dist": 8466.6
+    },
+    {
+      "id": "449921",
+      "name": "Geumgwan Library G2",
+      "kname": "금관도서관",
+      "kachel": "197",
+      "dist": 9085.1
+    },
+    {
+      "id": "449919",
+      "name": "CH Maidan G2",
+      "kname": "금관도서관",
+      "kachel": "197",
+      "dist": 9285.5
+    },
+    {
+      "id": "508488",
+      "name": "Cheongjin Cityhall G2 8 Garage",
+      "kname": "청진시청차고지",
+      "kachel": "161",
+      "dist": 9797.3
+    },
+    {
+      "id": "508242",
+      "name": "Seohan Market M3 To Garage",
+      "kname": "서한시장",
+      "kachel": "1",
+      "dist": 10929.8
+    },
+    {
+      "id": "449687",
+      "name": "Pabal-dong G3",
+      "kname": "파발동",
+      "kachel": "9",
+      "dist": 11447.7
+    },
+    {
+      "id": "450652",
+      "name": "Cheongjin Nonggyeong University G2",
+      "kname": "청진농경대학교",
+      "kachel": "41",
+      "dist": 11764.0
+    },
+    {
+      "id": "449302",
+      "name": "Cheongjin Public Garage End",
+      "kname": "청진공영차고지",
+      "kachel": "42",
+      "dist": 12267.2
+    }
+  ]
+}

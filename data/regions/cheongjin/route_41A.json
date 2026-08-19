@@ -1,0 +1,181 @@
+{
+  "key": "41A",
+  "no": "41",
+  "type": "일반",
+  "dir": "up",
+  "from": "문산역41",
+  "to": "상록아파트",
+  "length": 14100.1,
+  "first": "05:00",
+  "last": "23:30",
+  "stops": [
+    {
+      "id": "27385",
+      "name": "Munsan Station-41",
+      "kname": "문산역41",
+      "kachel": "515",
+      "dist": 764.4
+    },
+    {
+      "id": "28554",
+      "name": "Byeoksan APT, Parkvill",
+      "kname": "벽산APT,Parkvill",
+      "kachel": "501",
+      "dist": 1922.0
+    },
+    {
+      "id": "28566",
+      "name": "Jeokbo Highschool",
+      "kname": "적보Highschool",
+      "kachel": "481",
+      "dist": 2813.6
+    },
+    {
+      "id": "28583",
+      "name": "Jangmi Elementary School",
+      "kname": "장미초등학교",
+      "kachel": "455",
+      "dist": 3153.7
+    },
+    {
+      "id": "28598",
+      "name": "Sky Castle",
+      "kname": "Sky캐슬",
+      "kachel": "477",
+      "dist": 3623.5
+    },
+    {
+      "id": "38205",
+      "name": "Munsan Express Bus Terminal-41,99",
+      "kname": "문산Express버스터미널41,99",
+      "kachel": "398",
+      "dist": 4411.8
+    },
+    {
+      "id": "28612",
+      "name": "Munsan Police Station",
+      "kname": "문산경찰서",
+      "kachel": "332",
+      "dist": 5076.1
+    },
+    {
+      "id": "28645",
+      "name": "Digitalplaza",
+      "kname": "Digitalplaza",
+      "kachel": "331",
+      "dist": 5549.8
+    },
+    {
+      "id": "14681",
+      "name": "V Tour Hotel",
+      "kname": "VTour호텔",
+      "kachel": "288",
+      "dist": 6037.1
+    },
+    {
+      "id": "14689",
+      "name": "Munsan Intercity Bus Terminal-41,53,92,99",
+      "kname": "문산Intercity버스터미널41,53,92,99",
+      "kachel": "288",
+      "dist": 6291.1
+    },
+    {
+      "id": "14986",
+      "name": "Gyeong Ahm Rotary",
+      "kname": "경Ahm로터리",
+      "kachel": "292",
+      "dist": 6720.0
+    },
+    {
+      "id": "38208",
+      "name": "Yuseong Engineering-41,53,99",
+      "kname": "유성엥이네에링41,53,99",
+      "kachel": "294",
+      "dist": 7147.6
+    },
+    {
+      "id": "28759",
+      "name": "Chunil Metal",
+      "kname": "추닐메탈",
+      "kachel": "295",
+      "dist": 8038.4
+    },
+    {
+      "id": "29253",
+      "name": "Samhak highschool",
+      "kname": "삼학highschool",
+      "kachel": "381",
+      "dist": 8607.0
+    },
+    {
+      "id": "29501",
+      "name": "Shinil APT",
+      "kname": "시닐아파트",
+      "kachel": "388",
+      "dist": 9462.9
+    },
+    {
+      "id": "29658",
+      "name": "Myeongsung Elementary School",
+      "kname": "명숭초등학교",
+      "kachel": "390",
+      "dist": 10259.8
+    },
+    {
+      "id": "30068",
+      "name": "Samhak Vila",
+      "kname": "삼학Vila",
+      "kachel": "392",
+      "dist": 10640.0
+    },
+    {
+      "id": "30080",
+      "name": "Susong Park",
+      "kname": "수송공원",
+      "kachel": "394",
+      "dist": 11098.2
+    },
+    {
+      "id": "38201",
+      "name": "Susong Rodeo1-41",
+      "kname": "수송Rodeo141",
+      "kachel": "375",
+      "dist": 11549.5
+    },
+    {
+      "id": "30399",
+      "name": "Susong Library",
+      "kname": "수송도서관",
+      "kachel": "375",
+      "dist": 12087.1
+    },
+    {
+      "id": "30403",
+      "name": "Gwangmin Technical High School",
+      "kname": "광민Technical고등학교",
+      "kachel": "373",
+      "dist": 12497.7
+    },
+    {
+      "id": "30404",
+      "name": "Semyeong APT",
+      "kname": "세명아파트",
+      "kachel": "306",
+      "dist": 12991.6
+    },
+    {
+      "id": "43578",
+      "name": "Eileen's Garden-41",
+      "kname": "Eileen's Garden-41",
+      "kachel": "307",
+      "dist": 13583.5
+    },
+    {
+      "id": "43291",
+      "name": "Sangrok Apt",
+      "kname": "상록아파트",
+      "kachel": "366",
+      "dist": 14100.1
+    }
+  ]
+}

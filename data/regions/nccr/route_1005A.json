@@ -1,0 +1,125 @@
+{
+  "key": "1005A",
+  "no": "1005",
+  "type": "일반",
+  "dir": "up",
+  "from": "선북동",
+  "to": "주동교차로",
+  "length": 20418.0,
+  "first": "04:30",
+  "last": "21:15",
+  "stops": [
+    {
+      "id": "493582",
+      "name": "Seonbuk-dong 1005",
+      "kname": "선북동",
+      "kachel": "283",
+      "dist": 836.8
+    },
+    {
+      "id": "507902",
+      "name": "Bukbu Market",
+      "kname": "북부시장",
+      "kachel": "284",
+      "dist": 937.3
+    },
+    {
+      "id": "492402",
+      "name": "Geumsan POSCO1",
+      "kname": "금산포스코",
+      "kachel": "289",
+      "dist": 3552.1
+    },
+    {
+      "id": "492400",
+      "name": "Geumsan Neospo1",
+      "kname": "금산네오스포",
+      "kachel": "292",
+      "dist": 3998.2
+    },
+    {
+      "id": "492295",
+      "name": "Cheongjin Nambu Gas Corporation",
+      "kname": "청진남부가스공사",
+      "kachel": "392",
+      "dist": 5372.7
+    },
+    {
+      "id": "449916",
+      "name": "CH Cityhall G2",
+      "kname": "청진시청",
+      "kachel": "153",
+      "dist": 11725.1
+    },
+    {
+      "id": "507880",
+      "name": "CH Univ Hospital M3",
+      "kname": "청진대학교병원",
+      "kachel": "6",
+      "dist": 12457.7
+    },
+    {
+      "id": "449676",
+      "name": "Seohan Market M1",
+      "kname": "서한시장",
+      "kachel": "1",
+      "dist": 12821.4
+    },
+    {
+      "id": "451197",
+      "name": "Cheongyawol-myeon Office G1",
+      "kname": "청야월면사무소",
+      "kachel": "19",
+      "dist": 14920.8
+    },
+    {
+      "id": "507927",
+      "name": "Cheongwoon Hyundai Villa",
+      "kname": "청운현대빌라",
+      "kachel": "241",
+      "dist": 16121.7
+    },
+    {
+      "id": "507938",
+      "name": "Myeongbeop Hyundai Outlet R2",
+      "kname": "명법현대아울렛",
+      "kachel": "387",
+      "dist": 17098.7
+    },
+    {
+      "id": "507946",
+      "name": "Mojeon Station",
+      "kname": "모전역",
+      "kachel": "376",
+      "dist": 18062.4
+    },
+    {
+      "id": "507950",
+      "name": "Hwanam Market",
+      "kname": "화남시장",
+      "kachel": "376",
+      "dist": 18407.1
+    },
+    {
+      "id": "507531",
+      "name": "Gangbyeon Maeul",
+      "kname": "강변마을",
+      "kachel": "371",
+      "dist": 19030.2
+    },
+    {
+      "id": "497619",
+      "name": "Hansin Huplus G2 1011",
+      "kname": "한신휴플러스",
+      "kachel": "367",
+      "dist": 19708.4
+    },
+    {
+      "id": "507972",
+      "name": "Judong Junction1",
+      "kname": "주동교차로",
+      "kachel": "372",
+      "dist": 20418.0
+    }
+  ]
+}

@@ -1,0 +1,258 @@
+{
+  "key": "23B",
+  "no": "23",
+  "type": "일반",
+  "dir": "down",
+  "from": "Airbus-23",
+  "to": "문산Nat'l대학교23",
+  "length": 17723.3,
+  "first": "05:00",
+  "last": "22:03",
+  "stops": [
+    {
+      "id": "24006",
+      "name": "Airbus-23",
+      "kname": "Airbus-23",
+      "kachel": "353",
+      "dist": 20.5
+    },
+    {
+      "id": "24012",
+      "name": "ENSTA TECH1",
+      "kname": "ENSTA TECH1",
+      "kachel": "349",
+      "dist": 642.6
+    },
+    {
+      "id": "23818",
+      "name": "Honam Industry1",
+      "kname": "호남Industry",
+      "kachel": "342",
+      "dist": 1132.8
+    },
+    {
+      "id": "14690",
+      "name": "Munsan Intercity Bus Terminal1",
+      "kname": "문산Intercity버스터미널",
+      "kachel": "288",
+      "dist": 1473.5
+    },
+    {
+      "id": "14682",
+      "name": "V Tour Hotel1-23,92",
+      "kname": "V Tour Hotel1-23,92",
+      "kachel": "288",
+      "dist": 1688.4
+    },
+    {
+      "id": "14654",
+      "name": "Gyeong Ahm Church1",
+      "kname": "경Ahm교회",
+      "kachel": "285",
+      "dist": 2330.4
+    },
+    {
+      "id": "14544",
+      "name": "KEPCO Munsan branch1",
+      "kname": "KEPCO문산branch",
+      "kachel": "280",
+      "dist": 2780.8
+    },
+    {
+      "id": "38217",
+      "name": "Ex.MBC Intersection1-23",
+      "kname": "Ex.MBC Intersection1-23",
+      "kachel": "277",
+      "dist": 3056.9
+    },
+    {
+      "id": "23804",
+      "name": "Dooryong-Dong1",
+      "kname": "도오룡동",
+      "kachel": "327",
+      "dist": 3357.5
+    },
+    {
+      "id": "23791",
+      "name": "Munsan Cityhall",
+      "kname": "문산시청",
+      "kachel": "328",
+      "dist": 3852.1
+    },
+    {
+      "id": "23767",
+      "name": "Munsan Express Bus Terminal1",
+      "kname": "문산Express버스터미널",
+      "kachel": "398",
+      "dist": 4399.2
+    },
+    {
+      "id": "23748",
+      "name": "Mahyeon Sangga1",
+      "kname": "마현상가",
+      "kachel": "399",
+      "dist": 4790.0
+    },
+    {
+      "id": "23735",
+      "name": "Hongil Apt1",
+      "kname": "홍일아파트",
+      "kachel": "400",
+      "dist": 5145.5
+    },
+    {
+      "id": "23726",
+      "name": "Giseong Apt1",
+      "kname": "기성아파트",
+      "kachel": "401",
+      "dist": 5589.2
+    },
+    {
+      "id": "26915",
+      "name": "Mohyeon Highschool2",
+      "kname": "모현Highschool",
+      "kachel": "403",
+      "dist": 6027.8
+    },
+    {
+      "id": "26939",
+      "name": "Pyeonghwa dong ipgu1",
+      "kname": "평화동입구",
+      "kachel": "426",
+      "dist": 6755.1
+    },
+    {
+      "id": "49157",
+      "name": "Rural Development Administration",
+      "kname": "루랄DevelopmentAdministration",
+      "kachel": "429",
+      "dist": 7120.7
+    },
+    {
+      "id": "45270",
+      "name": "Agricultural Industrial Complex-23",
+      "kname": "Agricultural Industrial Complex-23",
+      "kachel": "729",
+      "dist": 7466.1
+    },
+    {
+      "id": "23694",
+      "name": "Taecho Maeul1",
+      "kname": "태초매울",
+      "kachel": "408",
+      "dist": 8827.3
+    },
+    {
+      "id": "21939",
+      "name": "Migwang Green Town1",
+      "kname": "미광GreenTown",
+      "kachel": "406",
+      "dist": 9471.4
+    },
+    {
+      "id": "21930",
+      "name": "Susong-dong Community Center1",
+      "kname": "수송동주민센터",
+      "kachel": "395",
+      "dist": 9989.6
+    },
+    {
+      "id": "21534",
+      "name": "Susong Rodeo1",
+      "kname": "수송로더",
+      "kachel": "375",
+      "dist": 10236.6
+    },
+    {
+      "id": "15550",
+      "name": "Weedeok Intersection",
+      "kname": "웨에덕교차로",
+      "kachel": "300",
+      "dist": 11035.3
+    },
+    {
+      "id": "15640",
+      "name": "Ohseong Market",
+      "kname": "Ohseong시장",
+      "kachel": "302",
+      "dist": 11587.8
+    },
+    {
+      "id": "15877",
+      "name": "Munsan Nat'l Univ Hospital",
+      "kname": "문산Nat'l대학교병원",
+      "kachel": "304",
+      "dist": 12318.4
+    },
+    {
+      "id": "21281",
+      "name": "Homeplus2",
+      "kname": "홈플러스",
+      "kachel": "307",
+      "dist": 12958.5
+    },
+    {
+      "id": "21189",
+      "name": "Lynn APT1",
+      "kname": "Lynn아파트",
+      "kachel": "307",
+      "dist": 13338.0
+    },
+    {
+      "id": "21074",
+      "name": "Changsin Elementry School1",
+      "kname": "창신초등학교",
+      "kachel": "366",
+      "dist": 13647.0
+    },
+    {
+      "id": "20900",
+      "name": "Hyundai APT, Bando APT1",
+      "kname": "현대APT,반도아파트",
+      "kachel": "365",
+      "dist": 14114.9
+    },
+    {
+      "id": "21291",
+      "name": "CGV Munsan3",
+      "kname": "CGV문산",
+      "kachel": "313",
+      "dist": 14349.7
+    },
+    {
+      "id": "16399",
+      "name": "Daesung Middle School",
+      "kname": "대숭중학교",
+      "kachel": "314",
+      "dist": 15105.8
+    },
+    {
+      "id": "16924",
+      "name": "Flower Market",
+      "kname": "Flower시장",
+      "kachel": "317",
+      "dist": 15833.7
+    },
+    {
+      "id": "16910",
+      "name": "Agricurtural Wholesale Market",
+      "kname": "AgricurturalWholesale시장",
+      "kachel": "318",
+      "dist": 16092.0
+    },
+    {
+      "id": "17154",
+      "name": "Paegang Maeul",
+      "kname": "패강매울",
+      "kachel": "321",
+      "dist": 16761.5
+    },
+    {
+      "id": "20083",
+      "name": "Munsan Nat'l Univ-23",
+      "kname": "문산Nat'l대학교23",
+      "kachel": "323",
+      "dist": 17723.3
+    }
+  ]
+}

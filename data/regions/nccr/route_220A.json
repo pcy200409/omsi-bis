@@ -1,0 +1,181 @@
+{
+  "key": "220A",
+  "no": "220",
+  "type": "일반",
+  "dir": "up",
+  "from": "해송대역",
+  "to": "두산위브더제니스",
+  "length": 22072.6,
+  "first": "07:30",
+  "last": "22:30",
+  "stops": [
+    {
+      "id": "494816",
+      "name": "Haesongdae Stn G1",
+      "kname": "해송대역",
+      "kachel": "339",
+      "dist": 73.8
+    },
+    {
+      "id": "494809",
+      "name": "Haesongdae T G2",
+      "kname": "해송대환승센터",
+      "kachel": "340",
+      "dist": 449.7
+    },
+    {
+      "id": "494801",
+      "name": "Gochang Entrance G2",
+      "kname": "고창입구",
+      "kachel": "333",
+      "dist": 1175.2
+    },
+    {
+      "id": "502500",
+      "name": "Gochang Samgeori G2",
+      "kname": "고창삼거리",
+      "kachel": "327",
+      "dist": 1877.2
+    },
+    {
+      "id": "507813",
+      "name": "Mora Homeplus G3",
+      "kname": "모라홈플러스",
+      "kachel": "260",
+      "dist": 3810.9
+    },
+    {
+      "id": "485986",
+      "name": "Mora Saemaeul Geumgo G1",
+      "kname": "모라새마을금고",
+      "kachel": "115",
+      "dist": 4136.1
+    },
+    {
+      "id": "460449",
+      "name": "Cheongjin Station G1",
+      "kname": "청진역",
+      "kachel": "79",
+      "dist": 4716.7
+    },
+    {
+      "id": "502481",
+      "name": "Namsan Hyundai APT G1",
+      "kname": "남산현대아파트",
+      "kachel": "155",
+      "dist": 5622.5
+    },
+    {
+      "id": "499892",
+      "name": "Kolon Sporex G1",
+      "kname": "코오롱스포츠",
+      "kachel": "320",
+      "dist": 7164.5
+    },
+    {
+      "id": "493060",
+      "name": "Daegyo LH APT G1",
+      "kname": "대교LH아파트",
+      "kachel": "125",
+      "dist": 7539.2
+    },
+    {
+      "id": "508233",
+      "name": "Midopa G1",
+      "kname": "미도파",
+      "kachel": "125",
+      "dist": 7706.0
+    },
+    {
+      "id": "508141",
+      "name": "Daegyo-dong G1 220 221",
+      "kname": "대교동",
+      "kachel": "49",
+      "dist": 8762.0
+    },
+    {
+      "id": "449675",
+      "name": "Seohan Market G1",
+      "kname": "서한시장",
+      "kachel": "1",
+      "dist": 10542.2
+    },
+    {
+      "id": "451197",
+      "name": "Cheongyawol-myeon Office G1",
+      "kname": "청야월면사무소",
+      "kachel": "19",
+      "dist": 12468.4
+    },
+    {
+      "id": "508277",
+      "name": "Cheongwon Ent G1",
+      "kname": "청원입구",
+      "kachel": "36",
+      "dist": 13783.9
+    },
+    {
+      "id": "502341",
+      "name": "Geumsan 1-dong Sungmo Hospital G1",
+      "kname": "금산1동.성모병원",
+      "kachel": "106",
+      "dist": 16847.2
+    },
+    {
+      "id": "502353",
+      "name": "Geumsan Chukhyeop G1",
+      "kname": "금산축협",
+      "kachel": "107",
+      "dist": 17234.4
+    },
+    {
+      "id": "495083",
+      "name": "Buksan APT G2",
+      "kname": "북산아파트",
+      "kachel": "110",
+      "dist": 17692.1
+    },
+    {
+      "id": "495089",
+      "name": "Geumsan Sinjugong APT G2",
+      "kname": "금산신주공아파트",
+      "kachel": "112",
+      "dist": 17993.8
+    },
+    {
+      "id": "502322",
+      "name": "Gaegeum APT G1 220221",
+      "kname": "개금아파트",
+      "kachel": "156",
+      "dist": 18487.2
+    },
+    {
+      "id": "492390",
+      "name": "Geumho APT G1",
+      "kname": "금호아파트",
+      "kachel": "293",
+      "dist": 19191.9
+    },
+    {
+      "id": "492399",
+      "name": "Geumsan Neospo",
+      "kname": "금산네오스포",
+      "kachel": "292",
+      "dist": 19415.6
+    },
+    {
+      "id": "492408",
+      "name": "Geunsam Public Garage To Garage",
+      "kname": "금산공영차고지",
+      "kachel": "286",
+      "dist": 21694.2
+    },
+    {
+      "id": "492624",
+      "name": "Doosan Weve The Zenith To Garage",
+      "kname": "두산위브더제니스",
+      "kachel": "278",
+      "dist": 22072.6
+    }
+  ]
+}

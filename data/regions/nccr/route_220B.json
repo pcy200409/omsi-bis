@@ -1,0 +1,202 @@
+{
+  "key": "220B",
+  "no": "220",
+  "type": "일반",
+  "dir": "down",
+  "from": "두산위브더제니스",
+  "to": "해송대역",
+  "length": 25731.8,
+  "first": "07:30",
+  "last": "22:30",
+  "stops": [
+    {
+      "id": "492625",
+      "name": "Doosan Weve The Zenith G2 Start",
+      "kname": "두산위브더제니스",
+      "kachel": "278",
+      "dist": 2585.1
+    },
+    {
+      "id": "492409",
+      "name": "Geunsam Public Garage G2",
+      "kname": "금산공영차고지",
+      "kachel": "288",
+      "dist": 3262.0
+    },
+    {
+      "id": "492402",
+      "name": "Geumsan POSCO1",
+      "kname": "금산포스코",
+      "kachel": "289",
+      "dist": 4243.7
+    },
+    {
+      "id": "492400",
+      "name": "Geumsan Neospo1",
+      "kname": "금산네오스포",
+      "kachel": "292",
+      "dist": 4491.7
+    },
+    {
+      "id": "492388",
+      "name": "Geumho APT G2",
+      "kname": "금호아파트",
+      "kachel": "293",
+      "dist": 5110.7
+    },
+    {
+      "id": "492381",
+      "name": "Gaegeum APT G2",
+      "kname": "개금아파트",
+      "kachel": "182",
+      "dist": 5793.3
+    },
+    {
+      "id": "495090",
+      "name": "Geumsan Sinjugong APT G1",
+      "kname": "금산신주공아파트",
+      "kachel": "112",
+      "dist": 6744.8
+    },
+    {
+      "id": "502329",
+      "name": "Geumsan 3-dong Community Center G2",
+      "kname": "금산3동행정복지센터",
+      "kachel": "106",
+      "dist": 6985.2
+    },
+    {
+      "id": "502330",
+      "name": "Geumsan 2-dong Daegu Bank G2",
+      "kname": "금산2동.대구은행",
+      "kachel": "106",
+      "dist": 7184.3
+    },
+    {
+      "id": "508295",
+      "name": "Cheongwon Ent G2",
+      "kname": "청원입구",
+      "kachel": "36",
+      "dist": 10274.0
+    },
+    {
+      "id": "451196",
+      "name": "Cheongyawol-myeon Office G2",
+      "kname": "청야월면사무소",
+      "kachel": "19",
+      "dist": 11636.1
+    },
+    {
+      "id": "449678",
+      "name": "Seohan Market M2",
+      "kname": "서한시장",
+      "kachel": "1",
+      "dist": 13370.0
+    },
+    {
+      "id": "508115",
+      "name": "Daegyo-dong G3 1011",
+      "kname": "대교동",
+      "kachel": "49",
+      "dist": 15037.4
+    },
+    {
+      "id": "508228",
+      "name": "Midopa G2",
+      "kname": "미도파",
+      "kachel": "125",
+      "dist": 15842.7
+    },
+    {
+      "id": "493059",
+      "name": "Daegyo LH APT G2",
+      "kname": "대교LH아파트",
+      "kachel": "125",
+      "dist": 15999.5
+    },
+    {
+      "id": "508298",
+      "name": "IKEA 220",
+      "kname": "이케아",
+      "kachel": "523",
+      "dist": 16916.2
+    },
+    {
+      "id": "499891",
+      "name": "Kolon Sporex G2",
+      "kname": "코오롱스포츠",
+      "kachel": "320",
+      "dist": 18234.8
+    },
+    {
+      "id": "502480",
+      "name": "Namsan Hyundai APT G2",
+      "kname": "남산현대아파트",
+      "kachel": "155",
+      "dist": 19563.3
+    },
+    {
+      "id": "460448",
+      "name": "Cheongjin Station G2",
+      "kname": "청진역",
+      "kachel": "79",
+      "dist": 20289.6
+    },
+    {
+      "id": "486967",
+      "name": "Namsanjeong Station Transfer Stop G2",
+      "kname": "남산정역환승센터",
+      "kachel": "80",
+      "dist": 20798.7
+    },
+    {
+      "id": "485987",
+      "name": "Mora Saemaeul Geumgo G2",
+      "kname": "모라새마을금고",
+      "kachel": "80",
+      "dist": 21156.9
+    },
+    {
+      "id": "485877",
+      "name": "Mora Homeplus G2",
+      "kname": "모라홈플러스",
+      "kachel": "83",
+      "dist": 21712.6
+    },
+    {
+      "id": "485725",
+      "name": "Mora Beach Entrance 220",
+      "kname": "모라해수욕장입구",
+      "kachel": "266",
+      "dist": 22289.7
+    },
+    {
+      "id": "502499",
+      "name": "Gochang Samgeori G1",
+      "kname": "고창삼거리",
+      "kachel": "327",
+      "dist": 23922.5
+    },
+    {
+      "id": "494800",
+      "name": "Gochang Entrance G1",
+      "kname": "고창입구",
+      "kachel": "333",
+      "dist": 24267.5
+    },
+    {
+      "id": "494810",
+      "name": "Haesongdae T G1",
+      "kname": "해송대환승센터",
+      "kachel": "340",
+      "dist": 25201.8
+    },
+    {
+      "id": "494818",
+      "name": "Haesongdae Stn G2",
+      "kname": "해송대역",
+      "kachel": "338",
+      "dist": 25731.8
+    }
+  ]
+}

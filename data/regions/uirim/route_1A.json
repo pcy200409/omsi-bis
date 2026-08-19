@@ -1,0 +1,167 @@
+{
+  "key": "1A",
+  "no": "1",
+  "type": "일반",
+  "dir": "up",
+  "from": "Southern차고지",
+  "to": "Nothern차고지",
+  "length": 10107.0,
+  "first": "05:00",
+  "last": "23:35",
+  "stops": [
+    {
+      "id": "1582",
+      "name": "Southern Garage 2",
+      "kname": "Southern차고지",
+      "kachel": "55",
+      "dist": 0.0
+    },
+    {
+      "id": "1494",
+      "name": "Bangchon 2",
+      "kname": "방촌",
+      "kachel": "55",
+      "dist": 186.0
+    },
+    {
+      "id": "1469",
+      "name": "Yeonnyeong Girl's Middle.High School 2",
+      "kname": "연녕Girl'sMiddle.고등학교",
+      "kachel": "52",
+      "dist": 564.0
+    },
+    {
+      "id": "1428",
+      "name": "Mokya District Entrance 1",
+      "kname": "모캬District입구",
+      "kachel": "51",
+      "dist": 1003.0
+    },
+    {
+      "id": "1022",
+      "name": "Doosan Apartment 2",
+      "kname": "두산아파트",
+      "kachel": "35",
+      "dist": 1267.0
+    },
+    {
+      "id": "1011",
+      "name": "Hillstate 2",
+      "kname": "Hillstate 2",
+      "kachel": "11",
+      "dist": 2050.0
+    },
+    {
+      "id": "999",
+      "name": "Seongchon Jugong Apartment 2",
+      "kname": "성촌주공아파트",
+      "kachel": "2",
+      "dist": 2396.0
+    },
+    {
+      "id": "241",
+      "name": "Yeongnyeong Intercity Bus Terminal 2",
+      "kname": "영녕Intercity버스터미널",
+      "kachel": "1",
+      "dist": 3020.0
+    },
+    {
+      "id": "242",
+      "name": "Yeongnyeong Joogang Market 2",
+      "kname": "영녕조오강시장",
+      "kachel": "0",
+      "dist": 3253.0
+    },
+    {
+      "id": "244",
+      "name": "North of the former Yeonnyeong Station 2",
+      "kname": "Northoftheformer연녕역",
+      "kachel": "3",
+      "dist": 3638.0
+    },
+    {
+      "id": "336",
+      "name": "Seongmo Hospital 2",
+      "kname": "성모병원",
+      "kachel": "5",
+      "dist": 3961.0
+    },
+    {
+      "id": "1086",
+      "name": "Nammun Middle.High School 2",
+      "kname": "남문Middle.고등학교",
+      "kachel": "9",
+      "dist": 5141.0
+    },
+    {
+      "id": "2027",
+      "name": "Uirim Elementary School",
+      "kname": "의림초등학교",
+      "kachel": "14",
+      "dist": 5508.0
+    },
+    {
+      "id": "2331",
+      "name": "Uirim Middle.High School 2",
+      "kname": "의림Middle.고등학교",
+      "kachel": "64",
+      "dist": 6086.0
+    },
+    {
+      "id": "2435",
+      "name": "Anteo Maeul 1st Apartment",
+      "kname": "안터매울1st아파트",
+      "kachel": "68",
+      "dist": 6436.0
+    },
+    {
+      "id": "2612",
+      "name": "Baeul Maeul 9th Apartment",
+      "kname": "배울매울9th아파트",
+      "kachel": "72",
+      "dist": 6793.0
+    },
+    {
+      "id": "2618",
+      "name": "Dongui Elementary School",
+      "kname": "동의초등학교",
+      "kachel": "74",
+      "dist": 7360.0
+    },
+    {
+      "id": "2850",
+      "name": "Baeul Maeul 8th Apartment 2",
+      "kname": "배울매울8th아파트",
+      "kachel": "84",
+      "dist": 7846.0
+    },
+    {
+      "id": "2876",
+      "name": "Chungui Middle School 2",
+      "kname": "충의중학교",
+      "kachel": "86",
+      "dist": 8660.0
+    },
+    {
+      "id": "3115",
+      "name": "Oryong Park 2",
+      "kname": "오룡공원",
+      "kachel": "86",
+      "dist": 8889.0
+    },
+    {
+      "id": "3123",
+      "name": "Oryong Maeul 15th Apartment 2",
+      "kname": "오룡매울15th아파트",
+      "kachel": "90",
+      "dist": 9230.0
+    },
+    {
+      "id": "3246",
+      "name": "Nothern Garage 2",
+      "kname": "Nothern차고지",
+      "kachel": "94",
+      "dist": 10107.0
+    }
+  ]
+}

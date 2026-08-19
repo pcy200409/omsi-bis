@@ -1,0 +1,160 @@
+{
+  "key": "1011B",
+  "no": "1011",
+  "type": "일반",
+  "dir": "down",
+  "from": "해송대역",
+  "to": "북구고용센터",
+  "length": 26388.6,
+  "first": "05:00",
+  "last": "00:05",
+  "stops": [
+    {
+      "id": "494816",
+      "name": "Haesongdae Stn G1",
+      "kname": "해송대역",
+      "kachel": "339",
+      "dist": 4.0
+    },
+    {
+      "id": "508123",
+      "name": "Gowon APT G2 1011",
+      "kname": "고원아파트",
+      "kachel": "345",
+      "dist": 648.7
+    },
+    {
+      "id": "494809",
+      "name": "Haesongdae T G2",
+      "kname": "해송대환승센터",
+      "kachel": "340",
+      "dist": 1773.8
+    },
+    {
+      "id": "494801",
+      "name": "Gochang Entrance G2",
+      "kname": "고창입구",
+      "kachel": "333",
+      "dist": 2499.2
+    },
+    {
+      "id": "502500",
+      "name": "Gochang Samgeori G2",
+      "kname": "고창삼거리",
+      "kachel": "327",
+      "dist": 3201.2
+    },
+    {
+      "id": "508139",
+      "name": "Sujeong IC G1 1011",
+      "kname": "수정IC",
+      "kachel": "148",
+      "dist": 6651.8
+    },
+    {
+      "id": "508140",
+      "name": "Geoje Stn G1 1011",
+      "kname": "거제역",
+      "kachel": "55",
+      "dist": 9135.4
+    },
+    {
+      "id": "451602",
+      "name": "Daegyo-dong G1 1011",
+      "kname": "대교동",
+      "kachel": "49",
+      "dist": 10047.1
+    },
+    {
+      "id": "508143",
+      "name": "Myeongbeop Medical Center G2",
+      "kname": "명법의료원",
+      "kachel": "374",
+      "dist": 13999.0
+    },
+    {
+      "id": "507974",
+      "name": "Judong JCT G1 1011",
+      "kname": "주동교차로",
+      "kachel": "372",
+      "dist": 14813.7
+    },
+    {
+      "id": "507956",
+      "name": "Hansin Huplus G1 1011",
+      "kname": "한신휴플러스",
+      "kachel": "367",
+      "dist": 15170.3
+    },
+    {
+      "id": "497646",
+      "name": "Myeongbeop Home Plus G1 1011",
+      "kname": "명법홈플러스",
+      "kachel": "367",
+      "dist": 15318.4
+    },
+    {
+      "id": "508148",
+      "name": "Myeongbeop Yangwoo Naeanae G1 1011",
+      "kname": "명법영우내안에",
+      "kachel": "370",
+      "dist": 15604.2
+    },
+    {
+      "id": "508149",
+      "name": "Myeongbeop Police Stn G1 1011",
+      "kname": "명법경찰서",
+      "kachel": "368",
+      "dist": 15795.8
+    },
+    {
+      "id": "508153",
+      "name": "Myeongbeop Museum G1 1011",
+      "kname": "명법박물관",
+      "kachel": "376",
+      "dist": 15999.1
+    },
+    {
+      "id": "508059",
+      "name": "Wolpyeong JCT G2",
+      "kname": "월평교차로",
+      "kachel": "376",
+      "dist": 16174.1
+    },
+    {
+      "id": "507938",
+      "name": "Myeongbeop Hyundai Outlet R2",
+      "kname": "명법현대아울렛",
+      "kachel": "387",
+      "dist": 17246.0
+    },
+    {
+      "id": "507946",
+      "name": "Mojeon Station",
+      "kname": "모전역",
+      "kachel": "376",
+      "dist": 18328.8
+    },
+    {
+      "id": "507904",
+      "name": "Bukbu Market G2 1011",
+      "kname": "북부시장",
+      "kachel": "284",
+      "dist": 25968.2
+    },
+    {
+      "id": "493580",
+      "name": "Seohee Starhill G2 1011",
+      "kname": "서희스타힐스",
+      "kachel": "283",
+      "dist": 26260.3
+    },
+    {
+      "id": "493579",
+      "name": "Bukgu Employment Branch1",
+      "kname": "북구고용센터",
+      "kachel": "280",
+      "dist": 26388.6
+    }
+  ]
+}

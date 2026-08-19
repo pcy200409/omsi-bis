@@ -1,0 +1,76 @@
+{
+  "key": "4A",
+  "no": "4",
+  "type": "일반",
+  "dir": "up",
+  "from": "안락터미널",
+  "to": "양촌면사무소4",
+  "length": 5889.6,
+  "first": "07:25",
+  "last": "18:47",
+  "stops": [
+    {
+      "id": "2841",
+      "name": "Anrak Terminal",
+      "kname": "안락터미널",
+      "kachel": "14",
+      "dist": 10.0
+    },
+    {
+      "id": "7764",
+      "name": "Anrak Gas Station",
+      "kname": "안락주유소",
+      "kachel": "26",
+      "dist": 295.8
+    },
+    {
+      "id": "7767",
+      "name": "Anrak Library",
+      "kname": "안락도서관",
+      "kachel": "24",
+      "dist": 667.0
+    },
+    {
+      "id": "38174",
+      "name": "AnrakGun Office-3, 4",
+      "kname": "안락군사무소3,",
+      "kachel": "25",
+      "dist": 791.9
+    },
+    {
+      "id": "31673",
+      "name": "Anrak Iaan",
+      "kname": "안락이아안",
+      "kachel": "30",
+      "dist": 1471.4
+    },
+    {
+      "id": "31681",
+      "name": "Salmi",
+      "kname": "살미",
+      "kachel": "568",
+      "dist": 2301.1
+    },
+    {
+      "id": "38175",
+      "name": "Salmi Intersection-4",
+      "kname": "살미교차로4",
+      "kachel": "562",
+      "dist": 2799.6
+    },
+    {
+      "id": "38176",
+      "name": "Yangchon Daewoo, Iaan-4",
+      "kname": "양촌Daewoo,이아안4",
+      "kachel": "589",
+      "dist": 5480.8
+    },
+    {
+      "id": "35465",
+      "name": "Yangchon Myeon Office-4",
+      "kname": "양촌면사무소4",
+      "kachel": "629",
+      "dist": 5889.6
+    }
+  ]
+}

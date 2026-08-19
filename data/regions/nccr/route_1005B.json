@@ -1,0 +1,125 @@
+{
+  "key": "1005B",
+  "no": "1005",
+  "type": "일반",
+  "dir": "down",
+  "from": "주동교차로",
+  "to": "선북동",
+  "length": 17640.9,
+  "first": "04:30",
+  "last": "21:15",
+  "stops": [
+    {
+      "id": "497561",
+      "name": "Judong Junction",
+      "kname": "주동교차로",
+      "kachel": "372",
+      "dist": 9.4
+    },
+    {
+      "id": "497620",
+      "name": "Hansin Huplus1",
+      "kname": "한신휴플러스",
+      "kachel": "367",
+      "dist": 260.5
+    },
+    {
+      "id": "507532",
+      "name": "Gangbyeon Maeul1",
+      "kname": "강변마을",
+      "kachel": "371",
+      "dist": 563.9
+    },
+    {
+      "id": "507951",
+      "name": "Hwanam Market1",
+      "kname": "화남시장",
+      "kachel": "376",
+      "dist": 1534.5
+    },
+    {
+      "id": "507947",
+      "name": "Mojeon Elementary School",
+      "kname": "모전초등학교",
+      "kachel": "376",
+      "dist": 2040.4
+    },
+    {
+      "id": "507931",
+      "name": "Myeongbeop Hyundai Outlet R1",
+      "kname": "명법현대아울렛",
+      "kachel": "247",
+      "dist": 2726.9
+    },
+    {
+      "id": "507928",
+      "name": "Cheongwoon Hyundai Villa1",
+      "kname": "청운현대빌라",
+      "kachel": "241",
+      "dist": 3703.3
+    },
+    {
+      "id": "451196",
+      "name": "Cheongyawol-myeon Office G2",
+      "kname": "청야월면사무소",
+      "kachel": "19",
+      "dist": 3977.2
+    },
+    {
+      "id": "449676",
+      "name": "Seohan Market M1",
+      "kname": "서한시장",
+      "kachel": "1",
+      "dist": 6072.5
+    },
+    {
+      "id": "507879",
+      "name": "CH Univ Hospital M2",
+      "kname": "청진대학교병원",
+      "kachel": "6",
+      "dist": 6493.2
+    },
+    {
+      "id": "449917",
+      "name": "CH Cityhall G1",
+      "kname": "청진시청",
+      "kachel": "153",
+      "dist": 7082.4
+    },
+    {
+      "id": "492295",
+      "name": "Cheongjin Nambu Gas Corporation",
+      "kname": "청진남부가스공사",
+      "kachel": "392",
+      "dist": 13265.5
+    },
+    {
+      "id": "492399",
+      "name": "Geumsan Neospo",
+      "kname": "금산네오스포",
+      "kachel": "292",
+      "dist": 14390.2
+    },
+    {
+      "id": "492401",
+      "name": "Geumsan POSCO",
+      "kname": "금산포스코",
+      "kachel": "289",
+      "dist": 15055.1
+    },
+    {
+      "id": "507904",
+      "name": "Bukbu Market G2 1011",
+      "kname": "북부시장",
+      "kachel": "284",
+      "dist": 17376.1
+    },
+    {
+      "id": "493583",
+      "name": "Seonbuk dong 1005",
+      "kname": "선북동",
+      "kachel": "283",
+      "dist": 17640.9
+    }
+  ]
+}

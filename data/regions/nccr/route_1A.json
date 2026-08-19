@@ -1,0 +1,237 @@
+{
+  "key": "1A",
+  "no": "1",
+  "type": "일반",
+  "dir": "up",
+  "from": "청진공영차고지",
+  "to": "동대동",
+  "length": 14961.2,
+  "first": "05:00",
+  "last": "22:35",
+  "stops": [
+    {
+      "id": "449301",
+      "name": "Cheongjin Public Garage Start",
+      "kname": "청진공영차고지",
+      "kachel": "42",
+      "dist": 122.6
+    },
+    {
+      "id": "450653",
+      "name": "Cheongjin Nonggyeong University G1",
+      "kname": "청진농경대학교",
+      "kachel": "41",
+      "dist": 405.7
+    },
+    {
+      "id": "449689",
+      "name": "Pabal-dong G1",
+      "kname": "파발동",
+      "kachel": "9",
+      "dist": 732.2
+    },
+    {
+      "id": "508495",
+      "name": "Seohan Market G2 1",
+      "kname": "서한시장",
+      "kachel": "1",
+      "dist": 1161.4
+    },
+    {
+      "id": "450869",
+      "name": "Dugok maeul G1",
+      "kname": "두곡마을",
+      "kachel": "0",
+      "dist": 1463.3
+    },
+    {
+      "id": "451201",
+      "name": "CHW Garage G1",
+      "kname": "청야월차고지",
+      "kachel": "19",
+      "dist": 4636.3
+    },
+    {
+      "id": "451198",
+      "name": "Cheongyawol NH G1",
+      "kname": "청야월농협",
+      "kachel": "19",
+      "dist": 2858.3
+    },
+    {
+      "id": "451196",
+      "name": "Cheongyawol-myeon Office G2",
+      "kname": "청야월면사무소",
+      "kachel": "19",
+      "dist": 2968.0
+    },
+    {
+      "id": "451194",
+      "name": "CHW Lamp festival G2",
+      "kname": "청야월등불축제광장",
+      "kachel": "18",
+      "dist": 3272.3
+    },
+    {
+      "id": "450870",
+      "name": "Hyundai I Park G2",
+      "kname": "현대이공원",
+      "kachel": "0",
+      "dist": 4382.1
+    },
+    {
+      "id": "507827",
+      "name": "Seohan Market M3",
+      "kname": "서한시장",
+      "kachel": "1",
+      "dist": 4751.1
+    },
+    {
+      "id": "508204",
+      "name": "Daegyo-dong G2",
+      "kname": "대교동",
+      "kachel": "49",
+      "dist": 6416.9
+    },
+    {
+      "id": "508222",
+      "name": "Daegyo Prugio G1",
+      "kname": "대교푸르지오",
+      "kachel": "62",
+      "dist": 6798.5
+    },
+    {
+      "id": "493032",
+      "name": "Cheongjin Post Office G1",
+      "kname": "청진우체국",
+      "kachel": "62",
+      "dist": 7012.1
+    },
+    {
+      "id": "508228",
+      "name": "Midopa G2",
+      "kname": "미도파",
+      "kachel": "125",
+      "dist": 7224.9
+    },
+    {
+      "id": "493059",
+      "name": "Daegyo LH APT G2",
+      "kname": "대교LH아파트",
+      "kachel": "125",
+      "dist": 7381.7
+    },
+    {
+      "id": "508298",
+      "name": "IKEA 220",
+      "kname": "이케아",
+      "kachel": "523",
+      "dist": 8298.4
+    },
+    {
+      "id": "508499",
+      "name": "Yuhan Sangga G2",
+      "kname": "유한상가",
+      "kachel": "320",
+      "dist": 9335.3
+    },
+    {
+      "id": "508503",
+      "name": "Neoleunbat Maeul Complex1 G2",
+      "kname": "너른밭마을1단지",
+      "kachel": "319",
+      "dist": 9660.7
+    },
+    {
+      "id": "502468",
+      "name": "Neoleunbat Maeul Complex2 G2",
+      "kname": "너른밭마을2단지",
+      "kachel": "521",
+      "dist": 9943.9
+    },
+    {
+      "id": "502476",
+      "name": "Namchon G2",
+      "kname": "남촌",
+      "kachel": "264",
+      "dist": 10645.1
+    },
+    {
+      "id": "502480",
+      "name": "Namsan Hyundai APT G2",
+      "kname": "남산현대아파트",
+      "kachel": "155",
+      "dist": 10964.4
+    },
+    {
+      "id": "495457",
+      "name": "Mora Residency G2",
+      "kname": "모라레지던시",
+      "kachel": "72",
+      "dist": 11313.3
+    },
+    {
+      "id": "460448",
+      "name": "Cheongjin Station G2",
+      "kname": "청진역",
+      "kachel": "79",
+      "dist": 11639.8
+    },
+    {
+      "id": "486968",
+      "name": "Namsanjeong Station Transfer Stop G3",
+      "kname": "남산정역환승센터",
+      "kachel": "80",
+      "dist": 12004.4
+    },
+    {
+      "id": "494033",
+      "name": "Cheongjin Station N G1",
+      "kname": "청진역",
+      "kachel": "79",
+      "dist": 12299.3
+    },
+    {
+      "id": "485987",
+      "name": "Mora Saemaeul Geumgo G2",
+      "kname": "모라새마을금고",
+      "kachel": "80",
+      "dist": 12386.7
+    },
+    {
+      "id": "508511",
+      "name": "Mora Homeplus G3 1",
+      "kname": "모라홈플러스",
+      "kachel": "260",
+      "dist": 12880.2
+    },
+    {
+      "id": "485732",
+      "name": "Mora Beach Entrance G2 1",
+      "kname": "모라해수욕장입구",
+      "kachel": "266",
+      "dist": 13751.9
+    },
+    {
+      "id": "485780",
+      "name": "Harbor G2",
+      "kname": "항만",
+      "kachel": "137",
+      "dist": 14271.8
+    },
+    {
+      "id": "495000",
+      "name": "Dongdae Hanyang APT G2 333",
+      "kname": "동대한양아파트",
+      "kachel": "119",
+      "dist": 14728.2
+    },
+    {
+      "id": "508472",
+      "name": "Dongdae-dong G2 8",
+      "kname": "동대동",
+      "kachel": "82",
+      "dist": 14961.2
+    }
+  ]
+}

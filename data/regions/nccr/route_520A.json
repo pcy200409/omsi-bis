@@ -1,0 +1,230 @@
+{
+  "key": "520A",
+  "no": "520",
+  "type": "일반",
+  "dir": "up",
+  "from": "선남초등학교",
+  "to": "청진대학교병원",
+  "length": 20279.1,
+  "first": "05:00",
+  "last": "21:35",
+  "stops": [
+    {
+      "id": "507792",
+      "name": "Seonnam Elementary School Start",
+      "kname": "선남초등학교",
+      "kachel": "280",
+      "dist": 341.5
+    },
+    {
+      "id": "493578",
+      "name": "Bukgu Employment Branch",
+      "kname": "북구고용센터",
+      "kachel": "280",
+      "dist": 517.8
+    },
+    {
+      "id": "508336",
+      "name": "Seohee Starhill G1 520",
+      "kname": "서희스타힐스",
+      "kachel": "283",
+      "dist": 945.5
+    },
+    {
+      "id": "507902",
+      "name": "Bukbu Market",
+      "kname": "북부시장",
+      "kachel": "284",
+      "dist": 1181.0
+    },
+    {
+      "id": "493594",
+      "name": "Seongbuk Maeul G1",
+      "kname": "성북마을",
+      "kachel": "281",
+      "dist": 1486.5
+    },
+    {
+      "id": "493597",
+      "name": "Seojung Maeul G2",
+      "kname": "서중마을",
+      "kachel": "354",
+      "dist": 1679.6
+    },
+    {
+      "id": "505662",
+      "name": "Dumoon Ent G2",
+      "kname": "두문입구",
+      "kachel": "353",
+      "dist": 2024.6
+    },
+    {
+      "id": "505704",
+      "name": "Doosan We've The Zenith Complex2 G2",
+      "kname": "두산위브더제니스2단지",
+      "kachel": "353",
+      "dist": 2233.9
+    },
+    {
+      "id": "505712",
+      "name": "Tando G2",
+      "kname": "탄도",
+      "kachel": "503",
+      "dist": 2751.9
+    },
+    {
+      "id": "505723",
+      "name": "Geumsan Beach G2",
+      "kname": "금산해수욕장",
+      "kachel": "287",
+      "dist": 3306.3
+    },
+    {
+      "id": "492409",
+      "name": "Geunsam Public Garage G2",
+      "kname": "금산공영차고지",
+      "kachel": "288",
+      "dist": 4172.6
+    },
+    {
+      "id": "508337",
+      "name": "Yeongdo Rotary G1 520",
+      "kname": "영도로터리",
+      "kachel": "497",
+      "dist": 5009.2
+    },
+    {
+      "id": "508340",
+      "name": "Yeongdo Rotary G2",
+      "kname": "영도로터리",
+      "kachel": "497",
+      "dist": 5271.3
+    },
+    {
+      "id": "492394",
+      "name": "Yeongdo Ent G2",
+      "kname": "영도입구",
+      "kachel": "293",
+      "dist": 5495.7
+    },
+    {
+      "id": "508346",
+      "name": "Geumho APT G2 520",
+      "kname": "금호아파트",
+      "kachel": "293",
+      "dist": 5885.6
+    },
+    {
+      "id": "492295",
+      "name": "Cheongjin Nambu Gas Corporation",
+      "kname": "청진남부가스공사",
+      "kachel": "392",
+      "dist": 6312.2
+    },
+    {
+      "id": "492382",
+      "name": "Mandarin G2",
+      "kname": "만다린",
+      "kachel": "182",
+      "dist": 7198.9
+    },
+    {
+      "id": "508347",
+      "name": "Gaegeum APT G2 520",
+      "kname": "개금아파트",
+      "kachel": "182",
+      "dist": 7428.8
+    },
+    {
+      "id": "495112",
+      "name": "Gaegeum Telephone Stn",
+      "kname": "개금전화국",
+      "kachel": "156",
+      "dist": 7882.8
+    },
+    {
+      "id": "495116",
+      "name": "Danggam Emart Town G2",
+      "kname": "당감이마트타운",
+      "kachel": "157",
+      "dist": 8291.4
+    },
+    {
+      "id": "492755",
+      "name": "Sindonga Market G2",
+      "kname": "신동아시장",
+      "kachel": "177",
+      "dist": 9068.4
+    },
+    {
+      "id": "493375",
+      "name": "Gukmin Bank G1",
+      "kname": "국민은행",
+      "kachel": "128",
+      "dist": 16201.0
+    },
+    {
+      "id": "461017",
+      "name": "Geoje Junction G1",
+      "kname": "거제교차로",
+      "kachel": "128",
+      "dist": 16388.8
+    },
+    {
+      "id": "442590",
+      "name": "Geoje Stn G1",
+      "kname": "거제역",
+      "kachel": "55",
+      "dist": 16470.5
+    },
+    {
+      "id": "442073",
+      "name": "I Square G5 2029",
+      "kname": "아이스퀘어",
+      "kachel": "51",
+      "dist": 17050.7
+    },
+    {
+      "id": "453807",
+      "name": "Suyeong Police Stn G1",
+      "kname": "수영경찰서",
+      "kachel": "50",
+      "dist": 17486.7
+    },
+    {
+      "id": "468120",
+      "name": "Daegyo Jugong Apt G2",
+      "kname": "대교주공아파트",
+      "kachel": "50",
+      "dist": 17621.5
+    },
+    {
+      "id": "508349",
+      "name": "Daegyo-dong E Mart G1 520",
+      "kname": "대교동이마트",
+      "kachel": "52",
+      "dist": 17908.2
+    },
+    {
+      "id": "508350",
+      "name": "Daegyo-dong G1 520",
+      "kname": "대교동",
+      "kachel": "49",
+      "dist": 18161.3
+    },
+    {
+      "id": "508240",
+      "name": "Seohan Market To Garage",
+      "kname": "서한시장",
+      "kachel": "1",
+      "dist": 19918.3
+    },
+    {
+      "id": "508241",
+      "name": "CH Univ Hospital To Garage",
+      "kname": "청진대학교병원",
+      "kachel": "6",
+      "dist": 20279.1
+    }
+  ]
+}

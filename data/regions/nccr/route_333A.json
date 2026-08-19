@@ -1,0 +1,125 @@
+{
+  "key": "333A",
+  "no": "333",
+  "type": "일반",
+  "dir": "up",
+  "from": "청진역",
+  "to": "청진역",
+  "length": 4914.2,
+  "first": "06:30",
+  "last": "21:30",
+  "stops": [
+    {
+      "id": "441313",
+      "name": "Cheongjin Stn 1B 333",
+      "kname": "청진역",
+      "kachel": "73",
+      "dist": 170.1
+    },
+    {
+      "id": "508175",
+      "name": "Namsanjeong Station Transfer Stop G3 333",
+      "kname": "남산정역환승센터",
+      "kachel": "80",
+      "dist": 525.9
+    },
+    {
+      "id": "486898",
+      "name": "Namsan Junction G1",
+      "kname": "남산교차로",
+      "kachel": "81",
+      "dist": 846.9
+    },
+    {
+      "id": "486895",
+      "name": "CHFEZ G2",
+      "kname": "청진경제자유무역",
+      "kachel": "81",
+      "dist": 1017.6
+    },
+    {
+      "id": "508181",
+      "name": "Cheongjin Intll Passenger 333",
+      "kname": "청진국제여객터미널",
+      "kachel": "119",
+      "dist": 1647.4
+    },
+    {
+      "id": "495000",
+      "name": "Dongdae Hanyang APT G2 333",
+      "kname": "동대한양아파트",
+      "kachel": "119",
+      "dist": 2143.3
+    },
+    {
+      "id": "494990",
+      "name": "Dongdae-dong 333",
+      "kname": "동대동",
+      "kachel": "82",
+      "dist": 2407.5
+    },
+    {
+      "id": "508183",
+      "name": "Simin APT 333",
+      "kname": "시민아파트",
+      "kachel": "117",
+      "dist": 2582.6
+    },
+    {
+      "id": "503032",
+      "name": "Sujeong Hill",
+      "kname": "수정언덕",
+      "kachel": "78",
+      "dist": 2657.4
+    },
+    {
+      "id": "487979",
+      "name": "Sujeong 3-dong G1",
+      "kname": "수정3동",
+      "kachel": "78",
+      "dist": 2927.5
+    },
+    {
+      "id": "503064",
+      "name": "Geumsusa G1",
+      "kname": "금수사",
+      "kachel": "70",
+      "dist": 3211.0
+    },
+    {
+      "id": "460439",
+      "name": "Choryang Fire Station G2",
+      "kname": "초량소방서",
+      "kachel": "68",
+      "dist": 3568.8
+    },
+    {
+      "id": "460441",
+      "name": "Dongil Park Mansion G1",
+      "kname": "동일공원만시온",
+      "kachel": "68",
+      "dist": 3805.3
+    },
+    {
+      "id": "460445",
+      "name": "Daesin Healty G1",
+      "kname": "대신건강",
+      "kachel": "73",
+      "dist": 4097.4
+    },
+    {
+      "id": "460447",
+      "name": "Namsan Samgeori G1 333",
+      "kname": "남산삼거리",
+      "kachel": "73",
+      "dist": 4335.2
+    },
+    {
+      "id": "508186",
+      "name": "Cheongjin Stn 1B 333 End",
+      "kname": "청진역",
+      "kachel": "73",
+      "dist": 4914.2
+    }
+  ]
+}
